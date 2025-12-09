@@ -20,12 +20,10 @@
   # ==========================================
   # Bootloader & Kernels
   # ==========================================
-  # Bootloader config is handled by the ISO build or the installer for the target system.
-  # We disable it here to avoid conflicts with the live media boot process.
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.device = "nodev";
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.efiInstallAsRemovable = true;
 
   # ==========================================
   # Networking & Locale
