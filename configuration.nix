@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./hardware-configuration.nix
+
     # Desktop Environments
     ./modules/desktop/kde.nix
     ./modules/desktop/hyprland.nix # Optional: Comment out if you don't want Hyprland
