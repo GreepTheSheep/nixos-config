@@ -1,0 +1,22 @@
+# Nix-specific
+result
+result-*
+.direnv/
+nix-shell/
+nix-profile/
+nix-path
+flake.lock
+
+# Editor/OS specific
+*~
+*.swp
+.DS_Store
+._*
+*.bak
+*.orig
+*.rej
+
+# Logs and temporary files
+*.log
+*.tmp
+tmp/
