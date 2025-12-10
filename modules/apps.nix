@@ -25,6 +25,7 @@
     gparted
     htop
     btop
+    mission-center
   ];
 
   # Flatpak
