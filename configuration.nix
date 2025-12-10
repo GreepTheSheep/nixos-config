@@ -26,7 +26,7 @@
   # ==========================================
   # Networking & Locale
   # ==========================================
-  networking.hostName = "nixos-custom";
+  networking.hostName = "laptop-hp-matt";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/Paris";
