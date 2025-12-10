@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
 {
-  # ============================================================================
-  # Plasma / KDE Configuration
-  # ============================================================================
   # Most Plasma configuration is done system-wide in modules/desktop/kde.nix
   # However, we can add user-specific Plasma settings here if needed.
 

@@ -1,9 +1,6 @@
 _:
 
 {
-  # ==========================================
-  # User: Greep
-  # ==========================================
   users.users.greep = {
     isNormalUser = true;
     description = "Greep";
