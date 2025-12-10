@@ -21,4 +21,4 @@ flake.lock
 *.tmp
 tmp/
 
-*.old
+hardware-configuration*.nix*
