@@ -6,9 +6,6 @@
     ./app-config/direnv.nix
   ];
 
-  # Flatpak
-  services.flatpak.enable = true;
-
   # Allow unfree packages (VSCode, etc.)
   nixpkgs.config.allowUnfree = true;
 
@@ -18,6 +15,7 @@
     vim
     wget
     curl
+    nixfmt
 
     # Requested Apps
     vscode
@@ -26,5 +24,16 @@
     # Utilities
     gparted
     htop
+    btop
   ];
+
+  # Flatpak
+  services.flatpak.enable = true;
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
+    script = ''
+      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    '';
+  };
 }
