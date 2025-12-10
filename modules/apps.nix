@@ -1,9 +1,12 @@
 { pkgs, ... }:
 
 {
-  # ==========================================
-  # Common System Applications
-  # ==========================================
+  imports = [
+    ./app-config/firefox.nix
+  ];
+
+  # Flatpak
+  services.flatpak.enable = true;
 
   # Allow unfree packages (VSCode, etc.)
   nixpkgs.config.allowUnfree = true;
@@ -16,7 +19,6 @@
     curl
 
     # Requested Apps
-    firefox
     vscode
     vlc
 
@@ -24,9 +26,4 @@
     gparted
     htop
   ];
-
-  # ==========================================
-  # Flatpak
-  # ==========================================
-  services.flatpak.enable = true;
 }
