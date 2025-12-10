@@ -57,14 +57,14 @@
 
       # Graphics
       videoDrivers = [ "modesetting" ];
+    };
 
-      # Audio
-      pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-      };
+    # Audio
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
     };
   };
 
