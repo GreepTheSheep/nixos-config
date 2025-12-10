@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Rebuild NixOS (switch, \"default\")",
+            "type": "shell",
+            "command": "sudo nixos-rebuild switch",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Rebuild NixOS (switch, \"unstable\")",
+            "type": "shell",
+            "command": "sudo nixos-rebuild switch -p unstable",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Rebuild NixOS (test)",
+            "type": "shell",
+            "command": "sudo nixos-rebuild test",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Lint configuration (statix & deadnix)",
+            "type": "shell",
+            "command": "echo 'Running Statix...' && nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#statix -c statix check . && echo 'Running Deadnix (Scanning for unused code)...' && nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#deadnix -c deadnix ."
+        }
+    ]
+}
