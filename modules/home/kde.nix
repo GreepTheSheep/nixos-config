@@ -14,4 +14,13 @@
   home.packages = with pkgs; [
     # libsForQt5.qt5.qtgraphicaleffects
   ];
+
+  programs.plasma = {
+    enable = true;
+
+    workspace = {
+      lookAndFeel = "org.kde.breezedark.desktop";
+      iconTheme = "Papirus-Dark";
+    };
+  };
 }

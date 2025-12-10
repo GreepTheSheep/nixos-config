@@ -1,4 +1,4 @@
-_:
+{ plasma-manager, ... }:
 
 {
   users.users.greep = {
@@ -12,6 +12,7 @@ _:
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    sharedModules = [ plasma-manager.homeModules.plasma-manager ];
 
     users = {
       greep = import ./greep-home.nix;

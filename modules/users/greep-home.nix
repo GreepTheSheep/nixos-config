@@ -11,6 +11,7 @@
   ];
 
   imports = [
+    ../home/kde.nix
     ../home/hyprland.nix
   ];
 
