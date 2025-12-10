@@ -22,6 +22,9 @@
         modules = [
           ./configuration.nix
           home-manager.nixosModules.home-manager
+          {
+            home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+          }
         ];
       };
     };
