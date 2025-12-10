@@ -22,7 +22,7 @@
     workspace = {
       lookAndFeel = "org.kde.breezedark.desktop";
       iconTheme = "Papirus-Dark";
-      wallpaper = "../../wallpaper/stolas.png";
+      wallpaper = "/etc/nixos/wallpaper/stolas.png";
     };
   };
 }
