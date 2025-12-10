@@ -122,7 +122,7 @@
 
         # 7TV
         "moz-addon-prod@7tv.app" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/7tx-extension/latest.xpi";
+          install_url = "https://addons.mozilla.org/firefox/downloads/latest/7tv-extension/latest.xpi";
           installation_mode = "force_installed";
         };
       };
