@@ -31,6 +31,12 @@
 
   time.timeZone = "Europe/Paris";
   i18n.defaultLocale = "fr_FR.UTF-8";
+  keyboard.layout = "fr";
+  i18n.extraLocaleSettings = {
+    LANG = "fr_FR.UTF-8";
+    LC_MESSAGES = "fr_FR.UTF-8"; # For translated messages
+    LANGUAGE = "fr_FR;en_US;C"; # Optional: for specific app fallbacks
+  };
 
   # ==========================================
   # Graphics & VM Support
