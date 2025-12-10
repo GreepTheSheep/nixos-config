@@ -7,6 +7,7 @@
   home.packages = with pkgs; [
     # Add user-specific packages here later
     neofetch
+    gearlever
   ];
 
   imports = [
