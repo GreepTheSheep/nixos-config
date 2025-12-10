@@ -29,14 +29,33 @@
   networking.hostName = "laptop-hp-matt";
   networking.networkmanager.enable = true;
 
+  # Set your time zone.
   time.timeZone = "Europe/Paris";
+
+  # Set your default locale.
   i18n.defaultLocale = "fr_FR.UTF-8";
-  i18n.keyboard.layout = "fr";
+
+  # Select internationalisation properties.
   i18n.extraLocaleSettings = {
-    LANG = "fr_FR.UTF-8";
-    LC_MESSAGES = "fr_FR.UTF-8"; # For translated messages
-    LANGUAGE = "fr_FR;en_US;C"; # Optional: for specific app fallbacks
+    LC_ADDRESS = "fr_FR.UTF-8";
+    LC_IDENTIFICATION = "fr_FR.UTF-8";
+    LC_MEASUREMENT = "fr_FR.UTF-8";
+    LC_MONETARY = "fr_FR.UTF-8";
+    LC_NAME = "fr_FR.UTF-8";
+    LC_NUMERIC = "fr_FR.UTF-8";
+    LC_PAPER = "fr_FR.UTF-8";
+    LC_TELEPHONE = "fr_FR.UTF-8";
+    LC_TIME = "fr_FR.UTF-8";
   };
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "fr";
+    variant = "";
+  };
+
+  # Configure console keymap
+  console.keyMap = "fr";
 
   # ==========================================
   # Graphics & VM Support
