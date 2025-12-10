@@ -10,7 +10,7 @@
   outputs = { nixpkgs, home-manager, ... }: {
     nixosConfigurations = {
       # Standard NixOS configuration
-      nixos-custom = nixpkgs.lib.nixosSystem {
+      laptop-hp-matt = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
