@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 
 {
   imports = [
@@ -17,15 +17,11 @@
 
   system.stateVersion = "26.05";
 
-  # ==========================================
-  # Bootloader & Kernels
-  # ==========================================
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # ==========================================
   # Networking & Locale
-  # ==========================================
   networking.hostName = "laptop-hp-matt";
   networking.networkmanager.enable = true;
 
@@ -48,37 +44,32 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "fr";
-    variant = "";
-  };
-
   # Configure console keymap
   console.keyMap = "fr";
 
-  # ==========================================
-  # Graphics & VM Support
-  # ==========================================
-  #virtualisation = {
-    #vmware.guest.enable = true;
-    #virtualbox.guest.enable = lib.mkForce true;
-  #};
-  services.xserver.videoDrivers = [ "modesetting" ];
+  services = {
+    xserver = {
+      # Configure keymap in X11
+      xkb = {
+        layout = "fr";
+        variant = "";
+      };
 
-  # ==========================================
-  # Sound
-  # ==========================================
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+      # Graphics
+      videoDrivers = [ "modesetting" ];
+
+      # Audio
+      pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+      };
+    };
   };
 
-  # ==========================================
-  # Nix Settings
-  # ==========================================
+  security.rtkit.enable = true;
+
+  # Nix Experimental Features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }
