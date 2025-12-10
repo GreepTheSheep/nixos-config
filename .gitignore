@@ -20,3 +20,5 @@ flake.lock
 *.log
 *.tmp
 tmp/
+
+*.old
