@@ -60,11 +60,11 @@
   # ==========================================
   # Graphics & VM Support
   # ==========================================
-  virtualisation = {
-    vmware.guest.enable = true;
-    virtualbox.guest.enable = lib.mkForce true;
-  };
-  services.xserver.videoDrivers = [ "modesetting" "vmware" "virtualbox" ];
+  #virtualisation = {
+    #vmware.guest.enable = true;
+    #virtualbox.guest.enable = lib.mkForce true;
+  #};
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   # ==========================================
   # Sound
