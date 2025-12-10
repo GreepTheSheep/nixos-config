@@ -12,6 +12,7 @@
 
   # Example: Theme specific packages meant for KDE
   home.packages = with pkgs; [
+    papirus-icon-theme
     # libsForQt5.qt5.qtgraphicaleffects
   ];
 
@@ -21,6 +22,7 @@
     workspace = {
       lookAndFeel = "org.kde.breezedark.desktop";
       iconTheme = "Papirus-Dark";
+      wallpaper = "../../wallpaper/stolas.png";
     };
   };
 }
