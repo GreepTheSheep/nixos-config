@@ -16,6 +16,9 @@
     wget
     curl
     nixfmt
+    nil
+    nixd
+    nixdoc
 
     # Requested Apps
     vscode
