@@ -26,11 +26,11 @@
     };
 
     kscreenlocker = {
-      lockOnResume = false;
+      lockOnResume = true;
       timeout = 5;
       passwordRequired = true;
       passwordRequiredDelay = 30;
-      lockOnStartup = true;
+      lockOnStartup = false;
       appearance = {
         alwaysShowClock = true;
         showMediaControls = true;
