@@ -28,7 +28,7 @@
     panels = [
       {
         location = "bottom";
-        hiding = "windowsgobelow";
+        hiding = "dodgewindows";
         widgets = [
           {
             kickoff = {
