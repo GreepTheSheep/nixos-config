@@ -25,6 +25,22 @@
       wallpaper = "/etc/nixos/wallpaper/stolas.png";
     };
 
+    kscreenlocker = {
+      lockOnResume = true;
+      timeout = 5;
+      passwordRequired = true;
+      passwordRequiredDelay = 30;
+      lockOnStartup = true;
+      appearance = {
+        alwaysShowClock = true;
+        showMediaControls = true;
+        wallpaper = "/etc/nixos/wallpaper/stolas.png";
+        wallpaperPictureOfTheDay = null;
+        wallpaperSlideShow = null;
+        wallpaperPlainColor = null;
+      };
+    };
+
     panels = [
       {
         location = "bottom";
@@ -144,13 +160,6 @@
         value = 1;
         # Forces kde to not change this value (even through the settings app).
         immutable = true;
-      };
-      kscreenlockerrc = {
-        # Set wallpaper for lock screen
-        Greeter = {
-          WallpaperPlugin = "org.kde.image";
-          Wallpaper = "/etc/nixos/wallpaper/stolas.png";
-        };
       };
     };
   };
