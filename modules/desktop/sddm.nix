@@ -2,7 +2,7 @@
 
 let
   background-package = pkgs.runCommand "background-image" {} ''
-  cp ${./wallpaper/stolas.png} $out
+  cp ${../../wallpaper/stolas.png} $out
 '';
 
 in {
