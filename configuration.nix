@@ -71,4 +71,8 @@
 
   # Nix Experimental Features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Automatic delete of old generations
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
 }
