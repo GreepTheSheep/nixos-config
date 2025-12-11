@@ -29,6 +29,9 @@
     htop
     btop
     mission-center
+    wayland-utils
+    hardinfo2
+    wl-clipboard
   ];
 
   # Flatpak
