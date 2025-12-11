@@ -22,7 +22,7 @@
     workspace = {
       lookAndFeel = "org.kde.breezedark.desktop";
       iconTheme = "Papirus-Dark";
-      wallpaper = "/etc/nixos/wallpaper/stolas.png";
+      wallpaper = "${../../wallpaper/stolas.png}";
     };
 
     kscreenlocker = {
@@ -34,7 +34,7 @@
       appearance = {
         alwaysShowClock = true;
         showMediaControls = true;
-        wallpaper = "/etc/nixos/wallpaper/stolas.png";
+        wallpaper = "${../../wallpaper/stolas.png}";
         wallpaperPictureOfTheDay = null;
         wallpaperSlideShow = null;
         wallpaperPlainColor = null;
