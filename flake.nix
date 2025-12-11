@@ -20,6 +20,9 @@
       laptop-hp-matt = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          {
+            system.stateVersion = "25.11";
+          }
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {

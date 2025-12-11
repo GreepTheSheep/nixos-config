@@ -15,8 +15,6 @@
     ./modules/apps.nix
   ];
 
-  system.stateVersion = "26.05";
-
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
