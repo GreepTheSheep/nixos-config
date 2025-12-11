@@ -26,7 +26,7 @@
     };
 
     kscreenlocker = {
-      lockOnResume = true;
+      lockOnResume = false;
       timeout = 5;
       passwordRequired = true;
       passwordRequiredDelay = 30;
