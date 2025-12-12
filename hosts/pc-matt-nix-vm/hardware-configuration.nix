@@ -12,7 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  
+
   virtualisation.vmware.guest.enable = true;
 
   fileSystems."/" =
