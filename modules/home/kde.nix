@@ -47,6 +47,7 @@
         screen = "all";
         hiding = "dodgewindows";
         opacity = "translucent";
+        floating = true;
         widgets = [
           {
             panelSpacer = {
