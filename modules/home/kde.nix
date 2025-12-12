@@ -20,8 +20,8 @@
     enable = true;
 
     workspace = {
-      lookAndFeel = "org.kde.breezedark.desktop";
-      iconTheme = "Papirus-Dark";
+      lookAndFeel = lib.mkForce "org.kde.breezedark.desktop";
+      iconTheme = lib.mkForce "Papirus-Dark";
       wallpaper = "${../../wallpaper/stolas.png}";
     };
 
@@ -56,14 +56,12 @@
           }
           {
             kickoff = {
-              icon = "nix-snowflake-white";
+              icon = lib.mkForce "nix-snowflake-white";
               favoritesDisplayMode = "list";
               applicationsDisplayMode = "list";
               showActionButtonCaptions = false;
               showButtonsFor = {
                 custom = [
-                  "suspend"
-                  "hibernate"
                   "shutdown"
                   "reboot"
                   "logout"
