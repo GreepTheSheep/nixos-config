@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Most Plasma configuration is done system-wide in modules/desktop/kde.nix
