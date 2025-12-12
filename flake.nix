@@ -20,10 +20,6 @@
       laptop-hp-matt = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          {
-            system.stateVersion = "25.11";
-            networking.hostName = "laptop-hp-matt";
-          }
           ./hosts/laptop-hp-matt/hardware-configuration.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
