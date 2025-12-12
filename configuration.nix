@@ -2,8 +2,6 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
-
     # Desktop Environments
     ./modules/desktop/sddm.nix
     ./modules/desktop/kde.nix

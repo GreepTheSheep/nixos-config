@@ -20,6 +20,3 @@ flake.lock
 *.log
 *.tmp
 tmp/
-
-hardware-configuration*.nix*
-hardware-configuration.nix

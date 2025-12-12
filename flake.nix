@@ -24,6 +24,7 @@
             system.stateVersion = "25.11";
             networking.hostName = "laptop-hp-matt";
           }
+          ./hosts/laptop-hp-matt/hardware-configuration.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -39,6 +40,7 @@
             networking.hostName = "pc-matt-nix-vm";
             virtualisation.vmware.guest.enable = true;
           }
+          ./hosts/pc-matt-nix-vm/hardware-configuration.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
