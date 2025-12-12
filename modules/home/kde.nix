@@ -56,6 +56,18 @@
           {
             kickoff = {
               icon = "nix-snowflake-white";
+              favoritesDisplayMode = "list";
+              applicationsDisplayMode = "list";
+              showActionButtonCaptions = false;
+              showButtonsFor = {
+                custom = [
+                  "suspend"
+                  "hibernate"
+                  "shutdown"
+                  "reboot"
+                  "logout"
+                ];
+              };
             };
           }
           {
