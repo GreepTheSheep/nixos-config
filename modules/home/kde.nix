@@ -84,14 +84,22 @@
             systemMonitor = {
               displayStyle = "org.kde.ksysguard.piechart";
 
-              textOnlySensors = [ "cpu/cpu.*/usage" "cpu/all/averageFrequency" "cpu/all/averageTemperature"];
-              totalSensors = [ "cpu/all/usage"];
+              textOnlySensors = [
+                "cpu/cpu.*/usage"
+                "cpu/all/averageFrequency"
+                "cpu/all/averageTemperature"
+              ];
+              totalSensors = [
+                "cpu/all/usage"
+              ];
 
-              sensors = [{
-                name = "cpu/all/usage";
-                color = "91,126,252";  # Bleu
-                label = "CPU %";
-              }];
+              sensors = [
+                {
+                  name = "cpu/all/usage";
+                  color = "91,126,252";  # Bleu
+                  label = "CPU %";
+                }
+              ];
               title = "Processeur";
               showTitle = true;
             };
@@ -100,14 +108,20 @@
             systemMonitor = {
               displayStyle = "org.kde.ksysguard.piechart";
 
-              textOnlySensors = [ "memory/physical/total" ];
-              totalSensors = [ "memory/physical/usedPercent" ];
+              textOnlySensors = [
+                "memory/physical/total"
+              ];
+              totalSensors = [
+                "memory/physical/usedPercent"
+              ];
 
-              sensors = [{
-                name = "memory/physical/used";
-                color = "91,252,126";  # Vert
-                label = "Mémoire";
-              }];
+              sensors = [
+                {
+                  name = "memory/physical/used";
+                  color = "91,252,126";  # Vert
+                  label = "Mémoire";
+                }
+              ];
               title = "Mémoire";
               showTitle = true;
             };
