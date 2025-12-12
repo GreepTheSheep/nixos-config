@@ -22,6 +22,7 @@
         modules = [
           {
             system.stateVersion = "25.11";
+            networking.hostName = "laptop-hp-matt";
           }
           ./configuration.nix
           home-manager.nixosModules.home-manager

@@ -21,7 +21,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Networking & Locale
-  networking.hostName = "laptop-hp-matt";
   networking.networkmanager.enable = true;
 
   # Set your time zone.
