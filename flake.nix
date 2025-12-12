@@ -31,7 +31,7 @@
           }
         ];
       };
-      vmware = nixpkgs.lib.nixosSystem {
+      pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           {
