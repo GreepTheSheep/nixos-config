@@ -35,11 +35,6 @@
       pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          {
-            system.stateVersion = "25.11";
-            networking.hostName = "pc-matt-nix-vm";
-            virtualisation.vmware.guest.enable = true;
-          }
           ./hosts/pc-matt-nix-vm/hardware-configuration.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
