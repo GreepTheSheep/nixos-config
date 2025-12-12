@@ -31,6 +31,21 @@
           }
         ];
       };
+      vmware = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          {
+            system.stateVersion = "25.11";
+            networking.hostName = "pc-matt-nix-vm";
+            virtualisation.vmware.guest.enable = true;
+          }
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+          }
+        ];
+      };
     };
   };
 }
