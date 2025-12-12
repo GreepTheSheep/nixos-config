@@ -45,6 +45,7 @@
       {
         location = "bottom";
         hiding = "dodgewindows";
+        opacity = "translucent";
         widgets = [
           {
             panelSpacer = {
