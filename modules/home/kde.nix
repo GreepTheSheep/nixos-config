@@ -44,6 +44,7 @@
     panels = [
       {
         location = "bottom";
+        screen = "all";
         hiding = "dodgewindows";
         opacity = "translucent";
         widgets = [
