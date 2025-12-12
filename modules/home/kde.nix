@@ -47,6 +47,11 @@
         hiding = "dodgewindows";
         widgets = [
           {
+            panelSpacer = {
+              expanding = true;
+            };
+          }
+          {
             kickoff = {
               icon = "nix-snowflake-white";
             };
@@ -61,7 +66,11 @@
               ];
             };
           }
-          "org.kde.plasma.marginsseparator"
+          {
+            panelSpacer = {
+              expanding = true;
+            };
+          }
           {
             systemTray.items = {
               shown = [
@@ -71,13 +80,6 @@
                 "org.kde.plasma.volume"
               ];
               # hidden = [];
-            };
-          }
-          {
-            digitalClock = {
-              calendar.firstDayOfWeek = "monday";
-              time.format = "24h";
-              time.showSeconds = "always";
             };
           }
           {
@@ -124,6 +126,13 @@
               ];
               title = "Mémoire";
               showTitle = true;
+            };
+          }
+          {
+            digitalClock = {
+              calendar.firstDayOfWeek = "monday";
+              time.format = "24h";
+              time.showSeconds = "always";
             };
           }
         ];
