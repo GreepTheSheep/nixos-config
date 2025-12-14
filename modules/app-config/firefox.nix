@@ -11,7 +11,6 @@ _:
       BlockAboutSupport = true;
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
-      DisableProfileRefresh = true;
       DisableSetDesktopBackground = true;
       EnableTrackingProtection = {
         Value = true;
