@@ -48,6 +48,7 @@
         hiding = "dodgewindows";
         opacity = "translucent";
         floating = true;
+        height = lib.mkForce 44;
         widgets = [
           {
             panelSpacer = {
