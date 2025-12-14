@@ -58,7 +58,7 @@
           {
             kickoff = {
               icon = lib.mkForce "nix-snowflake-white";
-              favoritesDisplayMode = "list";
+              favoritesDisplayMode = "grid";
               applicationsDisplayMode = "list";
               showActionButtonCaptions = false;
               showButtonsFor = {
