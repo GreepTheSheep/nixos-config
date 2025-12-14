@@ -97,39 +97,53 @@
             };
           }
           {
-            systemMonitor = {
-              displayStyle = "org.kde.ksysguard.piechart";
-              sensors = [
-                {
-                  name = "cpu/all/usage";
-                  color = "91,126,252";  # Bleu
-                  label = "CPU %";
-                }
-              ];
-              textOnlySensors = [
-                "cpu/cpu.*/usage"
-                "cpu/all/averageFrequency"
-                "cpu/all/averageTemperature"
-              ];
-              totalSensors = [ "cpu/all/usage" ];
-              title = "Processeur";
-              showTitle = true;
+            name = "org.kde.plasma.systemmonitor";
+            config = {
+              Appearance = {
+                title = "Processeur";
+                chareFace = "org.kde.ksysguard.piechart";
+                updateRateLimit = "1000";
+              };
+              SensorLabels = {
+                "cpu/all/usage" = "Usage";
+                "cpu/all/averageFrequency" = "Frequence moyenne";
+                "cpu/all/averageTemperature" = "Temperature moyenne";
+              };
+              SensorColors = {
+                "cpu/all/usage" = "14,0,209"; # Bleu
+              };
+              Sensors = {
+                highPrioritySensorIds = ''["cpu/all/usage"]'';
+                lowPrioritySensorIds = ''["cpu/cpu.*/usage","cpu/all/averageFrequency","cpu/all/averageTemperature"]'';
+                totalSensors = ''["cpu/all/usage"]'';
+              };
             };
           }
           {
-            systemMonitor = {
-              displayStyle = "org.kde.ksysguard.piechart";
-              sensors = [
-                {
-                  name = "memory/physical/used";
-                  color = "91,252,126";  # Vert
-                  label = "Mémoire";
-                }
-              ];
-              textOnlySensors = [ "memory/physical/total" ];
-              totalSensors = [ "memory/physical/usedPercent" ];
-              title = "Mémoire";
-              showTitle = true;
+            name = "org.kde.plasma.systemmonitor";
+            config = {
+              Appearance = {
+                title = "Mémoire";
+                chareFace = "org.kde.ksysguard.piechart";
+                updateRateLimit = "1000";
+              };
+              SensorLabels = {
+                "memory/physical/usedPercent" = "Usage %";
+                "memory/physical/used" = "Utilisation";
+                "memory/swap/used" = "Utilisation Swap";
+                "memory/swap/usedPercent" = "Usage Swap %";
+                "memory/physical/total" = "Total";
+                "memory/swap/total" = "Total Swap";
+              };
+              SensorColors = {
+                "memory/physical/usedPercent" = "0,209,14"; # Vert
+                "memory/swap/usedPercent" = "171,80,0"; # Orange
+              };
+              Sensors = {
+                highPrioritySensorIds = ''["memory/physical/usedPercent","memory/swap/usedPercent"]'';
+                lowPrioritySensorIds = ''["memory/physical/used","memory/physical/total","memory/swap/used","memory/swap/total"]'';
+                totalSensors = ''["memory/physical/usedPercent","memory/swap/usedPercent"]'';
+              };
             };
           }
           {
