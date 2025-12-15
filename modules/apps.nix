@@ -4,6 +4,7 @@
   imports = [
     ./app-config/firefox.nix
     ./app-config/direnv.nix
+    ./app-config/xdg.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
@@ -22,6 +23,7 @@
 
     # Requested Apps
     vscode
+    antigravity
     vlc
 
     # Utilities
