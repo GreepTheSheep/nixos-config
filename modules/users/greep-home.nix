@@ -11,6 +11,7 @@
   ];
 
   imports = [
+    ../home/xdg.nix
     ../home/plasma.nix
     ../home/hyprland.nix
   ];
