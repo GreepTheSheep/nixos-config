@@ -1,6 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.file.".zshrc".source = ./.zshrc;
-  home.file.".p10k.zsh".source = ./.p10k.zsh;
+  home.file.".zshrc" = {
+    enable = true;
+    source = "${./.zshrc}";
+  };
+  home.file.".p10k.zsh" = {
+    enable = true;
+    source = "${./.p10k.zsh}";
+  };
 }
