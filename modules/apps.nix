@@ -21,10 +21,15 @@
     nixd
     nixdoc
 
+    # Fonts
+    powerline-fonts
+    meslo-lgs-nf
+
     # Requested Apps
     vscode
     antigravity
     vlc
+    zsh-powerlevel10k
 
     # Utilities
     gparted
