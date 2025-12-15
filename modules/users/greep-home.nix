@@ -11,7 +11,7 @@
   ];
 
   imports = [
-    ../home/kde.nix
+    ../home/plasma.nix
     ../home/hyprland.nix
   ];
 
