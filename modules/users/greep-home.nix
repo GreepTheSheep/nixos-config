@@ -14,6 +14,7 @@
     ../home/xdg.nix
     ../home/plasma.nix
     ../home/hyprland.nix
+    ../home/zsh/zsh-home.nix
   ];
 
   # Let Home Manager manage itself
