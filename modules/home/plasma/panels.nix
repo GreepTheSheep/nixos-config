@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   programs.plasma = {
@@ -168,22 +168,6 @@
           }
           "org.kde.plasma.panelspacer"
           {
-            digitalClock = {
-              calendar.firstDayOfWeek = "monday";
-              time.format = "24h";
-              time.showSeconds = "always";
-              date = {
-                enable = true;
-                position = "besideTime";
-                format = {
-                  custom = "ddd d/M/yyyy •";
-                };
-              };
-              font = null;
-            };
-          }
-          "org.kde.plasma.panelspacer"
-          {
             plasmusicToolbar = {
               panelIcon = {
                 albumCover = {
@@ -207,6 +191,22 @@
                   resetOnPause = true;
                 };
               };
+            };
+          }
+          "org.kde.plasma.panelspacer"
+          {
+            digitalClock = {
+              calendar.firstDayOfWeek = "monday";
+              time.format = "24h";
+              time.showSeconds = "always";
+              date = {
+                enable = true;
+                position = "besideTime";
+                format = {
+                  custom = "ddd d/M/yyyy •";
+                };
+              };
+              font = null;
             };
           }
         ];
