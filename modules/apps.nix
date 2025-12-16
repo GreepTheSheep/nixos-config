@@ -24,6 +24,7 @@
     # Fonts
     powerline-fonts
     meslo-lgs-nf
+    nerd-fonts.zed-mono
 
     # Requested Apps
     vscode
