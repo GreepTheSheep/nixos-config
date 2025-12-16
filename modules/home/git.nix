@@ -28,11 +28,6 @@
         email = "greep@greep.fr";
       };
 
-      signing = {
-        key = null; # GPG will select the signing key from the commit email address
-        signByDefault = true;
-      };
-
       alias = {
         c = "commit";
         ca = "commit -a";
@@ -83,7 +78,9 @@
         enabled = true;
         autoupdate = true;
       };
+      commit.gpgSign = true;
       tag = {
+        gpgSign = true;
         sort = "version:refname";
       };
       diff = {

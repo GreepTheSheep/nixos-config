@@ -16,6 +16,7 @@
     ../home/hyprland.nix
     ../home/zsh/zsh.nix
     ../home/gpg.nix
+    ../home/git.nix
   ];
 
   # Let Home Manager manage itself
