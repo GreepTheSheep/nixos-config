@@ -33,9 +33,6 @@ postinstall() {
 
     # Configuration git
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
-    nixos-enter --silent -c "su -c 'git config --global credential.helper store' greep" > /dev/null 2>&1
-    nixos-enter --silent -c "su -c 'git config --global user.email greep@greep.fr' greep" > /dev/null 2>&1
-    nixos-enter --silent -c "su -c 'git config --global user.name Matthieu' greep" > /dev/null 2>&1
 
     # Sauvegarde Hardware configuration
     nixos-enter --silent -c "cp /etc/nixos/hardware-configuration.nix /root/"
@@ -51,7 +48,7 @@ postinstall() {
     nixos-enter --silent -c "ln -s /home/greep/nixos-config /etc/nixos"
 
     # On replace le Hardware configuration sauvegardé dans le dossier de la config
-    nixos-enter --silent -c "mv /root/hardware-configuration.nix /home/greep/nixos-config"
+    nixos-enter --silent -c "mv /root/hardware-configuration.nix /home/greep/nixos-config/hosts/$(hostname)/hardware-configuration.nix"
 
     finished
 }
