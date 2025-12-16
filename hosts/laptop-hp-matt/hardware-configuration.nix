@@ -26,7 +26,7 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  swapDevices = [ { device = "ffd81d86-209f-472c-870c-8f56ff19b40c"; } ];
+  swapDevices = [ { device = "/dev/disk/by-uuid/ffd81d86-209f-472c-870c-8f56ff19b40c"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
