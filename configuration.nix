@@ -12,6 +12,7 @@
 
     # Applications
     ./modules/apps.nix
+    ./modules/fonts.nix
   ];
 
   # Bootloader
