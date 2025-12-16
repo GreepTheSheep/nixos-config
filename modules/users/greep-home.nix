@@ -17,6 +17,7 @@
     ../home/zsh/zsh.nix
     ../home/gpg.nix
     ../home/git.nix
+    ../home/rbw.nix
   ];
 
   # Let Home Manager manage itself
