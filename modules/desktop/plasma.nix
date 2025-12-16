@@ -36,6 +36,7 @@
     kdePackages.sddm-kcm
     kdiff3
     kdePackages.isoimagewriter
+    kdePackages.kwallet-pam
   ];
 
   # Excludes some KDE applications

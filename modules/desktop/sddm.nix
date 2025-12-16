@@ -17,8 +17,12 @@ in {
     };
   };
 
-  environment.systemPackages = [
-    (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+  # Enable KWallet PAM unlocking
+  security.pam.services.sddm.enableKwallet = true;
+  security.pam.services.login.enableKwallet = true;
+
+  environment.systemPackages = with pkgs; [
+    (writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
       [General]
       background = "${background-package}"
     '')
