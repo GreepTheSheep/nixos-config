@@ -26,6 +26,8 @@
     antigravity
     vlc
     zsh-powerlevel10k
+    bitwarden-desktop
+    jellyfin-media-player
 
     # Utilities
     gparted
