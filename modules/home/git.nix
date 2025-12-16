@@ -92,6 +92,7 @@
       init.defaultBranch = "main";
       branch.sort = "-committerdate";
       column.ui = "auto";
+      credential.helper = "store";
     };
   };
 }
