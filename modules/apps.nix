@@ -5,6 +5,7 @@
     ./app-config/firefox.nix
     ./app-config/direnv.nix
     ./app-config/ohMyZsh.nix
+    ./app-config/git.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
@@ -12,7 +13,6 @@
 
   environment.systemPackages = with pkgs; [
     # Core
-    git
     vim
     wget
     curl
