@@ -115,6 +115,31 @@
         height = 26;
         widgets = [
           {
+            iconTasks = {
+              launchers = [];
+              appearance ={
+                rows.maximum = 5;
+                iconSpacing = "medium";
+              };
+              behavior = {
+                sortingMethod = "byHorizontalPosition";
+                minimizeActiveTaskOnClick = true;
+                middleClickAction = "newInstance";
+                wheel = {
+                  switchBetweenTasks = true;
+                  ignoreMinimizedTasks = false;
+                };
+                showTasks = {
+                  onlyInCurrentScreen = true;
+                  onlyInCurrentDesktop = false;
+                  onlyInCurrentActivity = true;
+                  onlyMinimized = false;
+                };
+                newTasksAppearOn = "right";
+              };
+            };
+          }
+          {
             applicationTitleBar = {
               behavior = {
                 activeTaskSource = "activeTask";
@@ -125,7 +150,7 @@
                 disableButtonsForNotHovered = false;
               };
               layout = {
-                elements = [ "windowIcon" "windowTitle" ];
+                elements = [ "windowTitle" ];
                 horizontalAlignment = "left";
                 showDisabledElements = "deactivated";
                 verticalAlignment = "center";
