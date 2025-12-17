@@ -67,8 +67,8 @@
       pulse.enable = true;
     };
 
-    # BLuetooth manager
-    blueman.enable = true;
+    # Bluetooth manager GUI (disabled as managed by DE)
+    #blueman.enable = true;
   };
 
   security.rtkit.enable = true;
