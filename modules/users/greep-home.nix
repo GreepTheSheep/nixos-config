@@ -19,6 +19,7 @@
     ../home/gpg.nix
     ../home/git.nix
     ../home/rbw.nix
+    ../home/bluetooth.nix
   ];
 
   # Let Home Manager manage itself

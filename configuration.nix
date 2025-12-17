@@ -47,7 +47,6 @@
   # Bluetooth
   hardware.bluetooth.enable = true;
   hardware.pulseaudio.enable = true; # Bluetooth audio
-  home-manager.options.services.mpris-proxy.enable = true; # Media buttons on bluetooth devices
 
   services = {
     xserver = {
