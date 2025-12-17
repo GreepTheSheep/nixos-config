@@ -44,6 +44,11 @@
   # Configure console keymap
   console.keyMap = "fr";
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.pulseaudio.enable = true; # Bluetooth audio
+  home-manager.options.services.mpris-proxy.enable = true; # Media buttons on bluetooth devices
+
   services = {
     xserver = {
       # Configure keymap in X11
@@ -63,6 +68,9 @@
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+
+    # BLuetooth manager
+    blueman.enable = true;
   };
 
   security.rtkit.enable = true;
