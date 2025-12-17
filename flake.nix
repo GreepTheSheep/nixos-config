@@ -12,9 +12,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, ... }: {
+  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, ... }: {
     nixosConfigurations = {
       # Standard NixOS configuration
       laptop-hp-matt = nixpkgs.lib.nixosSystem {
@@ -24,7 +25,10 @@
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
-            home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+            home-manager.sharedModules = [
+              plasma-manager.homeModules.plasma-manager
+              nix-flatpak.homeManagerModules.nix-flatpak
+            ];
           }
         ];
       };
@@ -35,7 +39,10 @@
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
-            home-manager.sharedModules = [ plasma-manager.homeModules.plasma-manager ];
+            home-manager.sharedModules = [
+              plasma-manager.homeModules.plasma-manager
+              nix-flatpak.homeManagerModules.nix-flatpak
+            ];
           }
         ];
       };
