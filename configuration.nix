@@ -46,7 +46,6 @@
 
   # Bluetooth
   hardware.bluetooth.enable = true;
-  hardware.pulseaudio.enable = true; # Bluetooth audio
 
   services = {
     xserver = {
