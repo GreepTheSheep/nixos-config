@@ -22,6 +22,10 @@ _:
       # Productivity
       "org.libreoffice.LibreOffice"
       "io.github.brunofin.Cohesion"
+
+      # Remote desktop clients
+      "com.parsecgaming.parsec"
+      "org.remmina.Remmina"
     ];
   };
 }
