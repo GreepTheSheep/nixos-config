@@ -13,6 +13,7 @@ _:
       # Utilities
       "com.usebottles.bottles"
       "it.mijorus.gearlever"
+      "com.github.tchx84.Flatseal"
 
       # Games
       "com.valvesoftware.Steam"
