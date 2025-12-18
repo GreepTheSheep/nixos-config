@@ -12,6 +12,7 @@ _:
     packages = [
       # Utilities
       "com.usebottles.bottles"
+      "it.mijorus.gearlever"
 
       # Games
       "com.valvesoftware.Steam"
