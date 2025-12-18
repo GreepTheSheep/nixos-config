@@ -22,7 +22,7 @@ _:
       # Productivity
       "org.libreoffice.LibreOffice"
       "io.github.brunofin.Cohesion"
-      "io.github.shiftey.Desktop"
+      "io.github.pol_rivero.github-desktop-plus"
 
       # Communication
       "com.discordapp.Discord"
