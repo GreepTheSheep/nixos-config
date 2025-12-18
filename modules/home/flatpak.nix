@@ -16,12 +16,17 @@ _:
 
       # Games
       "com.valvesoftware.Steam"
-      "com.discordapp.Discord"
+      "com.valvesoftware.SteamLink"
       "org.prismlauncher.PrismLauncher"
 
       # Productivity
       "org.libreoffice.LibreOffice"
       "io.github.brunofin.Cohesion"
+      "io.github.shiftey.Desktop"
+
+      # Communication
+      "com.discordapp.Discord"
+      "dev.vencord.Vesktop"
 
       # Remote desktop clients
       "com.parsecgaming.parsec"
