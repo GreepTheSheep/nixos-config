@@ -216,6 +216,14 @@
                   resetOnPause = true;
                 };
               };
+              settings = {
+                General = {
+                  colorsFromAlbumCover = true;
+                  mediaProgressInPanel = true;
+                  fullAlbumCoverAsBackgrourd = true;
+                  panelIconSizeRatio = 1;
+                };
+              };
             };
           }
           "org.kde.plasma.panelspacer"
