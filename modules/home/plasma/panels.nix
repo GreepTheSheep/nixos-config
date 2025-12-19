@@ -12,6 +12,37 @@
         height = lib.mkForce 44;
         widgets = [
           {
+            plasmusicToolbar = {
+              panelIcon = {
+                albumCover = {
+                  useAsIcon = true;
+                  fallbackToIcon = true;
+                  radius = 8;
+                };
+                icon = "view-media-track";
+              };
+              playbackSource = "auto";
+              musicControls.showPlaybackControls = false;
+              songText = {
+                displayInSeparateLines = true;
+                maximumWidth = 100;
+                scrolling = {
+                  behavior = "alwaysScroll";
+                  speed = 3;
+                  resetOnPause = true;
+                };
+              };
+              settings = {
+                General = {
+                  colorsFromAlbumCover = true;
+                  mediaProgressInPanel = true;
+                  fullAlbumCoverAsBackgrourd = true;
+                  panelIconSizeRatio = 1;
+                };
+              };
+            };
+          }
+          {
             panelSpacer = {
               expanding = true;
             };
