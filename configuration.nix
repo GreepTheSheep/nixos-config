@@ -44,9 +44,6 @@
   # Configure console keymap
   console.keyMap = "fr";
 
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-
   services = {
     xserver = {
       # Configure keymap in X11
