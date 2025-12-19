@@ -34,9 +34,12 @@
               };
               settings = {
                 General = {
-                  colorsFromAlbumCover = true;
-                  mediaProgressInPanel = true;
-                  fullAlbumCoverAsBackgrourd = true;
+                  artistsPosition = 2;
+                  playPauseControlInPanel = false;
+                  skipBackwardControlInPanel = false;
+                  skipForwardControlInPanel = false;
+                  mediaProgressInPanel = false;
+                  fullAlbumCoverAsBackground = true;
                   panelIconSizeRatio = 1;
                 };
               };
@@ -251,7 +254,7 @@
                 General = {
                   colorsFromAlbumCover = true;
                   mediaProgressInPanel = true;
-                  fullAlbumCoverAsBackgrourd = true;
+                  fullAlbumCoverAsBackground = true;
                   panelIconSizeRatio = 1;
                 };
               };
