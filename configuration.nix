@@ -56,12 +56,69 @@
       videoDrivers = [ "modesetting" ];
     };
 
+    avahi.enable = true;
+
     # Audio
     pipewire = {
       enable = true;
+      systemWide = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+
+      # Bluetooth audio support
+      wireplumber.extraConfig."10-bluez" = {
+        "monitor.bluez.properties" = {
+          "bluez5.enable-sbc-xq" = true;
+          "bluez5.enable-msbc" = true;
+          "bluez5.enable-hw-volume" = true;
+          "bluez5.roles" = [
+            "hsp_hs"
+            "hsp_ag"
+            "hfp_hf"
+            "hfp_ag"
+          ];
+        };
+      };
+
+      # RAOP
+      raopOpenFirewall = true;
+      extraConfig.pipewire = {
+        # AirPlay
+        "10-airplay" = {
+          "context.modules" = [
+            {
+              name = "libpipewire-module-raop-discover";
+
+              # increase the buffer size if you get dropouts/glitches
+              # args = {
+              #   "raop.latency.ms" = 500;
+              # };
+            }
+          ];
+        };
+
+        # Low latency
+        "92-low-latency" = {
+          "context.properties" = {
+            "default.clock.rate" = 48000;
+            "default.clock.quantum" = 32;
+            "default.clock.min-quantum" = 32;
+            "default.clock.max-quantum" = 32;
+          };
+          "pulse.properties" = {
+            "pulse.min.req" = "32/48000";
+            "pulse.default.req" = "32/48000";
+            "pulse.max.req" = "32/48000";
+            "pulse.min.quantum" = "32/48000";
+            "pulse.max.quantum" = "32/48000";
+          };
+          "stream.properties" = {
+            "node.latency" = "32/48000";
+            "resample.quality" = 1;
+          };
+        };
+      };
     };
 
     # Bluetooth manager GUI (disabled as managed by DE)
