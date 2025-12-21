@@ -27,6 +27,8 @@
     };
   };
 
+  programs.kdeconnect.enable = true; # Also ensures D-Bus setup
+
   # Additional KDE Applications
   environment.systemPackages = with pkgs; [
     kdePackages.kcalc

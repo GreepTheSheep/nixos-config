@@ -13,6 +13,9 @@
     # Applications
     ./modules/apps.nix
     ./modules/fonts.nix
+
+    # Networking
+    ./modules/network/firewall.nix
   ];
 
   # Bootloader
