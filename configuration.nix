@@ -114,6 +114,9 @@
   # Nix Experimental Features
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # XDG Portal integration
+  environment.pathsToLink = [ "/share/xdg-desktop-portal" "/share/applications" ];
+
   # Automatic delete of old generations
   #nix.gc.automatic = true;
   #nix.gc.dates = "weekly";
