@@ -13,9 +13,13 @@
       inputs.home-manager.follows = "home-manager";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, ... }: {
+  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, sops-nix, ... }: {
     nixosConfigurations = {
       # Standard NixOS configuration
       laptop-hp-matt = nixpkgs.lib.nixosSystem {
@@ -30,6 +34,7 @@
               nix-flatpak.homeManagerModules.nix-flatpak
             ];
           }
+          sops-nix.nixosModules.sops
         ];
       };
       pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
@@ -44,6 +49,7 @@
               nix-flatpak.homeManagerModules.nix-flatpak
             ];
           }
+          sops-nix.nixosModules.sops
         ];
       };
     };
