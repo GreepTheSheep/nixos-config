@@ -18,6 +18,11 @@
     ./modules/network/firewall.nix
   ];
 
+  # Sops secrets
+  sops = {
+    defaultSopsFile = ./secrets/secrets.yaml;
+  };
+
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

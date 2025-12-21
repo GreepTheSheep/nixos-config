@@ -20,5 +20,3 @@ flake.lock
 *.log
 *.tmp
 tmp/
-
-secrets/
