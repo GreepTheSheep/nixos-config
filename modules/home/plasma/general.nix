@@ -5,10 +5,10 @@
   # However, we can add user-specific Plasma settings here if needed.
 
   # Example: KDE Connect (phone integration)
-  # services.kdeconnect = {
-  #   enable = true;
-  #   indicator = true;
-  # };
+  services.kdeconnect = {
+    enable = true;
+    indicator = true;
+  };
 
   # Example: Theme specific packages meant for KDE
   home.packages = with pkgs; [
