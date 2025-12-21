@@ -3,10 +3,10 @@ _:
 {
   home.file.".zshrc" = {
     enable = true;
-    source = "${./.zshrc}";
+    source = "${./zsh/.zshrc}";
   };
   home.file.".p10k.zsh" = {
     enable = true;
-    source = "${./.p10k.zsh}";
+    source = "${./zsh/.p10k.zsh}";
   };
 }
