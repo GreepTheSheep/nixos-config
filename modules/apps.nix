@@ -3,7 +3,7 @@
 {
   imports = [
     ./app-config/direnv.nix
-    ./app-config/ohMyZsh.nix
+    ./app-config/zsh.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)

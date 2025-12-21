@@ -4,7 +4,7 @@
   programs.zsh = {
     enable = true;
     enableBashCompletion = true;
-    
+
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
 
