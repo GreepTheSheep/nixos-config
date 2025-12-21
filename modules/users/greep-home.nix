@@ -9,6 +9,11 @@
     neofetch
   ];
 
+  systemd.user.sessionVariables = {
+    EDITOR = "nano";
+    VISUAL = "code";
+  };
+
   imports = [
     ../home/xdg.nix
     ../home/plasma/general.nix
