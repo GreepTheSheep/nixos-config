@@ -11,6 +11,7 @@
     ./modules/users/greep.nix
 
     # Applications
+    ./modules/davfs.nix
     ./modules/apps.nix
     ./modules/fonts.nix
 
@@ -21,6 +22,11 @@
   # Sops secrets
   sops = {
     defaultSopsFile = ./secrets/secrets.yaml;
+    gnupg.home = "/home/greep/.gnupg";
+
+    secrets = {
+      "nextcloud/password" = {};
+    };
   };
 
   # Bootloader
