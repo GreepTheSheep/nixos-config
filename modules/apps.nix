@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./app-config/direnv.nix
     ./app-config/zsh.nix
   ];
 
@@ -19,14 +18,7 @@
     nil
     nixd
     nixdoc
-
-    # Requested Apps
-    vscode
-    antigravity
-    vlc
     zsh-powerlevel10k
-    bitwarden-desktop
-    jellyfin-media-player
 
     # Utilities
     gparted
@@ -37,6 +29,17 @@
     hardinfo2
     wl-clipboard
   ];
+
+  environment.defaultPackages = with pkgs; [
+    # Requested Apps
+    vscode
+    antigravity
+    vlc
+    bitwarden-desktop
+    jellyfin-media-player
+  ];
+
+  programs.direnv.enable = true;
 
   # Flatpak
   services.flatpak.enable = true;
