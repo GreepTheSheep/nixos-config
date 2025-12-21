@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./app-config/firefox.nix
     ./app-config/direnv.nix
     ./app-config/ohMyZsh.nix
   ];

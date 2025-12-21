@@ -14,10 +14,7 @@
     ../home/plasma/general.nix
     ../home/hyprland.nix
     ../home/flatpak.nix
-    ../home/programs/zsh/zsh.nix
-    ../home/programs/gpg.nix
-    ../home/programs/git.nix
-    ../home/programs/rbw.nix
+    ../home/apps.nix
   ];
 
   # Media buttons on bluetooth devices
