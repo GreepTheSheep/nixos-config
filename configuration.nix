@@ -5,7 +5,7 @@
     # Desktop Environments
     ./modules/desktop/sddm.nix
     ./modules/desktop/plasma.nix
-    ./modules/desktop/hyprland.nix # Optional: Comment out if you don't want Hyprland
+    #./modules/desktop/hyprland.nix # Optional: Comment out if you don't want Hyprland
 
     # Users
     ./modules/users/greep.nix
