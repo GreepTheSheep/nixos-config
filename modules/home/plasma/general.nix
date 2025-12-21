@@ -1,6 +1,11 @@
 { lib, pkgs, ... }:
 
 {
+  imports = [
+    ./panels.nix
+    ./shortcuts.nix
+  ];
+
   # Most Plasma configuration is done system-wide in modules/desktop/plasma
   # However, we can add user-specific Plasma settings here if needed.
 
