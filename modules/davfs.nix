@@ -25,7 +25,7 @@
     where = "/mnt/cloud";
     type = "davfs";
     options = "rw,uid=1000,gid=1000,_netdev,noauto,x-systemd.automount,x-systemd.idle-timeout=60";
-    
+
     # Monte uniquement quand le réseau est disponible
     wantedBy = [ "remote-fs.target" ];
     after = [ "network-online.target" ];
