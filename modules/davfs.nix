@@ -13,9 +13,29 @@
     mode = "0600";
   };
 
-  fileSystems."/mnt/cloud" = {
-    device = "https://cloud.greep.fr/remote.php/webdav/";
-    fsType = "davfs";
-    options = [ "rw" "uid=1000" "gid=1000" "_netdev" "auto" ];
-  };
+  # Créer le point de montage
+  systemd.tmpfiles.rules = [
+    "d /mnt/cloud 0755 greep users -"
+  ];
+
+  # Unité de montage systemd qui se monte/démonte automatiquement avec le réseau
+  systemd.mounts = [{
+    description = "Nextcloud WebDAV Mount";
+    what = "https://cloud.greep.fr/remote.php/webdav/";
+    where = "/mnt/cloud";
+    type = "davfs";
+    options = "rw,uid=1000,gid=1000,_netdev,noauto,x-systemd.automount,x-systemd.idle-timeout=60";
+    
+    # Monte uniquement quand le réseau est disponible
+    wantedBy = [ "remote-fs.target" ];
+    after = [ "network-online.target" ];
+    requires = [ "network-online.target" ];
+  }];
+
+  # Automount pour monter à la demande
+  systemd.automounts = [{
+    description = "Nextcloud WebDAV Automount";
+    where = "/mnt/cloud";
+    wantedBy = [ "multi-user.target" ];
+  }];
 }
