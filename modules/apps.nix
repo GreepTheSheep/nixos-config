@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./app-config/docker.nix
     ./app-config/zsh.nix
   ];
 
