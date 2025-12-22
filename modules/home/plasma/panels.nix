@@ -146,6 +146,10 @@
       }
       {
         location = "top";
+        screen = "all";
+        hiding = "dodgewindows";
+        opacity = "translucent";
+        floating = false;
         height = 26;
         widgets = [
           {
