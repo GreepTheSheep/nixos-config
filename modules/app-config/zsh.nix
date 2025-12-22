@@ -27,6 +27,8 @@
       ".." = "cd ..";
       "q" = "exit";
       "cls" = "clear";
+      "lzd" = "lazydocker";
+      "oxd" = "oxker";
     };
   };
 }

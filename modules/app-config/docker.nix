@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   virtualisation.docker = {
@@ -9,4 +9,9 @@
       oxker
     ];
   };
+
+  environment.systemPackages = with pkgs; lib.mkAfter [
+    lazydocker
+    oxker
+  ];
 }
