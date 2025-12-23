@@ -38,6 +38,7 @@
 
   # Additional KDE Applications
   environment.systemPackages = with pkgs; [
+    kdePackages.kdepim-runtime
     kdePackages.kcalc
     kdePackages.kcharselect
     kdePackages.kcolorchooser
