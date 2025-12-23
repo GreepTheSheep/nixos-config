@@ -4,7 +4,7 @@
   imports = [
 
     # Hardware & Services
-    ./services/audio.nix
+    ./modules/services/audio.nix
 
     # Desktop Environments
     ./modules/desktop/sddm.nix
