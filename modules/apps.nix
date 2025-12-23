@@ -39,6 +39,7 @@
     vlc
     bitwarden-desktop
     jellyfin-media-player
+    steam
   ];
 
   programs.direnv.enable = true;
