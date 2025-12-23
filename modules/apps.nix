@@ -20,6 +20,7 @@
     nixd
     nixdoc
     zsh-powerlevel10k
+    steam-devices-udev-rules # Udev rules for steam input devices
 
     # Utilities
     gparted
