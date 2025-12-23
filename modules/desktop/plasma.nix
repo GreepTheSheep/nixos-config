@@ -27,7 +27,14 @@
     };
   };
 
-  programs.kdeconnect.enable = true; # Also ensures D-Bus setup
+  programs = {
+    kdeconnect.enable = true; # Also ensures D-Bus setup
+
+    kde-pim = {
+      enable = true;
+      merkuro = true;
+    };
+  };
 
   # Additional KDE Applications
   environment.systemPackages = with pkgs; [
@@ -39,7 +46,6 @@
     kdiff3
     kdePackages.isoimagewriter
     kdePackages.kwallet-pam
-    kdePackages.merkuro
   ];
 
   # Excludes some KDE applications
