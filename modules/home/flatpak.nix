@@ -17,6 +17,7 @@ _:
       "org.filezillaproject.Filezilla"
 
       # Games
+      "com.valvesoftware.Steam"
       "com.valvesoftware.SteamLink"
       "org.prismlauncher.PrismLauncher"
 
