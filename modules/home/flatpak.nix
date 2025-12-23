@@ -15,6 +15,7 @@ _:
       "it.mijorus.gearlever"
       "com.github.tchx84.Flatseal"
       "org.filezillaproject.Filezilla"
+      "org.qbittorrent.qBittorrent"
 
       # Games
       "com.valvesoftware.SteamLink"
@@ -28,6 +29,8 @@ _:
       # Communication
       "com.discordapp.Discord"
       "dev.vencord.Vesktop"
+      "org.squidowl.halloy"
+      "im.riot.Riot" # Element
 
       # Remote desktop clients
       "com.parsecgaming.parsec"
