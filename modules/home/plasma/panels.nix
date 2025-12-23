@@ -71,8 +71,8 @@
                 "applications:firefox.desktop"
                 "applications:org.kde.dolphin.desktop"
                 "applications:org.kde.konsole.desktop"
-                "applications:code.desktop"
-                #"applications:code-url-handler.desktop"
+                "applications:bitwarden.desktop"
+                "applications:org.jellyfin.JellyfinDesktop.desktop"
               ];
             };
           }
