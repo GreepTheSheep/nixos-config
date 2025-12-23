@@ -39,6 +39,7 @@
     kdiff3
     kdePackages.isoimagewriter
     kdePackages.kwallet-pam
+    kdePackages.merkuro
   ];
 
   # Excludes some KDE applications
