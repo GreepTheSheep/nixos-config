@@ -2,6 +2,10 @@
 
 {
   imports = [
+
+    # Hardware & Services
+    ./services/audio.nix
+
     # Desktop Environments
     ./modules/desktop/sddm.nix
     ./modules/desktop/plasma.nix
@@ -73,69 +77,6 @@
     };
 
     avahi.enable = true;
-
-    # Audio
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-
-      # RAOP
-      raopOpenFirewall = true;
-      extraConfig.pipewire = {
-        # AirPlay
-        "10-airplay" = {
-          "context.modules" = [
-            {
-              name = "libpipewire-module-raop-discover";
-
-              # increase the buffer size if you get dropouts/glitches
-              # args = {
-              #   "raop.latency.ms" = 500;
-              # };
-            }
-          ];
-        };
-      };
-
-      wireplumber.extraConfig = {
-        "10-bluez" = {
-          "monitor.bluez.properties" = {
-            "bluez5.enable-sbc-xq" = true;
-            "bluez5.enable-msbc" = true;
-            "bluez5.enable-hw-volume" = true;
-            # Ne pas forcer les profils HSP/HFP - ils seront activés automatiquement
-            # uniquement quand une application VoIP (Discord, etc.) utilise le microphone
-            "bluez5.headset-roles" = [ "hfp_ag" "hsp_ag" ];
-            # Profil par défaut : A2DP (haute qualité stéréo)
-            "bluez5.auto-connect" = [ "a2dp_sink" ];
-          };
-        };
-
-        # Basculement automatique intelligent entre A2DP et HSP/HFP
-        "51-bluez-autoswitch" = {
-          "monitor.bluez.rules" = [
-            {
-              matches = [
-                {
-                  # S'applique à tous les périphériques Bluetooth
-                  "device.name" = "~bluez_card.*";
-                }
-              ];
-              actions = {
-                update-props = {
-                  # Profil par défaut : A2DP (audio haute qualité)
-                  "bluez5.auto-connect" = [ "a2dp_sink" ];
-                  # Bascule vers HFP uniquement si une source audio est requise (appel VoIP)
-                  "bluez5.profile" = "auto";
-                };
-              };
-            }
-          ];
-        };
-      };
-    };
 
     # Bluetooth manager GUI (disabled as managed by DE)
     #blueman.enable = true;
