@@ -51,7 +51,6 @@
   # Excludes some KDE applications
   environment.plasma6.excludePackages = with pkgs; [
     kdePackages.elisa
-    kdePackages.kdepim-runtime
     kdePackages.kmahjongg
     kdePackages.kmines
     kdePackages.konversation
