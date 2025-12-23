@@ -14,6 +14,7 @@ _:
       "com.usebottles.bottles"
       "it.mijorus.gearlever"
       "com.github.tchx84.Flatseal"
+      "org.filezillaproject.Filezilla"
 
       # Games
       "com.valvesoftware.Steam"
