@@ -17,13 +17,18 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, sops-nix, ... }: {
+  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, sops-nix, spicetify-nix, ... }@inputs: {
     nixosConfigurations = {
       # Standard NixOS configuration
       laptop-hp-matt = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/laptop-hp-matt/hardware-configuration.nix
           ./configuration.nix
@@ -35,10 +40,12 @@
             ];
           }
           sops-nix.nixosModules.sops
+          spicetify-nix.nixosModules.spicetify
         ];
       };
       pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           ./hosts/pc-matt-nix-vm/hardware-configuration.nix
           ./configuration.nix
@@ -50,6 +57,7 @@
             ];
           }
           sops-nix.nixosModules.sops
+          spicetify-nix.nixosModules.spicetify
         ];
       };
     };

@@ -1,10 +1,29 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
+  programs.spicetify = 
+    let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+    in
+    {
+    enable = true;
+    enabledExtensions = with spicePkgs.extensions; [
+      beautifulLyrics
+      adblock
+      hidePodcasts
+      shuffle # shuffle+ (special characters are sanitized out of extension names)
+    ];
+    theme = spicePkgs.themes.sleek;
+    colorScheme = "Deep";
+    enabledCustomApps = with spicePkgs.apps; [
+      marketplace
+      newReleases
+      ncsVisualizer
+    ];
+  };
+
   environment.defaultPackages = with pkgs; [
-    spotify
     spotifywm
-    spicetify-cli
   ];
 
   systemd.services.spotx-setup = {
@@ -18,5 +37,4 @@
       ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -sSL https://spotx-official.github.io/run.sh | ${pkgs.bash}/bin/bash -s -- -h'";
     };
   };
-
 }
