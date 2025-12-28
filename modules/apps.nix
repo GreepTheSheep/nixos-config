@@ -17,6 +17,9 @@
     vim
     wget
     curl
+    perl
+    zip
+    unzip
     nixfmt
     nil
     nixd
