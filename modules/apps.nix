@@ -5,6 +5,7 @@
     ./app-config/steam.nix
     ./app-config/docker.nix
     ./app-config/zsh.nix
+    ./app-config/spotify.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
