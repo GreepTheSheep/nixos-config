@@ -7,6 +7,5 @@ _:
     ./programs/gpg.nix
     ./programs/git.nix
     ./programs/rbw.nix
-    ./programs/wallpaperengine.nix
   ];
 }
