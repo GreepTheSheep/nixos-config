@@ -9,5 +9,5 @@ _:
                 audio.silent = true;
             }
         ];
-    }
+    };
 }
