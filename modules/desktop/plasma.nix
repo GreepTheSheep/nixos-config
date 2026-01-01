@@ -49,6 +49,7 @@
     kdiff3
     kdePackages.isoimagewriter
     kdePackages.kwallet-pam
+    kdePackages.wallpaper-engine-plugin
   ];
 
   # Excludes some KDE applications
