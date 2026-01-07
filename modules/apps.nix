@@ -6,6 +6,7 @@
     ./app-config/docker.nix
     ./app-config/zsh.nix
     ./app-config/spotify.nix
+    ./app-config/virt-manager.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
