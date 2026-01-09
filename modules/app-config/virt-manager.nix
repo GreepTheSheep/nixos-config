@@ -16,6 +16,10 @@ _:
     spiceUSBRedirection.enable = true;
   };
 
+  environment.systemPackages = with pkgs; [
+    virtio-win
+  ];
+
   # This should be set in home-manager
   #dconf.settings = {
   #  "org/virt-manager/virt-manager/connections" = {
