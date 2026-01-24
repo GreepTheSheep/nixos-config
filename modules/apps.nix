@@ -3,6 +3,7 @@
 {
   imports = [
     ./app-config/steam.nix
+    ./app-config/dev-tools.nix
     ./app-config/docker.nix
     ./app-config/zsh.nix
     ./app-config/spotify.nix
