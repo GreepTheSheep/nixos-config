@@ -22,6 +22,7 @@
     perl
     zip
     unzip
+    xdg-utils
     nixfmt
     nil
     nixd
