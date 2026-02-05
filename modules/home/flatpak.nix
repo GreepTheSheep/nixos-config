@@ -16,6 +16,7 @@ _:
       "com.github.tchx84.Flatseal"
       "org.filezillaproject.Filezilla"
       "org.qbittorrent.qBittorrent"
+      "io.github.shundhammer.qdirstat"
 
       # Games
       "com.valvesoftware.SteamLink"
