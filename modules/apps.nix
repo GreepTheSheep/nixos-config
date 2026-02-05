@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./app-config/restic_backrest.nix
     ./app-config/steam.nix
     ./app-config/dev-tools.nix
     ./app-config/docker.nix
