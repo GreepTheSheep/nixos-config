@@ -34,6 +34,7 @@
     gparted
     htop
     btop
+    ncdu
     mission-center
     wayland-utils
     hardinfo2
