@@ -3,9 +3,8 @@
 let
   cfg = config.appimages;
   appimagesDir = "${config.home.homeDirectory}/AppImages";
-  iconsDir = "${config.home.homeDirectory}/.local/share/icons/appimages";
 
-  # Génère le script de téléchargement et extraction d'icône pour une AppImage
+  # Génère le script de téléchargement pour une AppImage
   mkDownloadScript = name: appCfg: 
     let
       isGitHub = appCfg.githubRepo != "";
@@ -13,7 +12,6 @@ let
       assetPattern = if appCfg.githubAssetPattern != "" then appCfg.githubAssetPattern else ".AppImage";
     in ''
     APPIMAGE_PATH="${appimagesDir}/${appCfg.filename}"
-    ICON_NAME="${appCfg.desktopEntry.name}"
     
     # Déterminer l'URL de téléchargement
     ${if isGitHub then ''
@@ -36,56 +34,6 @@ let
         ${pkgs.curl}/bin/curl -L -o "$APPIMAGE_PATH" "$DOWNLOAD_URL"
         chmod +x "$APPIMAGE_PATH"
         echo "${name} téléchargé avec succès!"
-        
-        # Extraction automatique de l'icône
-        echo "Extraction de l'icône de ${name}..."
-        TEMP_DIR=$(mktemp -d)
-        cd "$TEMP_DIR"
-        
-        # Extraire tout le contenu de l'AppImage
-        "$APPIMAGE_PATH" --appimage-extract 2>/dev/null || {
-          echo "Erreur lors de l'extraction de l'AppImage"
-          cd - > /dev/null
-          rm -rf "$TEMP_DIR"
-          continue
-        }
-        
-        # Chercher l'icône dans plusieurs emplacements possibles
-        ICON_FILE=""
-        
-        # 1. Chercher dans les emplacements standards
-        for icon_path in \
-          "squashfs-root/usr/share/icons/hicolor/256x256/apps/*.png" \
-          "squashfs-root/usr/share/icons/hicolor/128x128/apps/*.png" \
-          "squashfs-root/usr/share/icons/hicolor/*/apps/*.png" \
-          "squashfs-root/usr/share/pixmaps/*.png" \
-          "squashfs-root/*.png" \
-          "squashfs-root/usr/share/icons/hicolor/scalable/apps/*.svg" \
-          "squashfs-root/*.svg"; do
-          FOUND=$(find squashfs-root -path "$icon_path" 2>/dev/null | head -1)
-          if [ -n "$FOUND" ]; then
-            ICON_FILE="$FOUND"
-            break
-          fi
-        done
-        
-        # 2. Si pas trouvé, chercher n'importe quelle icône PNG/SVG
-        if [ -z "$ICON_FILE" ]; then
-          ICON_FILE=$(find squashfs-root -type f \( -name "*.png" -o -name "*.svg" \) 2>/dev/null | \
-            ${pkgs.gnugrep}/bin/grep -v "thumbnail" | head -1)
-        fi
-        
-        if [ -n "$ICON_FILE" ] && [ -f "$ICON_FILE" ]; then
-          ICON_EXT="''${ICON_FILE##*.}"
-          mkdir -p "${iconsDir}"
-          cp "$ICON_FILE" "${iconsDir}/$ICON_NAME.$ICON_EXT"
-          echo "Icône extraite: ${iconsDir}/$ICON_NAME.$ICON_EXT"
-        else
-          echo "Aucune icône trouvée dans ${name}"
-        fi
-        
-        cd - > /dev/null
-        rm -rf "$TEMP_DIR"
       else
         echo "${name} existe déjà, téléchargement ignoré."
       fi
@@ -94,20 +42,6 @@ let
 
   # Liste des AppImages activées (avec url OU githubRepo)
   enabledAppImages = lib.filterAttrs (name: app: app.enable && (app.url != "" || app.githubRepo != "")) cfg.apps;
-
-  # Génère les fichiers .desktop pour chaque AppImage
-  mkDesktopEntry = name: appCfg: lib.mkIf appCfg.desktopEntry.enable {
-    "${appCfg.desktopEntry.name}" = {
-      name = appCfg.desktopEntry.displayName;
-      exec = "${appimagesDir}/${appCfg.filename}";
-      icon = "${iconsDir}/${appCfg.desktopEntry.name}";
-      comment = appCfg.desktopEntry.comment;
-      categories = appCfg.desktopEntry.categories;
-      mimeType = appCfg.desktopEntry.mimeTypes;
-      terminal = false;
-      type = "Application";
-    };
-  };
 
   # Type pour les options d'une AppImage
   appimageType = lib.types.submodule {
@@ -144,38 +78,6 @@ let
         default = false;
         description = "Si true, retélécharge l'AppImage à chaque switch";
       };
-
-      desktopEntry = {
-        enable = lib.mkEnableOption "l'entrée de bureau XDG";
-
-        name = lib.mkOption {
-          type = lib.types.str;
-          description = "Nom du fichier .desktop (sans extension)";
-        };
-
-        displayName = lib.mkOption {
-          type = lib.types.str;
-          description = "Nom affiché dans le menu";
-        };
-
-        comment = lib.mkOption {
-          type = lib.types.str;
-          default = "";
-          description = "Description de l'application";
-        };
-
-        categories = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ "Utility" ];
-          description = "Catégories XDG";
-        };
-
-        mimeTypes = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [];
-          description = "Types MIME supportés par l'application";
-        };
-      };
     };
   };
 
@@ -194,6 +96,11 @@ in
   };
 
   config = lib.mkIf (enabledAppImages != {}) {
+    # Active appimaged pour l'intégration automatique
+    services.appimagekit = {
+      enable = true;
+    };
+
     # Crée le dossier AppImages
     home.file."AppImages/.keep".text = "";
 
@@ -207,7 +114,6 @@ in
       }
       
       mkdir -p "${appimagesDir}"
-      mkdir -p "${iconsDir}"
       
       log "=== Début de l'installation des AppImages ==="
       
@@ -220,9 +126,7 @@ in
       
       log "=== Fin de l'installation des AppImages ==="
       log "Logs disponibles dans: $LOG_FILE"
+      log "appimaged intégrera automatiquement les AppImages (icônes + .desktop)"
     '';
-
-    # Génère les entrées .desktop
-    xdg.desktopEntries = lib.mkMerge (lib.mapAttrsToList mkDesktopEntry enabledAppImages);
   };
 }
