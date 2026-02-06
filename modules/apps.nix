@@ -40,7 +40,6 @@
     wayland-utils
     hardinfo2
     wl-clipboard
-    junction
   ];
 
   environment.defaultPackages = with pkgs; [
