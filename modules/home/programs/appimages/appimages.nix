@@ -9,9 +9,9 @@ let
     let
       isGitHub = appCfg.githubRepo != "";
       # Pattern pour filtrer les assets (ex: "x86_64.AppImage")
-      assetPattern = if appCfg.githubAssetPattern != "" then appCfg.githubAssetPattern else ".AppImage";
+      assetPattern = if appCfg.githubAssetPattern != "" then appCfg.githubAssetPattern else ".appimage";
     in ''
-    APPIMAGE_PATH="${appimagesDir}/${appCfg.filename}"
+    APPIMAGE_PATH="${appimagesDir}/${lib.toLower appCfg.filename}"
     ICON_PATH="${appimagesDir}/${name}.png"
     
     # Déterminer l'URL de téléchargement
@@ -67,7 +67,7 @@ let
         
         # Nettoyage
         cd "${appimagesDir}"
-        rm -rf "${appimagesDir}/tmp_${name}"
+        rm -drf "${appimagesDir}/tmp_${name}"
       else
         echo "${name} existe déjà, téléchargement ignoré."
       fi
@@ -81,7 +81,7 @@ let
   mkDesktopEntry = name: appCfg: lib.mkIf appCfg.desktopEntry.enable {
     "${appCfg.desktopEntry.name}" = {
       name = appCfg.desktopEntry.displayName;
-      exec = "${appimagesDir}/${appCfg.filename} ${appCfg.desktopEntry.execArgs}";
+      exec = "${appimagesDir}/${lib.toLower appCfg.filename} ${appCfg.desktopEntry.execArgs}";
       icon = if appCfg.desktopEntry.icon != "" then appCfg.desktopEntry.icon else "${appimagesDir}/${name}.png";
       comment = appCfg.desktopEntry.comment;
       categories = appCfg.desktopEntry.categories;
@@ -90,7 +90,7 @@ let
       type = "Application";
       actions = lib.mapAttrs (actionName: actionCfg: {
         name = actionCfg.name;
-        exec = "${appimagesDir}/${appCfg.filename} ${actionCfg.execArgs}";
+        exec = "${appimagesDir}/${lib.toLower appCfg.filename} ${actionCfg.execArgs}";
       }) appCfg.desktopEntry.actions;
     };
   };
