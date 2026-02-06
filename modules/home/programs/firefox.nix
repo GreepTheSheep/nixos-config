@@ -12,6 +12,7 @@ _:
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
       DisableSetDesktopBackground = true;
+      DontCheckDefaultBrowser = true;
       EnableTrackingProtection = {
         Value = true;
         Locked = true;

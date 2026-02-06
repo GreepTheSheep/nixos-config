@@ -16,10 +16,10 @@
         "x-scheme-handler/vscode" = "code.desktop";
         "x-scheme-handler/antigravity" = "antigravity.desktop";
         # Browser set to Junction (browser selector)
-        "text/html" = "junction.desktop";
-        "application/xhtml+xml" = "junction.desktop";
-        "x-scheme-handler/http" = "junction.desktop";
-        "x-scheme-handler/https" = "junction.desktop";
+        "text/html" = "re.sonny.Junction.desktop";
+        "application/xhtml+xml" = "re.sonny.Junction.desktop";
+        "x-scheme-handler/http" = "re.sonny.Junction.desktop";
+        "x-scheme-handler/https" = "re.sonny.Junction.desktop";
       };
     };
 
@@ -85,13 +85,13 @@
         name = "Junction";
         comment = "Browser Selector";
         genericName = "Browser Selector";
-        exec = "${pkgs.junction}/bin/junction %U";
-        icon = "junction";
+        exec = "${pkgs.junction}/bin/re.sonny.Junction %U";
+        icon = "re.sonny.Junction";
         startupNotify = true;
         categories = [ "Network" "WebBrowser" ];
         mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
         settings = {
-          StartupWMClass = "Junction";
+          StartupWMClass = "re.sonny.Junction";
           Keywords = "junction";
         };
       };
@@ -109,6 +109,13 @@
         settings = {
           StartupWMClass = "Firefox";
           Keywords = "firefox";
+        };
+        actions = {
+          new-private-window = {
+            name = "New Private Window";
+            exec = "firefox --private-window %F";
+            icon = "firefox";
+          };
         };
       };
     };
