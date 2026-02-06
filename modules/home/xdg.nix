@@ -2,6 +2,7 @@
 
 {
   xdg = {
+    enable = true;
     portal = {
       enable = true;
       xdgOpenUsePortal = true;

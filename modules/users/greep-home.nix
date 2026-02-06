@@ -12,6 +12,7 @@
   systemd.user.sessionVariables = {
     EDITOR = "nano";
     VISUAL = "code";
+    XDG_DATA_DIRS = "${pkgs.xdg-utils}/share:/run/current-system/sw/share";
   };
 
   imports = [
