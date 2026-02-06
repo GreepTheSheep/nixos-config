@@ -85,7 +85,11 @@
     };
 
     configFile = {
-      kdeglobals."General"."ColorScheme" = "BreezeDark";
+      kdeglobals."General" = {
+        "ColorScheme" = "BreezeDark";
+        # Set default web browser to Junction
+        "BrowserApplication" = "junction";
+      };
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
       kwinrc.Desktops.Number = {
         value = 1;
