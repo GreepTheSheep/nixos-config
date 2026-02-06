@@ -199,9 +199,27 @@ in
 
     # Script d'activation pour télécharger les AppImages
     home.activation.downloadAppImages = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      LOG_FILE="${appimagesDir}/appimages-install.log"
+      
+      # Fonction pour logger
+      log() {
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+      }
+      
       mkdir -p "${appimagesDir}"
       mkdir -p "${iconsDir}"
-      ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkDownloadScript enabledAppImages)}
+      
+      log "=== Début de l'installation des AppImages ==="
+      
+      # Rediriger la sortie vers le fichier de log tout en l'affichant
+      {
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList mkDownloadScript enabledAppImages)}
+      } 2>&1 | while IFS= read -r line; do
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] $line" | tee -a "$LOG_FILE"
+      done
+      
+      log "=== Fin de l'installation des AppImages ==="
+      log "Logs disponibles dans: $LOG_FILE"
     '';
 
     # Génère les entrées .desktop
