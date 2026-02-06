@@ -9,7 +9,7 @@
     githubAssetPattern = "x86_64.AppImage";
     
     filename = "helium.AppImage";
-    autoUpdate = false;
+    autoUpdate = true;
 
     desktopEntry = {
       enable = true;

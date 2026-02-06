@@ -41,12 +41,41 @@ let
         echo "Extraction de l'icône de ${name}..."
         TEMP_DIR=$(mktemp -d)
         cd "$TEMP_DIR"
-        "$APPIMAGE_PATH" --appimage-extract "*.png" 2>/dev/null || true
-        "$APPIMAGE_PATH" --appimage-extract "*.svg" 2>/dev/null || true
         
-        # Cherche l'icône principale
-        ICON_FILE=$(find squashfs-root -maxdepth 2 -name "*.png" -o -name "*.svg" 2>/dev/null | head -1)
-        if [ -n "$ICON_FILE" ]; then
+        # Extraire tout le contenu de l'AppImage
+        "$APPIMAGE_PATH" --appimage-extract 2>/dev/null || {
+          echo "Erreur lors de l'extraction de l'AppImage"
+          cd - > /dev/null
+          rm -rf "$TEMP_DIR"
+          continue
+        }
+        
+        # Chercher l'icône dans plusieurs emplacements possibles
+        ICON_FILE=""
+        
+        # 1. Chercher dans les emplacements standards
+        for icon_path in \
+          "squashfs-root/usr/share/icons/hicolor/256x256/apps/*.png" \
+          "squashfs-root/usr/share/icons/hicolor/128x128/apps/*.png" \
+          "squashfs-root/usr/share/icons/hicolor/*/apps/*.png" \
+          "squashfs-root/usr/share/pixmaps/*.png" \
+          "squashfs-root/*.png" \
+          "squashfs-root/usr/share/icons/hicolor/scalable/apps/*.svg" \
+          "squashfs-root/*.svg"; do
+          FOUND=$(find squashfs-root -path "$icon_path" 2>/dev/null | head -1)
+          if [ -n "$FOUND" ]; then
+            ICON_FILE="$FOUND"
+            break
+          fi
+        done
+        
+        # 2. Si pas trouvé, chercher n'importe quelle icône PNG/SVG
+        if [ -z "$ICON_FILE" ]; then
+          ICON_FILE=$(find squashfs-root -type f \( -name "*.png" -o -name "*.svg" \) 2>/dev/null | \
+            ${pkgs.gnugrep}/bin/grep -v "thumbnail" | head -1)
+        fi
+        
+        if [ -n "$ICON_FILE" ] && [ -f "$ICON_FILE" ]; then
           ICON_EXT="''${ICON_FILE##*.}"
           mkdir -p "${iconsDir}"
           cp "$ICON_FILE" "${iconsDir}/$ICON_NAME.$ICON_EXT"
