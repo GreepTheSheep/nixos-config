@@ -15,6 +15,11 @@
       defaultApplications = {
         "x-scheme-handler/vscode" = "code.desktop";
         "x-scheme-handler/antigravity" = "antigravity.desktop";
+        # Browser set to Junction (browser selector)
+        "text/html" = "junction.desktop";
+        "application/xhtml+xml" = "junction.desktop";
+        "x-scheme-handler/http" = "junction.desktop";
+        "x-scheme-handler/https" = "junction.desktop";
       };
     };
 
@@ -72,6 +77,38 @@
             exec = "antigravity --new-window %F";
             icon = "antigravity";
           };
+        };
+      };
+
+      # Junction
+      junction = {
+        name = "Junction";
+        comment = "Browser Selector";
+        genericName = "Browser Selector";
+        exec = "${pkgs.junction}/bin/junction %U";
+        icon = "junction";
+        startupNotify = true;
+        categories = [ "Network" "WebBrowser" ];
+        mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+        settings = {
+          StartupWMClass = "Junction";
+          Keywords = "junction";
+        };
+      };
+
+      # Firefox
+      firefox = {
+        name = "Firefox";
+        comment = "Firefox";
+        genericName = "Web Browser";
+        exec = "${pkgs.firefox}/bin/firefox %u";
+        icon = "firefox";
+        startupNotify = true;
+        categories = [ "Network" "WebBrowser" ];
+        mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+        settings = {
+          StartupWMClass = "Firefox";
+          Keywords = "firefox";
         };
       };
     };

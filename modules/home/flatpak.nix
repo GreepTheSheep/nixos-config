@@ -17,7 +17,6 @@ _:
       "org.filezillaproject.Filezilla"
       "org.qbittorrent.qBittorrent"
       "io.github.shundhammer.qdirstat"
-      "re.sonny.Junction"
 
       # Games
       "com.valvesoftware.SteamLink"
