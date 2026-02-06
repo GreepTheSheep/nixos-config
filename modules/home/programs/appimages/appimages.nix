@@ -12,6 +12,7 @@ let
       assetPattern = if appCfg.githubAssetPattern != "" then appCfg.githubAssetPattern else ".AppImage";
     in ''
     APPIMAGE_PATH="${appimagesDir}/${appCfg.filename}"
+    ICON_PATH="${appimagesDir}/${name}.png"
     
     # Déterminer l'URL de téléchargement
     ${if isGitHub then ''
@@ -34,6 +35,39 @@ let
         ${pkgs.curl}/bin/curl -L -o "$APPIMAGE_PATH" "$DOWNLOAD_URL"
         chmod +x "$APPIMAGE_PATH"
         echo "${name} téléchargé avec succès!"
+        
+        # Extraction de l'icône
+        echo "Extraction de l'icône pour ${name}..."
+        mkdir -p "${appimagesDir}/tmp_${name}"
+        cd "${appimagesDir}/tmp_${name}"
+        
+        # Tenter d'extraire .DirIcon
+        "$APPIMAGE_PATH" --appimage-extract .DirIcon > /dev/null 2>&1
+        
+        if [ -e "squashfs-root/.DirIcon" ]; then
+          # .DirIcon est souvent un lien symbolique
+          if [ -L "squashfs-root/.DirIcon" ]; then
+            ICON_TARGET=$(readlink "squashfs-root/.DirIcon")
+            "$APPIMAGE_PATH" --appimage-extract "$ICON_TARGET" > /dev/null 2>&1
+            SRC_ICON="squashfs-root/$ICON_TARGET"
+          else
+            SRC_ICON="squashfs-root/.DirIcon"
+          fi
+          
+          if [ -f "$SRC_ICON" ]; then
+            echo "Conversion de l'icône en PNG..."
+            ${pkgs.imagemagick}/bin/convert "$SRC_ICON" "$ICON_PATH"
+            echo "Icône sauvegardée: $ICON_PATH"
+          else
+            echo "Attention: Impossible de trouver le fichier icône cible"
+          fi
+        else
+          echo "Attention: .DirIcon non trouvé dans l'AppImage"
+        fi
+        
+        # Nettoyage
+        cd "${appimagesDir}"
+        rm -rf "${appimagesDir}/tmp_${name}"
       else
         echo "${name} existe déjà, téléchargement ignoré."
       fi
@@ -42,6 +76,38 @@ let
 
   # Liste des AppImages activées (avec url OU githubRepo)
   enabledAppImages = lib.filterAttrs (name: app: app.enable && (app.url != "" || app.githubRepo != "")) cfg.apps;
+
+  # Génère les fichiers .desktop pour chaque AppImage
+  mkDesktopEntry = name: appCfg: lib.mkIf appCfg.desktopEntry.enable {
+    "${appCfg.desktopEntry.name}" = {
+      name = appCfg.desktopEntry.displayName;
+      exec = "${appimagesDir}/${appCfg.filename} ${appCfg.desktopEntry.execArgs}";
+      icon = if appCfg.desktopEntry.icon != "" then appCfg.desktopEntry.icon else "${appimagesDir}/${name}.png";
+      comment = appCfg.desktopEntry.comment;
+      categories = appCfg.desktopEntry.categories;
+      mimeType = appCfg.desktopEntry.mimeTypes;
+      terminal = false;
+      type = "Application";
+      actions = lib.mapAttrs (actionName: actionCfg: {
+        name = actionCfg.name;
+        exec = "${appimagesDir}/${appCfg.filename} ${actionCfg.execArgs}";
+      }) appCfg.desktopEntry.actions;
+    };
+  };
+
+  # Type pour les actions .desktop
+  actionType = lib.types.submodule {
+    options = {
+      name = lib.mkOption {
+        type = lib.types.str;
+        description = "Nom de l'action affiché dans le menu";
+      };
+      execArgs = lib.mkOption {
+        type = lib.types.str;
+        description = "Arguments à passer à l'exécutable pour cette action";
+      };
+    };
+  };
 
   # Type pour les options d'une AppImage
   appimageType = lib.types.submodule {
@@ -78,6 +144,56 @@ let
         default = false;
         description = "Si true, retélécharge l'AppImage à chaque switch";
       };
+
+      desktopEntry = {
+        enable = lib.mkEnableOption "l'entrée de bureau XDG";
+
+        name = lib.mkOption {
+          type = lib.types.str;
+          description = "Nom du fichier .desktop (sans extension)";
+        };
+
+        displayName = lib.mkOption {
+          type = lib.types.str;
+          description = "Nom affiché dans le menu";
+        };
+
+        execArgs = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "Arguments à passer à l'exécutable (ex: %U pour les URLs, %F pour les fichiers)";
+        };
+
+        icon = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "Icône de l'application (nom du thème ou chemin absolu)";
+        };
+
+        comment = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "Description de l'application";
+        };
+
+        categories = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ "Utility" ];
+          description = "Catégories XDG";
+        };
+
+        mimeTypes = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [];
+          description = "Types MIME supportés par l'application";
+        };
+
+        actions = lib.mkOption {
+          type = lib.types.attrsOf actionType;
+          default = {};
+          description = "Actions supplémentaires (clic droit)";
+        };
+      };
     };
   };
 
@@ -96,11 +212,6 @@ in
   };
 
   config = lib.mkIf (enabledAppImages != {}) {
-    # Active appimaged pour l'intégration automatique
-    services.appimagekit = {
-      enable = true;
-    };
-
     # Crée le dossier AppImages
     home.file."AppImages/.keep".text = "";
 
@@ -126,7 +237,9 @@ in
       
       log "=== Fin de l'installation des AppImages ==="
       log "Logs disponibles dans: $LOG_FILE"
-      log "appimaged intégrera automatiquement les AppImages (icônes + .desktop)"
     '';
+
+    # Génère les entrées .desktop
+    xdg.desktopEntries = lib.mkMerge (lib.mapAttrsToList mkDesktopEntry enabledAppImages);
   };
 }

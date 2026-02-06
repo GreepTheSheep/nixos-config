@@ -41,6 +41,7 @@
     wayland-utils
     hardinfo2
     wl-clipboard
+    imagemagick
   ];
 
   environment.defaultPackages = with pkgs; [
