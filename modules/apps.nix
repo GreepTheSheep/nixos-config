@@ -43,6 +43,8 @@
     hardinfo2
     wl-clipboard
     imagemagick
+    yt-dlp
+    ffmpeg
   ];
 
   environment.defaultPackages = with pkgs; [
