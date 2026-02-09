@@ -18,7 +18,7 @@
   imports = [
     ../home/xdg.nix
     ../home/plasma/general.nix
-    ../home/hyprland.nix
+    #../home/hyprland.nix
     ../home/flatpak.nix
     ../home/apps.nix
   ];
