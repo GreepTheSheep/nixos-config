@@ -9,6 +9,7 @@
     ./app-config/zsh.nix
     ./app-config/spotify.nix
     ./app-config/virt-manager.nix
+    ./app-config/vmware.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
@@ -51,7 +52,6 @@
     vlc
     bitwarden-desktop
     jellyfin-media-player
-    vmware-workstation
   ];
 
   programs.direnv.enable = true;
