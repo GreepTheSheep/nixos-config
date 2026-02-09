@@ -51,6 +51,7 @@
     vlc
     bitwarden-desktop
     jellyfin-media-player
+    vmware-workstation
   ];
 
   programs.direnv.enable = true;
