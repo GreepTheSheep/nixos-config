@@ -12,16 +12,6 @@
     vmware-workstation
   ];
 
-  # Démarrer les services VMware
-  systemd.services.vmware = {
-    description = "VMware Workstation Server";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.vmware-workstation}/bin/vmware-networks --start";
-      ExecStop = "${pkgs.vmware-workstation}/bin/vmware-networks --stop";
-    };
-  };
-
   # Permissions pour les utilisateurs
   users.extraGroups.vmware = {};
   users.users.greep.extraGroups = [ "vmware" ];
