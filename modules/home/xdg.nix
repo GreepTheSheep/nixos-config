@@ -82,22 +82,6 @@
         };
       };
 
-      # Junction
-      junction = {
-        name = "Junction";
-        comment = "Browser Selector";
-        genericName = "Browser Selector";
-        exec = "${pkgs.junction}/bin/re.sonny.Junction %U";
-        icon = "re.sonny.Junction";
-        startupNotify = true;
-        categories = [ "Network" "WebBrowser" ];
-        mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
-        settings = {
-          StartupWMClass = "re.sonny.Junction";
-          Keywords = "junction";
-        };
-      };
-
       # Firefox
       firefox = {
         name = "Firefox";

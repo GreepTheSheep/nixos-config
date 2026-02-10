@@ -88,7 +88,7 @@
       kdeglobals."General" = {
         "ColorScheme" = "BreezeDark";
         # Set default web browser to Junction
-        "BrowserApplication" = "junction";
+        "BrowserApplication" = "re.sonny.Junction.desktop";
       };
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
       kwinrc.Desktops.Number = {
