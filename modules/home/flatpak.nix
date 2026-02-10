@@ -17,6 +17,7 @@ _:
       "org.filezillaproject.Filezilla"
       "org.qbittorrent.qBittorrent"
       "io.github.shundhammer.qdirstat"
+      "org.bunkus.mkvtoolnix-gui"
 
       # Games
       "com.valvesoftware.SteamLink"
