@@ -54,6 +54,7 @@
     vlc
     bitwarden-desktop
     jellyfin-media-player
+    flac
   ];
 
   programs.direnv.enable = true;
