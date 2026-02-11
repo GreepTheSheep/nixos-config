@@ -36,7 +36,7 @@ in
         # Telecharge et extrait l'archive
         TMPDIR=$(mktemp -d)
         ${pkgs.curl}/bin/curl -sL \
-          "https://github.com/jeffvli/feishin/releases/download/$LATEST/Feishin-linux-x64.tar.xz " \
+          "https://github.com/jeffvli/feishin/releases/download/$LATEST/Feishin-linux-x64.tar.xz" \
           -o "$TMPDIR/feishin.tar.xz"
 
         rm -rf "$FEISHIN_DIR"
@@ -57,12 +57,12 @@ in
   # XDG desktop entry pour le launcher d'applications
   xdg.desktopEntries.feishin = {
     name = "Feishin";
-    comment = "A modern self-hosted music player.";
-    genericName = "A modern self-hosted music player.";
+    comment = "Un lecteur de musique moderne auto-hébergé.";
+    genericName = "Lecteur de musique auto-hébergé";
     exec = "${feishinWrapper}/bin/feishin --no-sandbox %U";
     icon = "${feishinDir}/resources/assets/icons/icon.png";
     startupNotify = true;
-    categories = [ "Audio" "Music" "Player" ];
+    categories = [ "AudioVideo" "Audio" "Music" "Player" ];
     settings = {
       StartupWMClass = "Feishin";
       Keywords = "feishin music player";
