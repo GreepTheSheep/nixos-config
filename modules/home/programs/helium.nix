@@ -63,4 +63,30 @@ in
       fi
     fi
   '';
+
+  # XDG desktop entry pour le launcher d'applications
+  xdg.desktopEntries.helium = {
+    name = "Helium";
+    comment = "Web Browser";
+    genericName = "Web Browser";
+    exec = "${heliumWrapper}/bin/helium %U";
+    icon = "${heliumDir}/product_logo_256.png";
+    startupNotify = true;
+    categories = [ "Network" "WebBrowser" ];
+    mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+    settings = {
+      StartupWMClass = "helium";
+      Keywords = "helium web browser";
+    };
+    actions = {
+      new-window = {
+        name = "New Window";
+        exec = "${heliumWrapper}/bin/helium %U";
+      };
+      new-private-window = {
+        name = "New Incognito Window";
+        exec = "${heliumWrapper}/bin/helium --incognito %U";
+      };
+    };
+  };
 }
