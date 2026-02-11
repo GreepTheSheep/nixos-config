@@ -59,7 +59,7 @@ in
     name = "Feishin";
     comment = "Un lecteur de musique moderne auto-hébergé.";
     genericName = "Lecteur de musique";
-    exec = "${feishinWrapper}/bin/feishin --no-sandbox %U";
+    exec = "${feishinWrapper}/bin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
     icon = "${feishinDir}/resources/assets/icons/256x256.png";
     terminal = false;
     startupNotify = true;
