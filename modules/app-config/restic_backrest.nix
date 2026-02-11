@@ -29,4 +29,9 @@
       Restart = "always";
     };
   };
+
+  # Create a host to redirect http://backrest/ to the backrest service
+  networking.hosts = {
+    "127.0.0.1" = lib.mkAfter [ "backrest" "backrest.local" ];
+  };
 }
