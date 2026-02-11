@@ -94,13 +94,16 @@
         mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
         settings = {
           StartupWMClass = "Firefox";
-          Keywords = "firefox";
+          Keywords = "firefox web browser";
         };
         actions = {
+          new-window = {
+            name = "New Window";
+            exec = "firefox %F";
+          };
           new-private-window = {
             name = "New Private Window";
             exec = "firefox --private-window %F";
-            icon = "firefox";
           };
         };
       };

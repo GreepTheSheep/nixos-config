@@ -75,7 +75,7 @@ in
     categories = [ "Network" "WebBrowser" ];
     mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
     settings = {
-      StartupWMClass = "helium";
+      StartupWMClass = "Helium";
       Keywords = "helium web browser";
     };
     actions = {
