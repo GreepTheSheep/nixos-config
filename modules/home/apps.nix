@@ -8,5 +8,6 @@ _:
     ./programs/git.nix
     ./programs/rbw.nix
     ./programs/claude-code.nix
+    ./programs/helium.nix
   ];
 }
