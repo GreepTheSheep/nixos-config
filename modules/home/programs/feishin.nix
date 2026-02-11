@@ -68,7 +68,7 @@ in
       Keywords = "jellyfin;feishin;music player";
       TryExec = "${feishinWrapper}/bin/feishin";
       StartupWMClass = "feishin";
-      SingleMainWindow = true;
+      SingleMainWindow = "true";
     };
   };
 }
