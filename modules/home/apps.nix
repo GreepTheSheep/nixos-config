@@ -7,5 +7,6 @@ _:
     ./programs/gpg.nix
     ./programs/git.nix
     ./programs/rbw.nix
+    ./programs/claude-code.nix
   ];
 }
