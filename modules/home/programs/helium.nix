@@ -45,7 +45,8 @@ in
 
         rm -rf "$HELIUM_DIR"
         mkdir -p "$HELIUM_DIR"
-        ${pkgs.gnutar}/bin/tar xf "$TMPDIR/helium.tar.xz" \
+        ${pkgs.gnutar}/bin/tar --use-compress-program=${pkgs.xz}/bin/xz \
+          -xf "$TMPDIR/helium.tar.xz" \
           -C "$HELIUM_DIR" --strip-components=1
         echo "$LATEST" > "$VERSION_FILE"
         rm -rf "$TMPDIR"
