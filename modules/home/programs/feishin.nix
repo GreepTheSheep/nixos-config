@@ -58,14 +58,17 @@ in
   xdg.desktopEntries.feishin = {
     name = "Feishin";
     comment = "Un lecteur de musique moderne auto-hébergé.";
-    genericName = "Lecteur de musique auto-hébergé";
+    genericName = "Lecteur de musique";
     exec = "${feishinWrapper}/bin/feishin --no-sandbox %U";
     icon = "${feishinDir}/resources/assets/icons/256x256.png";
+    terminal = false;
     startupNotify = true;
     categories = [ "AudioVideo" "Audio" "Music" "Player" ];
     settings = {
-      StartupWMClass = "Feishin";
-      Keywords = "feishin music player";
+      Keywords = "jellyfin;feishin;music player";
+      TryExec = "${feishinWrapper}/bin/feishin";
+      StartupWMClass = "feishin";
+      SingleMainWindow = true;
     };
   };
 }
