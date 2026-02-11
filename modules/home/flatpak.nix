@@ -25,8 +25,8 @@ _:
 
       # Productivity
       "org.libreoffice.LibreOffice"
-      "io.github.brunofin.Cohesion"
       "io.github.pol_rivero.github-desktop-plus"
+      "md.obsidian.Obsidian"
 
       # Communication
       "com.discordapp.Discord"
@@ -37,6 +37,20 @@ _:
       # Remote desktop clients
       "com.parsecgaming.parsec"
       "org.remmina.Remmina"
+
+      # OBS Studio and its plugins
+      "com.obsproject.Studio"
+      "com.obsproject.Studio.Plugin.OBSVkCapture"
+      "com.obsproject.Studio.Plugin.WaylandHotkeys"
+      "com.obsproject.Studio.Plugin.SceneSwitcher"
+      "com.obsproject.Studio.Plugin.InputOverlay"
+      "com.obsproject.Studio.Plugin.AudioMonitor"
+      "com.obsproject.Studio.Plugin.MoveTransition"
+      "com.obsproject.Studio.Plugin.Countdown"
+      "com.obsproject.Studio.Plugin.waveform"
+      "com.obsproject.Studio.Plugin.SourceClone"
+      "com.obsproject.Studio.Plugin.AsyncAudioFilter"
+      "com.obsproject.Studio.Plugin.OBSPWVideo"
     ];
   };
 }
