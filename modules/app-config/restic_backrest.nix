@@ -18,6 +18,12 @@
     description = "Backrest Backup Service";
     wantedBy = [ "multi-user.target" ];
     path = with pkgs; [ backrest restic ];
+    environment = {
+      BACKREST_PORT = "0.0.0.0:9898";
+      BACKREST_RESTIC_COMMAND = "${pkgs.restic}/bin/restic";
+      HOME = "/root";
+      TZ = "Europe/Paris";
+    };
     serviceConfig = {
       ExecStart = "${pkgs.backrest}/bin/backrest";
       Restart = "always";
