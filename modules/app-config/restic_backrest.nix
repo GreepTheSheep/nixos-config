@@ -8,5 +8,19 @@
 
   # Backrest is accessed via web port 9898, we need to open it up using a firewall rule and environment variable
   networking.firewall.allowedTCPPorts = [ 9898 ];
-  environment.variables.BACKREST_PORT = "0.0.0.0:9898";
+  environment.variables= {
+    BACKREST_PORT = "0.0.0.0:9898";
+    BACKREST_RESTIC_COMMAND = "${pkgs.restic}/bin/restic";
+  };
+
+  # Create a systemd service to run backrest on startup
+  systemd.services.backrest = {
+    description = "Backrest Backup Service";
+    wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [ backrest restic ];
+    serviceConfig = {
+      ExecStart = "${pkgs.backrest}/bin/backrest";
+      Restart = "always";
+    };
+  };
 }
