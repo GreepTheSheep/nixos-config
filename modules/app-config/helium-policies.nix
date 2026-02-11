@@ -2,29 +2,16 @@ _:
 
 let
   heliumPolicies = builtins.toJSON {
-    # Telemetrie et vie privee
     MetricsReportingEnabled = false;
     BlockThirdPartyCookies = true;
-
-    # Acceleration materielle
     HardwareAccelerationModeEnabled = true;
-
-    # DNS-over-HTTPS (Cloudflare)
     DnsOverHttpsMode = "secure";
     DnsOverHttpsTemplates = "https://cloudflare-dns.com/dns-query";
-
-    # Gestionnaire de mots de passe desactive (Bitwarden utilise)
-    PasswordManagerEnabled = false;
-
-    # Bloquer les demandes de permissions
+    PasswordManagerEnabled = false; # Overridden by Bitwarden
     VideoCaptureAllowed = false;
     DefaultGeolocationSetting = 2;
     DefaultNotificationsSetting = 2;
-
-    # Telechargements
     PromptForDownloadLocation = true;
-
-    # Interface
     BookmarkBarEnabled = true;
     RestoreOnStartup = 1;
 
@@ -45,7 +32,31 @@ let
       };
 
       # Return YouTube Dislikes
-      "gebbhagfogifgklhldnoajcejolblihc" = {
+      "gebbhagfogifgggkldgodflihgfeippi" = {
+        installation_mode = "force_installed";
+        update_url = "https://clients2.google.com/service/update2/crx";
+      };
+
+      # Windscribe VPN
+      "hnmpcagpplmpfojmgmnngilcnanddlhb" = {
+        installation_mode = "force_installed";
+        update_url = "https://clients2.google.com/service/update2/crx";
+      };
+
+      # Youtube Non-Stop
+      "nlkaejimjacpillmajjnopmpbkbnocid" = {
+        installation_mode = "force_installed";
+        update_url = "https://clients2.google.com/service/update2/crx";
+      };
+
+      # Youtube Anti-Translate
+      "ndpmhjnlfkgfalaieeneneenijondgag" = {
+        installation_mode = "force_installed";
+        update_url = "https://clients2.google.com/service/update2/crx";
+      };
+
+      # 7TV
+      "ammjkodgmmoknidbanneddgankgfejfh" = {
         installation_mode = "force_installed";
         update_url = "https://clients2.google.com/service/update2/crx";
       };
