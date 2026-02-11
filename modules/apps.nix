@@ -10,6 +10,7 @@
     ./app-config/spotify.nix
     #./app-config/virt-manager.nix
     ./app-config/vmware.nix
+    ./app-config/helium-policies.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
