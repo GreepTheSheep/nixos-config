@@ -60,7 +60,7 @@ in
     comment = "Un lecteur de musique moderne auto-hébergé.";
     genericName = "Lecteur de musique auto-hébergé";
     exec = "${feishinWrapper}/bin/feishin --no-sandbox %U";
-    icon = "${feishinDir}/resources/assets/icons/icon.png";
+    icon = "${feishinDir}/resources/assets/icons/256x256.png";
     startupNotify = true;
     categories = [ "AudioVideo" "Audio" "Music" "Player" ];
     settings = {
