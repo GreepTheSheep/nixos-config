@@ -19,6 +19,9 @@
     ./modules/apps.nix
     ./modules/fonts.nix
 
+    # Nix-ld
+    ./modules/nix-ld.nix
+
     # Networking
     ./modules/network/firewall.nix
   ];
