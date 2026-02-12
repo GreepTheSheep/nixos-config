@@ -12,6 +12,7 @@
     # XRDP for remote desktop access
     xrdp = {
       enable = true;
+      defaultWindowManager = "startplasma-wayland";
       openFirewall = true;
     };
 
