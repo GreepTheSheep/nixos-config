@@ -12,8 +12,6 @@ let
     DefaultGeolocationSetting = 2;
     DefaultNotificationsSetting = 2;
     PromptForDownloadLocation = true;
-    BookmarkBarEnabled = true;
-    RestoreOnStartup = 1;
 
     # Extensions
     ExtensionSettings = {
@@ -61,6 +59,16 @@ let
         update_url = "https://clients2.google.com/service/update2/crx";
       };
     };
+
+    ExtensionInstallForcelist = [
+      "nngceckbapebfimnlniiiahkandclblb"
+      "mnjggcdmjocbbbhaepdhchncahnbgone"
+      "gebbhagfogifgggkldgodflihgfeippi"
+      "hnmpcagpplmpfojmgmnngilcnanddlhb"
+      "nlkaejimjacpillmajjnopmpbkbnocid"
+      "ndpmhjnlfkgfalaieeneneenijondgag"
+      "ammjkodgmmoknidbanneddgankgfejfh"
+    ];
   };
 in
 {
