@@ -11,7 +11,7 @@
 
     # XRDP for remote desktop access
     xrdp = {
-      defaultWindowManager = "startplasma-x11";
+      defaultWindowManager = "plasmashell";
       enable = true;
       openFirewall = true;
     };
