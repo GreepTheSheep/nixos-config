@@ -46,16 +46,17 @@
     imagemagick
     yt-dlp
     ffmpeg
+    flac
   ];
 
   environment.defaultPackages = with pkgs; [
     # Requested Apps
     vscode
     antigravity
+    davinci-resolve
     vlc
     bitwarden-desktop
     jellyfin-media-player
-    flac
   ];
 
   programs.direnv.enable = true;
