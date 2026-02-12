@@ -75,7 +75,6 @@
                 "applications:org.kde.konsole.desktop"
                 "applications:bitwarden.desktop"
                 "applications:org.jellyfin.JellyfinDesktop.desktop"
-                "applications:code.desktop"
               ];
             };
           }
