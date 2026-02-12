@@ -18,6 +18,7 @@ _:
       "org.qbittorrent.qBittorrent"
       "io.github.shundhammer.qdirstat"
       "org.bunkus.mkvtoolnix-gui"
+      "re.sonny.Junction"
 
       # Games
       "com.valvesoftware.SteamLink"
