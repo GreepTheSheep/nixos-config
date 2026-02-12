@@ -6,8 +6,8 @@
       {
         location = "bottom";
         screen = "all";
-        hiding = "dodgewindows";
-        opacity = "translucent";
+        hiding = lib.mkForce "dodgewindows";
+        opacity = lib.mkForce "translucent";
         floating = true;
         height = lib.mkForce 44;
         widgets = [
@@ -150,10 +150,10 @@
       {
         location = "top";
         screen = "all";
-        hiding = "dodgewindows";
+        hiding = lib.mkForce "dodgewindows";
         opacity = "translucent";
         floating = false;
-        height = 26;
+        height = lib.mkForce 26;
         widgets = [
           {
             iconTasks = {
