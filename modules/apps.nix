@@ -56,6 +56,7 @@
     vlc
     bitwarden-desktop
     jellyfin-media-player
+    junction
   ];
 
   programs.direnv.enable = true;
