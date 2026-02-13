@@ -56,8 +56,8 @@
 
       antigravity = {
         name = "Antigravity";
-        comment = "Code Editing. Redefined.";
-        genericName = "Text Editor";
+        comment = "Code Editing. AI-Powered.";
+        genericName = "AI-Powered Text Editor";
         exec = "${pkgs.writeShellScript "antigravity-wrapper" ''
           if echo "$1" | grep -q "^antigravity:"; then
             antigravity --open-url "$@"
