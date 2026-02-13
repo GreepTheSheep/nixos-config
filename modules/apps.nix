@@ -62,6 +62,7 @@ in
     vlc
     bitwarden-desktop
     jellyfin-media-player
+    feishin
     junction
   ] ++ lib.optionals (hostname != "laptop-hp-matt") [
     # Those apps will not be installed on the laptop
