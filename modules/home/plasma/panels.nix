@@ -70,7 +70,7 @@
               launchers = [
                 "applications:firefox.desktop"
                 "applications:org.kde.dolphin.desktop"
-                "applications:dev.vencord.Vesktop.desktop"
+                "applications:com.discordapp.Discord.desktop"
                 "applications:feishin.desktop"
                 "applications:org.kde.konsole.desktop"
                 "applications:bitwarden.desktop"
