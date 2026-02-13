@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
+let
+  hostname = config.networking.hostName;
+in
 {
   imports = [
     ./app-config/restic_backrest.nix
@@ -56,11 +59,13 @@
     # Requested Apps
     vscode
     antigravity
-    davinci-resolve
     vlc
     bitwarden-desktop
     jellyfin-media-player
     junction
+  ] ++ lib.optionals (hostname != "laptop-hp-matt") [
+    # Those apps will not be installed on the laptop
+    davinci-resolve
   ];
 
   programs.direnv.enable = true;
