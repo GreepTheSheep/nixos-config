@@ -107,6 +107,52 @@
           };
         };
       };
+
+      # Helium
+      helium = {
+        name = "Helium";
+        comment = "Web Browser";
+        genericName = "Web Browser";
+        exec = "/opt/helium/helium %U";
+        icon = "/opt/helium/product_logo_256.png";
+        startupNotify = true;
+        terminal = false;
+        categories = [ "Network" "WebBrowser" ];
+        mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+        settings = {
+          Type = "Application";
+          StartupWMClass = "helium";
+          Keywords = "helium;web browser";
+        };
+        actions = {
+          new-window = {
+            name = "New Window";
+            exec = "/opt/helium/helium %U";
+          };
+          new-private-window = {
+            name = "New Incognito Window";
+            exec = "/opt/helium/helium --incognito %U";
+          };
+        };
+      };
+
+      # Feishin
+      feishin = {
+        name = "Feishin";
+        comment = "Un lecteur de musique moderne auto-hébergé.";
+        genericName = "Lecteur de musique";
+        exec = "/opt/feishin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
+        icon = "/opt/feishin/resources/assets/icons/256x256.png";
+        terminal = false;
+        startupNotify = true;
+        categories = [ "AudioVideo" "Audio" "Music" "Player" ];
+        settings = {
+          Keywords = "jellyfin;feishin;music player";
+          TryExec = "/opt/feishin/feishin";
+          StartupWMClass = "feishin";
+          SingleMainWindow = "true";
+        };
+      };
     };
   };
 }

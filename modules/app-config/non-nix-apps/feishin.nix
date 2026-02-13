@@ -1,7 +1,7 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, ... }:
 
 let
-  feishinDir = "${config.home.homeDirectory}/.local/share/feishin";
+  feishinDir = "/opt/feishin";
 
   # Wrapper qui redirige vers le binaire telecharge par le script d'activation
   feishinWrapper = pkgs.writeShellScriptBin "feishin" ''
@@ -9,11 +9,11 @@ let
   '';
 in
 {
-  home.packages = [ feishinWrapper ];
+  environment.systemPackages = [ feishinWrapper ];
 
   # Script d'activation : telecharge la derniere version de Feishin a chaque rebuild
   # Les bibliotheques sont resolues par nix-ld (modules/nix-ld.nix)
-  home.activation.installFeishin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  system.activationScripts.installFeishin = ''
     FEISHIN_DIR="${feishinDir}"
     VERSION_FILE="$FEISHIN_DIR/.version"
 
@@ -53,22 +53,4 @@ in
       fi
     fi
   '';
-
-  # XDG desktop entry pour le launcher d'applications
-  xdg.desktopEntries.feishin = {
-    name = "Feishin";
-    comment = "Un lecteur de musique moderne auto-hébergé.";
-    genericName = "Lecteur de musique";
-    exec = "${feishinWrapper}/bin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
-    icon = "${feishinDir}/resources/assets/icons/256x256.png";
-    terminal = false;
-    startupNotify = true;
-    categories = [ "AudioVideo" "Audio" "Music" "Player" ];
-    settings = {
-      Keywords = "jellyfin;feishin;music player";
-      TryExec = "${feishinWrapper}/bin/feishin";
-      StartupWMClass = "feishin";
-      SingleMainWindow = "true";
-    };
-  };
 }

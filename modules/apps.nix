@@ -11,6 +11,10 @@
     #./app-config/virt-manager.nix
     ./app-config/vmware.nix
     ./app-config/helium-policies.nix
+
+    # Non-nix apps are installed in /opt
+    ./app-config/non-nix-apps/helium.nix
+    ./app-config/non-nix-apps/feishin.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
