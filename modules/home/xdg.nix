@@ -85,16 +85,16 @@
       # Firefox
       firefox = {
         name = "Firefox";
-        comment = "Firefox";
+        comment = "Web Browser";
         genericName = "Web Browser";
-        exec = "${pkgs.firefox}/bin/firefox %u";
+        exec = "${pkgs.firefox}/bin/firefox %U";
         icon = "firefox";
         startupNotify = true;
         categories = [ "Network" "WebBrowser" ];
-        mimeType = [ "text/html" "application/xhtml+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+        mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
         settings = {
           StartupWMClass = "Firefox";
-          Keywords = "firefox web browser";
+          Keywords = "firefox;web browser";
         };
         actions = {
           new-window = {
@@ -133,24 +133,6 @@
             name = "New Incognito Window";
             exec = "/opt/helium/helium --incognito %U";
           };
-        };
-      };
-
-      # Feishin
-      feishin = {
-        name = "Feishin";
-        comment = "Un lecteur de musique moderne auto-hébergé.";
-        genericName = "Lecteur de musique";
-        exec = "/opt/feishin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
-        icon = "/opt/feishin/resources/assets/icons/256x256.png";
-        terminal = false;
-        startupNotify = true;
-        categories = [ "AudioVideo" "Audio" "Music" "Player" ];
-        settings = {
-          Keywords = "jellyfin;feishin;music player";
-          TryExec = "/opt/feishin/feishin";
-          StartupWMClass = "feishin";
-          SingleMainWindow = "true";
         };
       };
     };
