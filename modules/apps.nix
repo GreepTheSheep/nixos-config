@@ -17,6 +17,7 @@ in
 
     # Non-nix apps are installed in /opt
     ./app-config/non-nix-apps/helium.nix
+    ./app-config/non-nix-apps/feishin.nix
   ];
 
   # Allow unfree packages (VSCode, etc.)
@@ -61,7 +62,6 @@ in
     vlc
     bitwarden-desktop
     jellyfin-media-player
-    feishin
     junction
   ] ++ lib.optionals (hostname != "laptop-hp-matt") [
     # Those apps will not be installed on the laptop

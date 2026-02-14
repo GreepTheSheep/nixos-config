@@ -135,6 +135,25 @@
           };
         };
       };
+
+      # Feishin
+      feishin = {
+        name = "Feishin";
+        comment = "Un lecteur de musique moderne auto-hébergé.";
+        genericName = "Lecteur de musique";
+        exec = "/opt/feishin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
+        icon = "/opt/feishin/resources/assets/icons/256x256.png";
+        terminal = false;
+        startupNotify = true;
+        categories = [ "AudioVideo" "Audio" "Music" "Player" ];
+        settings = {
+          Keywords = "jellyfin;feishin;music player";
+          TryExec = "/opt/feishin/feishin";
+          StartupWMClass = "feishin";
+          SingleMainWindow = "true";
+        };
+      };
+
     };
   };
 }
