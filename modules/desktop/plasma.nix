@@ -69,8 +69,7 @@ in
     kdePackages.ktorrent
   ];
 
-} // lib.mkIf (hostname != "laptop-hp-matt") {
-  nixos.pkgs = {
-    wallpaper-engine-kde-plugin.enable = true; # Don't install on the laptop
-  };
+  # Wallpaper Engine KDE plugin
+  nixos.pkgs.wallpaper-engine-kde-plugin.enable = lib.mkIf (hostname != "laptop-hp-matt") true; # Don't enable on the laptop
+
 }
