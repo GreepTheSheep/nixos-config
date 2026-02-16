@@ -1,6 +1,13 @@
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
+let
+  hostname = config.networking.hostName;
+in
 {
+  imports = [
+    ../app-config/pkgs/wallpaper-engine-kde-plugin.nix
+  ];
+
   services = {
     # KDE Plasma 6 (Wayland)
     desktopManager = {
@@ -49,7 +56,6 @@
     kdiff3
     kdePackages.isoimagewriter
     kdePackages.kwallet-pam
-    kdePackages.wallpaper-engine-plugin
   ];
 
   # Excludes some KDE applications
@@ -62,4 +68,9 @@
     kdePackages.ksudoku
     kdePackages.ktorrent
   ];
+
+} // lib.mkIf (hostname != "laptop-hp-matt") {
+  nixos.pkgs = {
+    wallpaper-engine-kde-plugin.enable = true; # Don't install on the laptop
+  };
 }
