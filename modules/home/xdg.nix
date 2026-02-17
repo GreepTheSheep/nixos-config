@@ -154,6 +154,17 @@
         };
       };
 
+      # Backrest (opens http://backrest:9898)
+      backrest = {
+        name = "Backrest";
+        comment = "Utilitaire de sauvegardes avec Restic.";
+        genericName = "Backup utility";
+        exec = "xdg-open http://backrest:9898/";
+        terminal = false;
+        startupNotify = false;
+        categories = [ "Utility" "FileTools" ];
+      };
+
     };
   };
 }
