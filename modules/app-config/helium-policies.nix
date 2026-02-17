@@ -14,16 +14,16 @@ let
     PromptForDownloadLocation = true;
 
     # Extensions
-    ExtensionInstallAllowlist = ["*"];
-    ExtensionInstallForcelist = [
-      "nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx" # Bitwarden Password Manager
-      "mnjggcdmjocbbbhaepdhchncahnbgone;https://clients2.google.com/service/update2/crx" # SponsorBlock
+    #ExtensionInstallAllowlist = ["*"];
+    #ExtensionInstallForcelist = [
+      #"nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx" # Bitwarden Password Manager
+      #"mnjggcdmjocbbbhaepdhchncahnbgone;https://clients2.google.com/service/update2/crx" # SponsorBlock
       #"gebbhagfogifgggkldgodflihgfeippi;https://clients2.google.com/service/update2/crx" # Return YouTube Dislikes
       #"hnmpcagpplmpfojmgmnngilcnanddlhb;https://clients2.google.com/service/update2/crx" # Windscribe VPN
-      "nlkaejimjacpillmajjnopmpbkbnocid;https://clients2.google.com/service/update2/crx" # Youtube Non-Stop
-      "ndpmhjnlfkgfalaieeneneenijondgag;https://clients2.google.com/service/update2/crx" # Youtube Anti-Translate
+      #"nlkaejimjacpillmajjnopmpbkbnocid;https://clients2.google.com/service/update2/crx" # Youtube Non-Stop
+      #"ndpmhjnlfkgfalaieeneneenijondgag;https://clients2.google.com/service/update2/crx" # Youtube Anti-Translate
       #"ammjkodgmmoknidbanneddgankgfejfh;https://clients2.google.com/service/update2/crx" # 7TV
-    ];
+    #];
   };
 in
 {
