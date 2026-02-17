@@ -14,51 +14,16 @@ let
     PromptForDownloadLocation = true;
 
     # Extensions
-    ExtensionSettings = {
-      "*".installation_mode = "allowed";
-
-      # Bitwarden Password Manager
-      "nngceckbapebfimnlniiiahkandclblb" = {
-        installation_mode = "force_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # SponsorBlock
-      "mnjggcdmjocbbbhaepdhchncahnbgone" = {
-        installation_mode = "force_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # Return YouTube Dislikes
-      "gebbhagfogifgggkldgodflihgfeippi" = {
-        installation_mode = "normal_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # Windscribe VPN
-      "hnmpcagpplmpfojmgmnngilcnanddlhb" = {
-        installation_mode = "normal_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # Youtube Non-Stop
-      "nlkaejimjacpillmajjnopmpbkbnocid" = {
-        installation_mode = "force_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # Youtube Anti-Translate
-      "ndpmhjnlfkgfalaieeneneenijondgag" = {
-        installation_mode = "force_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-
-      # 7TV
-      "ammjkodgmmoknidbanneddgankgfejfh" = {
-        installation_mode = "normal_installed";
-        update_url = "https://clients2.google.com/service/update2/crx";
-      };
-    };
+    ExtensionInstallAllowlist = ["*"];
+    ExtensionInstallForcelist = [
+      "nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx" # Bitwarden Password Manager
+      "mnjggcdmjocbbbhaepdhchncahnbgone;https://clients2.google.com/service/update2/crx" # SponsorBlock
+      #"gebbhagfogifgggkldgodflihgfeippi;https://clients2.google.com/service/update2/crx" # Return YouTube Dislikes
+      #"hnmpcagpplmpfojmgmnngilcnanddlhb;https://clients2.google.com/service/update2/crx" # Windscribe VPN
+      "nlkaejimjacpillmajjnopmpbkbnocid;https://clients2.google.com/service/update2/crx" # Youtube Non-Stop
+      "ndpmhjnlfkgfalaieeneneenijondgag;https://clients2.google.com/service/update2/crx" # Youtube Anti-Translate
+      #"ammjkodgmmoknidbanneddgankgfejfh;https://clients2.google.com/service/update2/crx" # 7TV
+    ];
   };
 in
 {
