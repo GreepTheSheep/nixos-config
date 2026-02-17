@@ -19,7 +19,7 @@ in
     # XRDP for remote desktop access
     xrdp = {
       enable = true;
-      defaultWindowManager = "startplasma-wayland";
+      defaultWindowManager = "startplasma-x11";
       openFirewall = true;
     };
 
@@ -56,6 +56,7 @@ in
     kdiff3
     kdePackages.isoimagewriter
     kdePackages.kwallet-pam
+    kdePackages.krdp
   ];
 
   # Excludes some KDE applications
