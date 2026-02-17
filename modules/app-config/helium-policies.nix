@@ -31,13 +31,13 @@ let
 
       # Return YouTube Dislikes
       "gebbhagfogifgggkldgodflihgfeippi" = {
-        installation_mode = "force_installed";
+        installation_mode = "normal_installed";
         update_url = "https://clients2.google.com/service/update2/crx";
       };
 
       # Windscribe VPN
       "hnmpcagpplmpfojmgmnngilcnanddlhb" = {
-        installation_mode = "force_installed";
+        installation_mode = "normal_installed";
         update_url = "https://clients2.google.com/service/update2/crx";
       };
 
@@ -55,20 +55,10 @@ let
 
       # 7TV
       "ammjkodgmmoknidbanneddgankgfejfh" = {
-        installation_mode = "force_installed";
+        installation_mode = "normal_installed";
         update_url = "https://clients2.google.com/service/update2/crx";
       };
     };
-
-    ExtensionInstallForcelist = [
-      "nngceckbapebfimnlniiiahkandclblb"
-      "mnjggcdmjocbbbhaepdhchncahnbgone"
-      "gebbhagfogifgggkldgodflihgfeippi"
-      "hnmpcagpplmpfojmgmnngilcnanddlhb"
-      "nlkaejimjacpillmajjnopmpbkbnocid"
-      "ndpmhjnlfkgfalaieeneneenijondgag"
-      "ammjkodgmmoknidbanneddgankgfejfh"
-    ];
   };
 in
 {
