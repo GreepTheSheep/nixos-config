@@ -43,11 +43,35 @@
           spicetify-nix.nixosModules.spicetify
         ];
       };
+
       pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/pc-matt-nix-vm/hardware-configuration.nix
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.sharedModules = [
+              plasma-manager.homeModules.plasma-manager
+              nix-flatpak.homeManagerModules.nix-flatpak
+            ];
+          }
+          sops-nix.nixosModules.sops
+          spicetify-nix.nixosModules.spicetify
+        ];
+      };
+
+      liveIso = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ({ pkgs, modulesPath, ... }: {
+            imports = [
+              (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+            ];
+          })
+          ./hosts/live-iso.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
