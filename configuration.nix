@@ -5,6 +5,7 @@
 
     # Hardware & Services
     ./modules/services/audio.nix
+    ./modules/services/openssh.nix
 
     # Desktop Environments
     ./modules/desktop/sddm.nix
