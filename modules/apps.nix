@@ -53,6 +53,7 @@ in
     yt-dlp
     ffmpeg
     flac
+    progress
   ];
 
   environment.defaultPackages = with pkgs; [
