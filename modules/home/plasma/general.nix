@@ -1,5 +1,8 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 
+let
+  isLaptop = config.networking.hostName == "laptop-hp-matt";
+in
 {
   imports = [
     ./panels.nix
@@ -50,22 +53,42 @@
       AC = {
         powerButtonAction = "lockScreen";
         whenLaptopLidClosed = "doNothing";
+        dimDisplay = lib.mkIf isLaptop {
+          enable = true;
+          idleTimeout = 300;
+        };
+        turnOffDisplay = lib.mkMerge [
+          (lib.mkIf isLaptop {
+            idleTimeout = 900;
+            idleTimeoutWhenLocked = "immediately";
+          })
+          (lib.mkIf (!isLaptop) {
+            idleTimeout = "never";
+            idleTimeoutWhenLocked = "immediately";
+          })
+        ];
         autoSuspend = {
           action = "nothing";
-        };
-        turnOffDisplay = {
-          idleTimeout = 900;
-          idleTimeoutWhenLocked = "immediately";
         };
       };
       battery = {
         powerButtonAction = "hibernate";
         whenLaptopLidClosed = "doNothing";
-        turnOffDisplay = {
-          idleTimeout = 120;
-          idleTimeoutWhenLocked = "immediately";
+        dimDisplay = lib.mkIf isLaptop {
+          enable = true;
+          idleTimeout = 60;
         };
-        autoSuspend = {
+        turnOffDisplay = lib.mkMerge [
+          (lib.mkIf isLaptop {
+            idleTimeout = 120;
+            idleTimeoutWhenLocked = "immediately";
+          })
+          (lib.mkIf (!isLaptop) {
+            idleTimeout = "never";
+            idleTimeoutWhenLocked = "immediately";
+          })
+        ];
+        autoSuspend = lib.mkIf isLaptop {
           action = "sleep";
           idleTimeout = 300;
         };
