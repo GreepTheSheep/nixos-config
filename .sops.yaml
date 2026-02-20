@@ -1,13 +1,10 @@
-# This example uses YAML anchors which allows reuse of multiple keys
-# without having to repeat yourself.
-# Also see https://github.com/Mic92/dotfiles/blob/d6114726d859df36ccaa32891c4963ae5717ef7f/nixos/.sops.yaml
-# for a more complex example.
+# Age keys for each host (derived from SSH host keys)
 keys:
-  - &laptop_hp_matt 3C07E1183C2DA8DAE8E15DEF827F01FB59002258
-  - &pc_matt_nix_vm F5E44286251DBBE437DCA847603E1DF09C30DD60
+  - &laptop_hp_matt age19hgrs33stkh44ujk03gzu0hkvpvfqyu4w5qu99t4xwkms5056plqhsfzae
+  - &pc_matt_nix_vm age1n05g09zwgcdazvngtuzmaju02hylmg9mhukl4szy6l974pc5yq2q24593l
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
-    - pgp:
+    - age:
       - *laptop_hp_matt
       - *pc_matt_nix_vm

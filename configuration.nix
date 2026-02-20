@@ -27,10 +27,10 @@
     ./modules/network/firewall.nix
   ];
 
-  # Sops secrets
+  # Sops secrets (age via SSH host key)
   sops = {
     defaultSopsFile = ./secrets/secrets.yaml;
-    gnupg.home = "/home/greep/.gnupg";
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
     secrets = {
       "nextcloud/password" = {};
