@@ -1,7 +1,7 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, osConfig, ... }:
 
 let
-  isLaptop = config.networking.hostName == "laptop-hp-matt";
+  isLaptop = osConfig.networking.hostName == "laptop-hp-matt";
 in
 {
   imports = [
@@ -64,7 +64,6 @@ in
           })
           (lib.mkIf (!isLaptop) {
             idleTimeout = "never";
-            idleTimeoutWhenLocked = "immediately";
           })
         ];
         autoSuspend = {
@@ -85,7 +84,6 @@ in
           })
           (lib.mkIf (!isLaptop) {
             idleTimeout = "never";
-            idleTimeoutWhenLocked = "immediately";
           })
         ];
         autoSuspend = lib.mkIf isLaptop {
