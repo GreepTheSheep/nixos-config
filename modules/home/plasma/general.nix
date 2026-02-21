@@ -109,16 +109,23 @@ in
     };
 
     configFile = {
-      kdeglobals."General" = {
-        "ColorScheme" = "BreezeDark";
+      kdeglobals.General = {
+        ColorScheme = "BreezeDark";
+
         # Set default web browser to Junction
-        "BrowserApplication" = "re.sonny.Junction.desktop";
+        BrowserApplication = "re.sonny.Junction.desktop";
       };
+
       baloofilerc."Basic Settings"."Indexing-Enabled" = false;
+
       kwinrc.Desktops.Number = {
         value = 1;
         # Forces kde to not change this value (even through the settings app).
         immutable = true;
+      };
+
+      klipperrc.General = {
+        SyncClipboards = false; # Disable sync between X11 and Wayland clipboards
       };
     };
   };
