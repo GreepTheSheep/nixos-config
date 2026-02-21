@@ -35,7 +35,10 @@ in
 
     kscreenlocker = {
       lockOnResume = true;
-      timeout = 5;
+      timeout = lib.mkMerge [
+          (lib.mkIf isLaptop 5)
+          (lib.mkIf (!isLaptop) 15)
+        ];
       passwordRequired = true;
       passwordRequiredDelay = 30;
       lockOnStartup = false;
