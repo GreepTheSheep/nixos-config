@@ -510,10 +510,6 @@ fetch_config() {
     mkdir -p /mnt/etc/nixos
     cp -r /home/nixos/nixos-config/* /mnt/etc/nixos/
     cp -r /home/nixos/nixos-config/.* /mnt/etc/nixos/
-
-    nixos-generate-config --root /mnt > /dev/null 2>&1
-
-    install_nix
 }
 
 install_nix() {
@@ -522,14 +518,16 @@ install_nix() {
     echo "Etape 10 : Installation de NixOS"
     echo ""
 
-    export NIX_CONFIG="experimental-features = nix-command flakes"
+    nixos-generate-config --root /mnt
+
     nixos-install --root /mnt \
         --flake "/mnt/etc/nixos#${FLAKE_CONFIG}" \
         --no-write-lock-file \
         --no-root-passwd \
+        --impure \
+        --keep-going \
+        --experimental-features "nix-command flakes" \
         --option eval-cache false
-
-    postinstall
 }
 
 postinstall() {
@@ -541,7 +539,7 @@ postinstall() {
     # Config du mot de passe root
     read -sp "Entrer le mot de passe root: " rootpasswd
     echo ""
-    { echo $rootpasswd; echo $rootpasswd; } | nixos-enter --silent -c passwd > /dev/null 2>&1
+    echo $rootpasswd | nixos-enter --silent -c passwd > /dev/null 2>&1
 
     # Configuration git
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
