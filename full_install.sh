@@ -551,7 +551,7 @@ postinstall() {
     # Config du mot de passe root
     read -sp "Entrer le mot de passe root: " rootpasswd
     echo ""
-    echo $rootpasswd | nixos-enter --silent -c passwd > /dev/null 2>&1
+    { echo $rootpasswd; echo $rootpasswd; } | nixos-enter --silent -c passwd > /dev/null 2>&1
 
     # Configuration git
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
@@ -574,7 +574,7 @@ postinstall() {
 }
 
 finished() {
-    echo ""
+    clear_screen
     echo "/!\ Installation terminée !"
     echo "Vous pouvez maintenant redémarrer votre poste pour accéder a votre configuration NixOS"
     echo "ou sinon passer en mode chroot avec la commande 'nixos-enter'"
