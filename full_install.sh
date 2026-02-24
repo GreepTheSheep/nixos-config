@@ -532,13 +532,13 @@ install_nix() {
 
     nixos-generate-config --root /mnt
 
+    export NIX_CONFIG="experimental-features = nix-command flakes"
     nixos-install --root /mnt \
         --flake "/mnt/etc/nixos#${FLAKE_CONFIG}" \
         --no-write-lock-file \
         --no-root-passwd \
         --impure \
         --keep-going \
-        --experimental-features "nix-command flakes" \
         --option eval-cache false
 }
 
