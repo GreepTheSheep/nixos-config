@@ -72,7 +72,7 @@ get_hosts_from_flake() {
         | sed 's/^[^A-Za-z]*//' \
         | cut -d':' -f1 \
         | sort -u)
-    
+
     rm -f "$tmpfile"
 
     # Remove liveIso from hosts as it is not a real host
@@ -101,7 +101,7 @@ select_host() {
         echo ""
         exit 1
     fi
-    
+
     echo "Sélectionnez l'hôte à installer:"
     select host in $hosts; do
         if [ -n "$host" ]; then
@@ -144,10 +144,21 @@ select_disk() {
     for disk in $disks; do
         local size=$(lsblk -dn -o SIZE "/dev/${disk}")
         local model=$(lsblk -dn -o MODEL "/dev/${disk}" 2>/dev/null | xargs || echo "Unknown")
-        
+        local rota=$(lsblk -dn -o ROTA "/dev/${disk}")
+        local nvme=$(lsblk -dn -o NAME "/dev/${disk}" | grep -q "nvme" && echo true || echo false)
+
         echo -e "  [${num}] ${disk}"
         echo -e "      Size: ${size}"
         echo -e "      Model: ${model}"
+        if [ "$rota" -eq 0 ]; then
+            if [ "$nvme" = true ]; then
+                echo "      Interface: NVMe SSD"
+            else
+                echo "      Interface: SATA SSD ou SSHD"
+            fi
+        else
+            echo "      Interface: HDD"
+        fi
         echo ""
         num=$((num+1))
     done
@@ -155,6 +166,7 @@ select_disk() {
     select disk in $disks; do
         if [ -n "$disk" ]; then
             DISK="/dev/$disk"
+            IS_DISK_SSD=$(lsblk -dn -o ROTA "/dev/${disk}" | grep -q "0" && echo true || echo false)
             break
         fi
         if [ -z "$disk" ]; then
