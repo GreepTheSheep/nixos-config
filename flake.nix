@@ -1,36 +1,106 @@
 {
-  description = "Greep NixOS Configuration ISO";
+  description = "Greep NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    impermanence.url = "github:nix-community/impermanence";
+
+    catppuccin.url = "github:catppuccin/nix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Blocklists
+    ads = {
+      url = "https://blocklistproject.github.io/Lists/ads.txt";
+      flake = false;
+    };
+    malware = {
+      url = "https://blocklistproject.github.io/Lists/malware.txt";
+      flake = false;
+    };
+    oisd-big = {
+      url = "https://big.oisd.nl/";
+      flake = false;
+    };
+    oisd-small = {
+      url = "https://small.oisd.nl/";
+      flake = false;
+    };
+    phishing = {
+      url = "https://blocklistproject.github.io/Lists/phishing.txt";
+      flake = false;
+    };
+    ransomware = {
+      url = "https://blocklistproject.github.io/Lists/ransomware.txt";
+      flake = false;
+    };
+    tracking = {
+      url = "https://blocklistproject.github.io/Lists/tracking.txt";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, nix-flatpak, sops-nix, spicetify-nix, ... }@inputs: {
-    nixosConfigurations = {
-      # Standard NixOS configuration
-      laptop-hp-matt = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+  outputs = inputs@{
+    self,
+    nixpkgs,
+    catppuccin,
+    home-manager,
+    plasma-manager,
+    nix-flatpak,
+    sops-nix,
+    spicetify-nix,
+    ...
+  }: let
+    system = "x86_64-linux";
+
+    mkHost =
+      hostname: nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = inputs // { inherit inputs; };
         modules = [
-          ./hosts/laptop-hp-matt/hardware-configuration.nix
+          (
+            if hostname == "liveIso" then
+              [
+                ({ pkgs, modulesPath, ... }: {
+                  imports = [
+                    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+                  ];
+                })
+                ./hosts/live-iso.nix
+              ]
+            else
+              [
+                catppuccin.nixosModules.catppuccin
+                ./hosts/${hostname}/configuration.nix
+              ]
+          )
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -44,46 +114,18 @@
         ];
       };
 
-      pc-matt-nix-vm = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./hosts/pc-matt-nix-vm/hardware-configuration.nix
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.sharedModules = [
-              plasma-manager.homeModules.plasma-manager
-              nix-flatpak.homeManagerModules.nix-flatpak
-            ];
-          }
-          sops-nix.nixosModules.sops
-          spicetify-nix.nixosModules.spicetify
-        ];
-      };
-
-      liveIso = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
-        modules = [
-          ({ pkgs, modulesPath, ... }: {
-            imports = [
-              (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-            ];
-          })
-          ./hosts/live-iso.nix
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.sharedModules = [
-              plasma-manager.homeModules.plasma-manager
-              nix-flatpak.homeManagerModules.nix-flatpak
-            ];
-          }
-          sops-nix.nixosModules.sops
-          spicetify-nix.nixosModules.spicetify
-        ];
-      };
-    };
+    hosts = [
+      "laptop-hp-matt"
+      "pc-matt-nix-vm"
+      "liveIso"
+    ];
+  in
+  {
+    nixosConfigurations = builtins.listToAttrs (
+      map (host: {
+        name = host;
+        value = mkHost host;
+      }) hosts
+    );
   };
 }
