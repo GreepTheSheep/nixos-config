@@ -8,7 +8,7 @@
     ./hardware
     ./pkgs
     #./server
-    #./system
+    ./system
     #./theme
     #./userEnvironment
     #./virtualisation
@@ -33,7 +33,7 @@
       hardware.enable = true;
       pkgs.enable = true;
       #server.enable = false;
-      #system.enable = true;
+      system.enable = true;
       #theme.enable = true;
       #userEnvironment.enable = lib.mkDefault false;
       #virtualisation.enable = lib.mkDefault false;
