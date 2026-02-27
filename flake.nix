@@ -98,7 +98,7 @@
             else
               [
                 catppuccin.nixosModules.catppuccin
-                ./hosts/${hostname}/configuration.nix
+                ./hosts/${hostname}/default.nix
               ]
           )
           ./configuration.nix
