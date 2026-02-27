@@ -12,7 +12,8 @@
       defaultuser = {
         name = lib.mkOption {
           type = lib.types.str;
-          example = "USER1";
+          default = "greep";
+          example = "user";
           description = "Set the default user name.";
         };
         pass = lib.mkOption {
@@ -27,8 +28,8 @@
         };
         shell = lib.mkOption {
           type = lib.types.package;
-          default = pkgs.bash;
-          example = pkgs.zsh;
+          default = pkgs.zsh;
+          example = pkgs.bash;
           description = "Set the default shell.";
         };
         settings = lib.mkOption {
