@@ -16,12 +16,6 @@
     services.xserver = {
       enable = true;
 
-      # Configure keymap in X11
-      xkb = {
-        layout = "fr";
-        variant = "";
-      };
-
       # Graphics
       videoDrivers = [ "modesetting" ];
     };
