@@ -3,7 +3,7 @@
 {
   imports = [
     ./base
-    #./desktop
+    ./desktop
     #./disko
     ./hardware
     #./pkgs
@@ -28,7 +28,7 @@
   config = lib.mkIf config.nixos.nixosModules.enable {
     nixos = {
       base.enable = true;
-      #desktop.enable = lib.mkDefault false;
+      desktop.enable = lib.mkDefault false;
       #disko.enable = true;
       hardware.enable = true;
       #pkgs.enable = true;

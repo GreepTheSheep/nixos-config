@@ -1,0 +1,24 @@
+{ lib, ... }:
+
+{
+  imports = [
+    ./gdm.nix
+    ./sddm.nix
+  ];
+
+  options.nixos = {
+    desktop.displayManager = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Enable displayManager modules bundle.";
+      };
+      defaultSession = lib.mkOption {
+        type = lib.types.str;
+        example = "plasma";
+        description = "Set the default session for display manager.";
+      };
+    };
+  };
+}
