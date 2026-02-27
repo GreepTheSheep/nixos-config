@@ -6,7 +6,7 @@
     ./desktop
     #./disko
     ./hardware
-    #./pkgs
+    ./pkgs
     #./server
     #./system
     #./theme
@@ -31,7 +31,7 @@
       desktop.enable = lib.mkDefault false;
       #disko.enable = true;
       hardware.enable = true;
-      #pkgs.enable = true;
+      pkgs.enable = true;
       #server.enable = false;
       #system.enable = true;
       #theme.enable = true;
