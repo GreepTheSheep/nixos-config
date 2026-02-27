@@ -27,7 +27,7 @@
 
     # Créer le point de montage
     systemd.tmpfiles.rules = [
-      "d /mnt/cloud 0755 greep users -"
+      "d /mnt/cloud 0755 ${config.nixos.system.user.defaultuser.name} users -"
     ];
 
     # Unité de montage systemd qui se monte/démonte automatiquement avec le réseau
