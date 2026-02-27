@@ -1,0 +1,113 @@
+{ config, lib, inputs, ... }:
+
+let
+  fetchBlocklist = name: inputs.${name};
+
+  enabledBlocklists = [
+    "ads"
+    "malware"
+    "phishing"
+    "ransomware"
+    "tracking"
+    # "oisd-big"
+    # "oisd-small"
+  ];
+
+  localIP = config.nixos.system.networking.localIP or null;
+
+  mkHostEntries =
+    ip: hosts:
+    let
+      effectiveIP = if localIP != null && ip == localIP then "127.0.0.1" else ip;
+    in
+    {
+      ${effectiveIP} = lib.mkDefault hosts;
+    };
+
+  # https://github.com/xerhaxs/nixos/blob/main/nixosModules/system/networking.nix#L40
+  hostEntries = lib.mkMerge [
+    (mkHostEntries "192.168.1.50" [
+      "greep.local"
+    ])
+  ];
+
+in
+
+{
+  options.nixos = {
+    system.networking = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Enable networking and network config.";
+      };
+
+      localIP = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "192.168.1.50";
+        description = "Local IP address of this host. Host entries matching this IP will use 127.0.0.1 instead.";
+      };
+
+      blocklists = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Enable DNS blocklists.";
+        };
+
+        urls = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = enabledBlocklists;
+          description = "List of blocklist URLs to use.";
+        };
+      };
+    };
+  };
+
+  config = lib.mkIf config.nixos.system.networking.enable {
+    networking = {
+      networkmanager = {
+        enable = true;
+        dns = "default";
+        wifi = {
+          scanRandMacAddress = true;
+          powersave = false;
+          macAddress = "stable";
+        };
+      };
+
+      wireless = {
+        enable = true;
+        userControlled = true;
+      };
+
+      enableIPv6 = true;
+      tempAddresses = "default";
+      useDHCP = false;
+
+      hosts = hostEntries;
+
+      hostFiles = lib.mkIf config.nixos.system.networking.blocklists.enable (
+        map fetchBlocklist config.nixos.system.networking.blocklists.urls
+      );
+
+      defaultGateway = "10.75.0.1";
+      defaultGateway6 = "fe80::1";
+
+      nameservers = [
+        "10.75.0.21"
+        "10.75.0.1"
+        "9.9.9.9"
+        "149.112.112.112"
+        "2620:fe::fe"
+        "2620:fe::9"
+      ];
+    };
+
+    users.users."${config.nixos.system.user.defaultuser.name}" = {
+      extraGroups = [ "networkmanager" ];
+    };
+  };
+}
