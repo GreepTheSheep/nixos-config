@@ -9,8 +9,8 @@
     ./pkgs
     #./server
     ./system
-    #./theme
-    #./userEnvironment
+    #./theme # TODO later: cappuccin
+    ./userEnvironment
     #./virtualisation
   ];
 
@@ -35,7 +35,7 @@
       #server.enable = false;
       system.enable = true;
       #theme.enable = true;
-      #userEnvironment.enable = lib.mkDefault false;
+      userEnvironment.enable = lib.mkDefault false;
       #virtualisation.enable = lib.mkDefault false;
     };
   };
