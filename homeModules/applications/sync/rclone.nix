@@ -1,0 +1,20 @@
+{ config, lib, ... }:
+
+{
+  options.homeManager = {
+    applications.sync.rclone = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Enable rclone sync.";
+      };
+    };
+  };
+
+  config = lib.mkIf config.homeManager.applications.sync.rclone.enable {
+    programs.rclone = {
+      enable = true;
+    };
+  };
+}
