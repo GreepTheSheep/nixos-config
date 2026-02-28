@@ -11,7 +11,7 @@
     ./system
     #./theme # TODO later: cappuccin
     ./userEnvironment
-    #./virtualisation
+    ./virtualisation
   ];
 
   options.nixos = {
@@ -36,7 +36,7 @@
       system.enable = true;
       #theme.enable = true;
       userEnvironment.enable = lib.mkDefault false;
-      #virtualisation.enable = lib.mkDefault false;
+      virtualisation.enable = lib.mkDefault false;
     };
   };
 }
