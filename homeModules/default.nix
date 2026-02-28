@@ -4,7 +4,7 @@
   imports = [
     ./applications
     ./base
-    #./desktop
+    ./desktop
     ./home
     #./theme
     ./userEnvironment
@@ -22,7 +22,7 @@
   config = lib.mkIf config.homeManager.enable {
     homeManager = {
       base.enable = lib.mkIf osConfig.nixos.base.enable true;
-      #desktop.enable = lib.mkIf osConfig.nixos.desktop.enable true;
+      desktop.enable = lib.mkIf osConfig.nixos.desktop.enable true;
       home.enable = true;
       #theme.enable = lib.mkIf osConfig.nixos.theme.enable true;
       userEnvironment.enable = lib.mkIf osConfig.nixos.userEnvironment.enable true;
