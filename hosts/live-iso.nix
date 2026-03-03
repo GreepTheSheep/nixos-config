@@ -1,6 +1,10 @@
 { lib, ... }:
 
 {
+  host.isLaptop = false;
+  host.isVM = false;
+  host.isLiveIso = true;
+
   system.stateVersion = "25.11";
   networking.hostName = "greep-nixos-live-iso";
 
