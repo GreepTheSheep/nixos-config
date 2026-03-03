@@ -2,7 +2,7 @@
 
 {
   options.homeManager = {
-    base.shell.bash = {
+    base.shell.zsh = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
