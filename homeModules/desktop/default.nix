@@ -2,8 +2,8 @@
 
 {
   imports = [
-    #./desktopEnvironment
-    #./windowManager
+    ./desktopEnvironment
+    ./windowManager
 
     ./xdg.nix
     ./xserver.nix
@@ -22,8 +22,8 @@
 
   config = lib.mkIf config.homeManager.desktop.enable {
     homeManager.desktop = {
-      #desktopEnvironment.enable = true;
-      #windowManager.enable = true;
+      desktopEnvironment.enable = true;
+      windowManager.enable = true;
 
       xdg.enable = true;
       xserver.enable = true;
