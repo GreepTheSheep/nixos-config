@@ -71,11 +71,6 @@
     self,
     nixpkgs,
     catppuccin,
-    home-manager,
-    plasma-manager,
-    nix-flatpak,
-    sops-nix,
-    spicetify-nix,
     ...
   }: let
     system = "x86_64-linux";
@@ -93,24 +88,18 @@
                     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
                   ];
                 })
+                ./nixosModules/default.nix
                 ./hosts/live-iso.nix
+                ./homeModules/homemanager.nix
               ]
             else
               [
-                catppuccin.nixosModules.catppuccin
+                #catppuccin.nixosModules.catppuccin
+                ./nixosModules/default.nix
                 ./hosts/${hostname}/default.nix
+                ./homeModules/homemanager.nix
               ]
           )
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.sharedModules = [
-              plasma-manager.homeModules.plasma-manager
-              nix-flatpak.homeManagerModules.nix-flatpak
-            ];
-          }
-          sops-nix.nixosModules.sops
-          spicetify-nix.nixosModules.spicetify
         ];
       };
 
