@@ -1,6 +1,10 @@
-{ config, lib, ... }:
+{ config, lib, nix-flatpak, ... }:
 
 {
+  imports = [
+    nix-flatpak.homeManagerModules.nix-flatpak
+  ];
+
   options.homeManager = {
     applications.flatpak = {
       enable = lib.mkOption {
