@@ -12,6 +12,7 @@
     ./fonts.nix
     ./kdeconnect.nix
     ./samba-client.nix
+    ./spotify.nix
   ];
 
   options.nixos = {
@@ -37,6 +38,7 @@
       fonts.enable = true;
       kdeconnect.enable = true;
       samba-client.enable = true;
+      spotify.enable = true;
     };
   };
 }
