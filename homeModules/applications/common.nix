@@ -16,7 +16,7 @@
     home.packages = with pkgs; [
       qdirstat
       remmina
-      gearlever
+      #gearlever
     ];
   };
 }

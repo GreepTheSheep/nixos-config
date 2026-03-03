@@ -27,6 +27,7 @@
       ];
       packages = [
         "com.github.tchx84.Flatseal"
+        "it.mijorus.gearlever"
       ];
     };
   };
