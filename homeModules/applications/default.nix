@@ -34,7 +34,6 @@
       communication.enable = true;
       development.enable = true;
       editing.enable = true;
-      education.enable = true;
       gaming.enable = lib.mkIf osConfig.nixos.userEnvironment.game.enable true;
       media.enable = true;
       office.enable = true;
