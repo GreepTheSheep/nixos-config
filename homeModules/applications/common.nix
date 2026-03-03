@@ -17,6 +17,7 @@
       qdirstat
       remmina
       bitwarden-desktop
+      junction
       #gearlever
     ];
   };
