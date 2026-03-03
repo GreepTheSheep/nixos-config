@@ -21,56 +21,58 @@
     };
   };
 
-  networking.hostName = "greep-nixos-live-iso";
+  config = {
+    networking.hostName = "greep-nixos-live-iso";
 
-  nixpkgs.hostPlatform = lib.mkForce "x86_64-linux";
+    nixpkgs.hostPlatform = lib.mkForce "x86_64-linux";
 
-  # Disable sops secrets for the live ISO (no SSH host keys available)
-  sops = {
-    age.sshKeyPaths = lib.mkForce [];
-    secrets = lib.mkForce {};
-    templates = lib.mkForce {};
-  };
-
-  virtualisation = {
-    vmware.guest.enable = true;
-    virtualbox.guest.enable = true;
-    hypervGuest.enable = true;
-  };
-
-  services.qemuGuest.enable = true;
-
-  hardware = {
-    enableAllFirmware = true;
-    enableAllHardware = true;
-  };
-
-  nixos.desktop = {
-    enable = true;
-    desktopEnvironment = {
-      plasma6.enable = true;
+    # Disable sops secrets for the live ISO (no SSH host keys available)
+    sops = {
+      age.sshKeyPaths = lib.mkForce [];
+      secrets = lib.mkForce {};
+      templates = lib.mkForce {};
     };
-    displayManager = {
-      defaultSession = "plasma";
-      sddm.enable = true;
+
+    virtualisation = {
+      vmware.guest.enable = true;
+      virtualbox.guest.enable = true;
+      hypervGuest.enable = true;
     };
-    windowManager = {
-      hyprland.enable = false;
+
+    services.qemuGuest.enable = true;
+
+    hardware = {
+      enableAllFirmware = true;
+      enableAllHardware = true;
     };
+
+    nixos.desktop = {
+      enable = true;
+      desktopEnvironment = {
+        plasma6.enable = true;
+      };
+      displayManager = {
+        defaultSession = "plasma";
+        sddm.enable = true;
+      };
+      windowManager = {
+        hyprland.enable = false;
+      };
+    };
+
+    nixos.hardware = {
+      amdcpu.enable = true;
+      nvidiagpu.enable = true;
+    };
+
+    nixos.system.user.defaultuser = {
+      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+    };
+
+    nixos.userEnvironment.enable = true;
+
+    services.spice-autorandr.enable = true;
+    services.spice-vdagentd.enable = true;
+    services.spice-webdavd.enable = true;
   };
-
-  nixos.hardware = {
-    amdcpu.enable = true;
-    nvidiagpu.enable = true;
-  };
-
-  nixos.system.user.defaultuser = {
-    pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
-  };
-
-  nixos.userEnvironment.enable = true;
-
-  services.spice-autorandr.enable = true;
-  services.spice-vdagentd.enable = true;
-  services.spice-webdavd.enable = true;
 }
