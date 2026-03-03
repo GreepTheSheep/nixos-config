@@ -48,5 +48,8 @@
     };
 
     nixos.userEnvironment.enable = true;
+
+    nixos.system.cloudmount.enable = true;
+    sops.age.keyFile = "/root/.secrets/keys.txt";
   };
 }
