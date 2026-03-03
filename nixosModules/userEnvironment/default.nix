@@ -5,6 +5,7 @@
     ./config
     #./game
     ./io
+    ./non-nix-apps
 
     ./appimage.nix
     ./fonts.nix
@@ -28,14 +29,12 @@
       config.enable = true;
       #game.enable = lib.mkDefault false;
       io.enable = true;
+      non-nix-apps.enable = true;
 
       appimage.enable = true;
       fonts.enable = true;
       kdeconnect.enable = true;
-      mullvad.enable = true;
-      nfs-client.enable = true;
       samba-client.enable = true;
-      syncthing.enable = true;
     };
   };
 }
