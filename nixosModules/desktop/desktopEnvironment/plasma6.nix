@@ -12,7 +12,7 @@ let
                 enableLanguages = [
                   "eng"
                   "osd"
-                  "fre"
+                  "fra"
                 ];
               }
             }/bin \
@@ -21,7 +21,7 @@ let
                 enableLanguages = [
                   "eng"
                   "osd"
-                  "fre"
+                  "fra"
                 ];
               }
             }/share/tessdata \
@@ -30,7 +30,7 @@ let
                 enableLanguages = [
                   "eng"
                   "osd"
-                  "fre"
+                  "fra"
                 ];
               }
             }/lib

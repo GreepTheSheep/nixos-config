@@ -16,7 +16,7 @@
     home.packages = with pkgs; [
       gImageReader
       hunspell
-      hunspellDicts.fr_FR
+      hunspellDicts.fr-any
       hunspellDicts.en_GB-large
       hunspellDicts.en_US
       hyphen

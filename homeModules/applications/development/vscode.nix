@@ -112,21 +112,21 @@
             };
           };
         };
-      };
 
-      extensions = with pkgs.vscode-extensions; [
-        shardulm94.trailing-spaces
-        hbenl.vscode-test-explorer
-        vscode-icons-team.vscode-icons
-        esbenp.prettier-vscode
-        jnoortheen.nix-ide
-        usernamehw.errorlens
-        editorconfig.editorconfig
-        ms-azuretools.vscode-docker
-        ritwickdey.liveserver
-        ms-vscode-remote.remote-containers
-        anthropic.claude-code
-      ];
+        extensions = with pkgs.vscode-extensions; [
+          shardulm94.trailing-spaces
+          hbenl.vscode-test-explorer
+          vscode-icons-team.vscode-icons
+          esbenp.prettier-vscode
+          jnoortheen.nix-ide
+          usernamehw.errorlens
+          editorconfig.editorconfig
+          ms-azuretools.vscode-docker
+          ritwickdey.liveserver
+          ms-vscode-remote.remote-containers
+          anthropic.claude-code
+        ];
+      };
     };
   };
 }

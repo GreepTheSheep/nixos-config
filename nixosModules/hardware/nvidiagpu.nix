@@ -16,11 +16,7 @@
     boot.initrd.kernelModules = [ "nvidia" ];
 
     # Make sure opengl is enabled
-    hardware.opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
+    hardware.graphics.enable = true;
 
     # Tell Xorg to use the nvidia driver
     services.xserver = {
@@ -34,7 +30,7 @@
 
       # Use the open source version of the kernel module
       # Only available on driver 515.43.04+
-      #open = true;
+      open = true;
 
       # Enable the nvidia settings menu
       nvidiaSettings = true;

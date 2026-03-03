@@ -102,7 +102,7 @@
           name = "Firefox";
           comment = "Web Browser";
           genericName = "Web Browser";
-          exec = "${pkgs.wrapFirefox}/bin/firefox %U";
+          exec = "${pkgs.firefox}/bin/firefox %U";
           icon = "firefox";
           startupNotify = true;
           categories = [ "Network" "WebBrowser" ];

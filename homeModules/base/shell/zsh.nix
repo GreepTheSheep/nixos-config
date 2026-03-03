@@ -17,7 +17,9 @@
       enable = true;
       enableCompletion = true;
 
-      autosuggestions.enable = true;
+      dotDir = config.home.homeDirectory;
+
+      autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
       initContent = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
