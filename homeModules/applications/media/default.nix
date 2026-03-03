@@ -8,6 +8,7 @@
     ./mediaplayer.nix
     ./mpv.nix
     ./obs-studio.nix
+    ./qbittorrent.nix
     ./yt-dlp.nix
   ];
 
@@ -30,6 +31,7 @@
       mediaplayer.enable = true;
       mpv.enable = true;
       obs-studio.enable = true;
+      qbittorrent.enable = true;
       yt-dlp.enable = true;
     };
   };
