@@ -13,6 +13,10 @@
   };
 
   config = lib.mkIf config.nixos.base.shell.zsh.enable {
+    environment.systemPackages = with pkgs; [
+      zsh-powerlevel10k
+    ];
+
     programs.zsh = {
       enable = true;
       enableBashCompletion = true;
@@ -43,9 +47,5 @@
         "oxd" = "oxker";
       };
     };
-
-    environment.systemPackages = with pkgs; [
-      zsh-powerlevel10k
-    ];
   };
 }

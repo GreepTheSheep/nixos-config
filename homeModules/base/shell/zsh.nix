@@ -13,39 +13,6 @@
   };
 
   config = lib.mkIf config.homeManager.base.shell.zsh.enable {
-    programs.zsh = {
-      enable = true;
-      enableCompletion = true;
-
-      dotDir = config.home.homeDirectory;
-
-      autosuggestion.enable = true;
-      syntaxHighlighting.enable = true;
-
-      initContent = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-
-      oh-my-zsh = {
-        enable = true;
-        # theme = "agnoster"; # Disabled for Powerlevel10k
-        plugins = [
-          "git"
-          "sudo"
-          "history"
-          "command-not-found"
-        ];
-      };
-
-      shellAliases = {
-        ll = "ls -l";
-        "nix-update" = "sudo nixos-rebuild switch";
-        ".." = "cd ..";
-        "q" = "exit";
-        "cls" = "clear";
-        "lzd" = "lazydocker";
-        "oxd" = "oxker";
-      };
-    };
-
     home.file.".zshrc" = {
       enable = true;
       source = "${./zsh/.zshrc}";
