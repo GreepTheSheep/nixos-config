@@ -85,7 +85,7 @@ in
 
       enableIPv6 = true;
       tempAddresses = "default";
-      useDHCP = if localIP == null then true else false;
+      useDHCP = lib.mkDefault (if localIP == null then true else false);
 
       hosts = hostEntries;
 
