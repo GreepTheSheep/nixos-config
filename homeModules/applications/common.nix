@@ -16,6 +16,7 @@
     home.packages = with pkgs; [
       qdirstat
       remmina
+      bitwarden-desktop
       #gearlever
     ];
   };
