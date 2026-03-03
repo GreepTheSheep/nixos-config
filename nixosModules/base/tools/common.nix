@@ -43,11 +43,10 @@
       usbutils
       wl-clipboard
       imagemagick
-      yt-dlp
-      ffmpeg
       flac
       hardinfo2
       wayland-utils
+      junction
 
       # networking tools
       inetutils
