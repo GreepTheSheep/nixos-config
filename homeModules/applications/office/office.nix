@@ -21,7 +21,6 @@
       hunspellDicts.en_US
       hyphen
       kdePackages.ghostwriter
-      kile
       languagetool
       libreoffice
       multimarkdown
