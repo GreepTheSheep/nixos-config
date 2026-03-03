@@ -14,6 +14,7 @@
     ./terminal
 
     ./common.nix
+    ./flatpak.nix
   ];
 
   options.homeManager = {
@@ -39,9 +40,10 @@
       office.enable = true;
       screenshot.enable = true;
       sync.enable = true;
-      terminal.enable = true;
+      terminal.enable = lib.mkDefault false;
 
       common.enable = true;
+      flatpak.enable = lib.mkDefault false;
     };
   };
 }
