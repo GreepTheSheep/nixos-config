@@ -2,7 +2,8 @@ _:
 
 {
   imports = [
-    #./bootloader.nix
+    ./bootloader.nix
+    ./bluetooth.nix
     ./configuration.nix
     #./disko.nix
     ./hardware-configuration.nix
