@@ -43,5 +43,9 @@
         "oxd" = "oxker";
       };
     };
+
+    environment.systemPackages = with pkgs; [
+      zsh-powerlevel10k
+    ];
   };
 }
