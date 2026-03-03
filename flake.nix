@@ -79,28 +79,26 @@
       hostname: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = inputs // { inherit inputs; };
-        modules = [
-          (
-            if hostname == "liveIso" then
-              [
-                ({ pkgs, modulesPath, ... }: {
-                  imports = [
-                    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-                  ];
-                })
-                ./nixosModules/default.nix
-                ./hosts/live-iso.nix
-                ./homeModules/homemanager.nix
-              ]
-            else
-              [
-                #catppuccin.nixosModules.catppuccin
-                ./nixosModules/default.nix
-                ./hosts/${hostname}/default.nix
-                ./homeModules/homemanager.nix
-              ]
-          )
-        ];
+        modules = (
+          if hostname == "liveIso" then
+            [
+              ({ pkgs, modulesPath, ... }: {
+                imports = [
+                  (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+                ];
+              })
+              ./nixosModules/default.nix
+              ./hosts/live-iso.nix
+              ./homeModules/homemanager.nix
+            ]
+          else
+            [
+              #catppuccin.nixosModules.catppuccin
+              ./nixosModules/default.nix
+              ./hosts/${hostname}/default.nix
+              ./homeModules/homemanager.nix
+            ]
+        );
       };
 
     hosts = [
