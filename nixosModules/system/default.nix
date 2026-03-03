@@ -12,6 +12,7 @@
     ./locals.nix
     ./networking.nix
     ./nh.nix
+    ./nix-ld.nix
     ./nixos.nix
     ./nixosvm.nix
     ./powermanagement.nix
@@ -44,6 +45,7 @@
       locals.enable = true;
       networking.enable = true;
       nh.enable = true;
+      nix-ld.enable = true;
       nixos.enable = true;
       nixosvm.enable = true;
       powermanagement.enable = true;
