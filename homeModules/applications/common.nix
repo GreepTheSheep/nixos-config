@@ -13,8 +13,10 @@
   };
 
   config = lib.mkIf config.homeManager.applications.common.enable {
-    #home.packages = with pkgs; [
-
-    #];
+    home.packages = with pkgs; [
+      qdirstat
+      remmina
+      gearlever
+    ];
   };
 }
