@@ -6,6 +6,8 @@
     ./bottles.nix
     ./claudecode.nix
     ./diff.nix
+    ./filezilla.nix
+    ./github-desktop.nix
     ./nixd.nix
     ./virtualisation.nix
     ./vscode.nix
@@ -27,6 +29,8 @@
       antigravity.enable = lib.mkDefault false;
       bottles.enable = true;
       diff.enable = lib.mkDefault false;
+      filezilla.enable = true;
+      github-desktop.enable = true;
       claudecode.enable = lib.mkDefault false;
       nixd.enable = true;
       virtualisation.enable = lib.mkIf osConfig.nixos.virtualisation.kvm.enable true;
