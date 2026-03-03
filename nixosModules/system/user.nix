@@ -16,6 +16,12 @@
           example = "user";
           description = "Set the default user name.";
         };
+        description = lib.mkOption {
+          type = lib.types.str;
+          default = "Greep";
+          example = "User";
+          description = "Set the default display name.";
+        };
         pass = lib.mkOption {
           type = lib.types.str;
           example = "$y$j9T$0UcoJ1R/ZXIbBZ5E0HtJT/$I7Q8aZQe/J06G1WZiLlEh0rc7HDOrltYUuDZrZSd4r0";
@@ -47,7 +53,7 @@
       group = "users";
       createHome = true;
       home = "/home/${config.nixos.system.user.defaultuser.name}";
-      description = "${config.nixos.system.user.defaultuser.name}";
+      description = "${config.nixos.system.user.defaultuser.description}";
       extraGroups = [
         "wheel"
       ];
