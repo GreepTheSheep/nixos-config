@@ -3,7 +3,7 @@
 {
   imports = [
     ./config
-    #./game
+    ./game
     ./io
     ./non-nix-apps
     ./runtimes
@@ -29,7 +29,7 @@
   config = lib.mkIf config.nixos.userEnvironment.enable {
     nixos.userEnvironment = {
       config.enable = true;
-      #game.enable = lib.mkDefault false;
+      game.enable = lib.mkDefault false;
       io.enable = true;
       non-nix-apps.enable = true;
       runtimes.enable = true;
