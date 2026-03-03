@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./helium-policies.nix
     #./obs-studio.nix
   ];
 
@@ -18,6 +19,7 @@
 
   config = lib.mkIf config.nixos.userEnvironment.config.enable {
     nixos.userEnvironment.config = {
+      helium-policies.enable = true;
       #obs-studio.enable = true;
     };
   };
