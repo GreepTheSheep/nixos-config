@@ -6,6 +6,7 @@
     #./game
     ./io
     ./non-nix-apps
+    ./runtimes
 
     ./appimage.nix
     ./fonts.nix
@@ -30,6 +31,7 @@
       #game.enable = lib.mkDefault false;
       io.enable = true;
       non-nix-apps.enable = true;
+      runtimes.enable = true;
 
       appimage.enable = true;
       fonts.enable = true;
