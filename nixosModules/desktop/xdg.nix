@@ -11,7 +11,7 @@ let
   pdfviewer = [ "re.sonny.Junction.desktop;" ];
   imageviewer = [ "org.kde.gwenview.desktop;" ];
   editor = [ "org.kde.kate.desktop;" ];
-  discord = [ "com.discordapp.Discord.desktop;" ];
+  discord = [ "discord.desktop;" ];
   vscode = [ "code.desktop;" ];
   antigravity = [ "antigravity.desktop;" ];
 
