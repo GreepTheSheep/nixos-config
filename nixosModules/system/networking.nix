@@ -85,7 +85,7 @@ in
 
       enableIPv6 = true;
       tempAddresses = "default";
-      useDHCP = false;
+      useDHCP = if localIP == null then true else false;
 
       hosts = hostEntries;
 
@@ -93,14 +93,19 @@ in
         map fetchBlocklist config.nixos.system.networking.blocklists.urls
       );
 
-      defaultGateway = "10.75.0.1";
-      defaultGateway6 = "fe80::1";
+      defaultGateway = if localIP == null then null else "192.168.1.1";
+      defaultGateway6 = if localIP == null then null else "fe80::1";
 
       nameservers = [
-        "10.75.0.21"
-        "10.75.0.1"
+        "94.140.14.14"
+        "1.1.1.1"
+        "94.140.15.15"
+        "1.0.0.1"
         "9.9.9.9"
-        "149.112.112.112"
+        "2a10:50c0::ad1:ff"
+        "2606:4700:4700::1111"
+        "2a10:50c0::2:ff"
+        "2606:4700:4700::1001"
         "2620:fe::fe"
         "2620:fe::9"
       ];
