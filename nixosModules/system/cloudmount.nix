@@ -2,7 +2,7 @@
 
 {
   options.nixos = {
-    system.nasmount = {
+    system.cloudmount = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -12,7 +12,7 @@
     };
   };
 
-  config = lib.mkIf config.nixos.system.nasmount.enable {
+  config = lib.mkIf config.nixos.system.cloudmount.enable {
     services.davfs2.enable = true;
     environment.systemPackages = [ pkgs.davfs2 ];
 
