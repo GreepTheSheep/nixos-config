@@ -5,8 +5,8 @@
     applications.common = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = false;
-        example = true;
+        default = true;
+        example = false;
         description = "Enable common tools.";
       };
     };
@@ -17,6 +17,7 @@
       qdirstat
       remmina
       bitwarden-desktop
+      mission-center
       #gearlever
     ];
   };
