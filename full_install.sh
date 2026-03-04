@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euo pipefail  # Arrêter en cas d'erreur
 
@@ -6,18 +6,26 @@ set -euo pipefail  # Arrêter en cas d'erreur
 GIT_REPO_URL="git.greep.fr/greep/nixos-config"
 FLAKE_CONFIG=""
 DISK=""
-PART_BOOT=""
-PART_BTRFS=""
-SWAP_SIZE=4
-ENCRYPT_DISK=false
-IS_DISK_SSD=false
+IS_NEW_HOST=false
+ALONGSIDE_ESP=""       # Chemin de l'ESP à utiliser (/dev/sdaX ou /dev/nvme...)
+ALONGSIDE_BTRFS=""     # Chemin de la nouvelle partition btrfs
+GIT_CRED_FILE=""       # Fichier de credentials git temporaire
 
 abort() {
     echo ""
     echo "Installation interrompue par l'utilisateur"
+    cleanup_git_auth
     exit 1
 }
 trap abort INT TERM
+
+cleanup_git_auth() {
+    if [[ -n "${GIT_CRED_FILE:-}" ]]; then
+        rm -f "$GIT_CRED_FILE"
+        GIT_CRED_FILE=""
+    fi
+    git config --global --unset credential.helper 2>/dev/null || true
+}
 
 clear_screen() {
     clear
@@ -46,6 +54,16 @@ require_root() {
     fi
 }
 
+setup_git_auth() {
+    GIT_CRED_FILE=$(mktemp /tmp/.git-creds-XXXXXX)
+    chmod 600 "$GIT_CRED_FILE"
+    # Stocker les credentials dans un fichier temporaire (non visible dans ps)
+    printf 'https://%s:%s@%s\n' "$gitusername" "$gitpassword" "${GIT_REPO_URL%%/*}" > "$GIT_CRED_FILE"
+    git config --global credential.helper "store --file ${GIT_CRED_FILE}"
+    # Effacer le mot de passe de la mémoire
+    unset gitpassword
+}
+
 get_git_credentials() {
     clear_screen
 
@@ -55,13 +73,15 @@ get_git_credentials() {
     echo "La repo git utilisé est: https://${GIT_REPO_URL}"
     read -p "Entrer votre identifiant git: " gitusername
     read -sp "Entrer votre mot de passe git: " gitpassword
+    echo ""
+    setup_git_auth
 }
 
 # ------ Host selection from flake ------
 get_hosts_from_flake() {
     local tmpfile="/tmp/nix_flake.txt"
 
-    nix flake show git+https://${gitusername}:${gitpassword}@${GIT_REPO_URL}.git \
+    nix flake show "git+https://${GIT_REPO_URL}.git" \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
         --accept-flake-config > "$tmpfile" 2>&1
@@ -81,6 +101,31 @@ get_hosts_from_flake() {
     echo "$hosts"
 }
 
+get_new_host_name() {
+    clear_screen
+
+    echo "Etape 2b : Nom du nouvel hôte"
+    echo ""
+
+    while true; do
+        read -p "Entrez le nom du nouvel hôte (ex: desktop-greep): " new_host_name
+
+        if [[ -z "$new_host_name" ]]; then
+            echo "/!\\ Le nom ne peut pas être vide"
+            continue
+        fi
+
+        if [[ ! "$new_host_name" =~ ^[a-zA-Z0-9-]+$ ]]; then
+            echo "/!\\ Le nom ne peut contenir que des lettres, chiffres et tirets"
+            continue
+        fi
+
+        break
+    done
+
+    FLAKE_CONFIG="$new_host_name"
+}
+
 select_host() {
     clear_screen
 
@@ -88,33 +133,40 @@ select_host() {
     echo ""
     echo "Chargement en cours..."
 
-    local hosts
-    hosts=$(get_hosts_from_flake)
+    local hosts_raw
+    hosts_raw=$(get_hosts_from_flake)
 
     clear_screen
     echo "Etape 2 : Sélection de l'hôte"
     echo ""
 
-    if [[ -z "$hosts" ]]; then
+    if [[ -z "$hosts_raw" ]]; then
         echo ""
-        echo "/!\ Aucun hôte trouvé dans le fichier flake"
+        echo "/!\\ Aucun hôte trouvé dans le fichier flake"
         echo ""
         exit 1
     fi
 
+    local -a host_options
+    while IFS= read -r line; do
+        host_options+=("$line")
+    done <<< "$hosts_raw"
+    host_options+=("[ Créer un nouvel hôte ]")
+
     echo "Sélectionnez l'hôte à installer:"
-    select host in $hosts; do
-        if [ -n "$host" ]; then
-            FLAKE_CONFIG="$host"
+    select choice in "${host_options[@]}"; do
+        if [ -n "$choice" ]; then
+            if [ "$choice" = "[ Créer un nouvel hôte ]" ]; then
+                get_new_host_name
+                IS_NEW_HOST=true
+            else
+                FLAKE_CONFIG="$choice"
+            fi
             break
         fi
-        if [ -z "$host" ]; then
-            echo ""
-            echo "/!\ Veuillez entrer un hôte valide"
-            echo ""
-            select_host
-            return
-        fi
+        echo ""
+        echo "/!\\ Veuillez entrer un hôte valide"
+        echo ""
     done
 
     echo ""
@@ -133,7 +185,7 @@ select_disk() {
     disks=$(lsblk -d -o NAME,TYPE | grep disk | awk '{print $1}')
 
     if [[ -z "$disks" ]]; then
-        echo "/!\ Aucun disque trouvé"
+        echo "/!\\ Aucun disque trouvé"
         exit 1
     fi
 
@@ -163,24 +215,340 @@ select_disk() {
         num=$((num+1))
     done
 
-    select disk in $disks; do
-        if [ -n "$disk" ]; then
-            DISK="/dev/$disk"
-            IS_DISK_SSD=$(lsblk -dn -o ROTA "/dev/${disk}" | grep -q "0" && echo true || echo false)
+    while true; do
+        select disk in $disks; do
+            if [ -n "$disk" ]; then
+                DISK="/dev/$disk"
+                break 2
+            fi
+            echo ""
+            echo "/!\\ Veuillez entrer un disque valide"
+            echo ""
             break
-        fi
-        if [ -z "$disk" ]; then
-            echo ""
-            echo "/!\ Veuillez entrer un disque valide"
-            echo ""
-            select_disk
-            return
-        fi
+        done
     done
 
     echo ""
     echo "Disque sélectionné: $DISK"
 
+    sleep 2
+}
+
+update_mount_uuids() {
+    local mount_nix="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/mount.nix"
+
+    [[ ! -f "$mount_nix" ]] && return
+
+    echo "  Mise à jour des UUIDs dans mount.nix..."
+
+    local new_btrfs_uuid new_esp_uuid
+    new_btrfs_uuid=$(blkid -s UUID -o value "$(findmnt -n -o SOURCE /mnt | sed 's/\[.*//')" 2>/dev/null || true)
+    new_esp_uuid=$(blkid -s UUID -o value "$(findmnt -n -o SOURCE /mnt/boot | sed 's/\[.*//')" 2>/dev/null || true)
+
+    if [[ -z "$new_btrfs_uuid" ]] || [[ -z "$new_esp_uuid" ]]; then
+        echo "  /!\\ Impossible de lire les UUIDs depuis /mnt"
+        return
+    fi
+
+    # UUID btrfs : format lowercase xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    local old_btrfs_uuid
+    old_btrfs_uuid=$(grep -oP '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$mount_nix" | head -1 || true)
+    if [[ -n "$old_btrfs_uuid" ]] && [[ "$old_btrfs_uuid" != "$new_btrfs_uuid" ]]; then
+        sed -i "s/${old_btrfs_uuid}/${new_btrfs_uuid}/g" "$mount_nix"
+        echo "  UUID btrfs : $old_btrfs_uuid → $new_btrfs_uuid"
+    fi
+
+    # UUID ESP : format uppercase XXXX-XXXX
+    local old_esp_uuid
+    old_esp_uuid=$(grep -oP '[0-9A-F]{4}-[0-9A-F]{4}' "$mount_nix" | head -1 || true)
+    if [[ -n "$old_esp_uuid" ]] && [[ "$old_esp_uuid" != "$new_esp_uuid" ]]; then
+        sed -i "s/${old_esp_uuid}/${new_esp_uuid}/g" "$mount_nix"
+        echo "  UUID ESP : $old_esp_uuid → $new_esp_uuid"
+    fi
+}
+
+detect_existing_os() {
+    echo "  Détection des systèmes d'exploitation existants..."
+    echo ""
+
+    local found=false
+
+    if command -v os-prober &>/dev/null; then
+        local prober_out
+        prober_out=$(os-prober 2>/dev/null || true)
+        if [[ -n "$prober_out" ]]; then
+            echo "  Systèmes détectés (os-prober) :"
+            while IFS='|' read -r part label short type; do
+                [[ -z "$part" ]] && continue
+                echo "    - ${short:-$label} sur $part (type : ${type:-inconnu})"
+                found=true
+            done <<< "$prober_out"
+        fi
+    fi
+
+    if [[ "$found" = false ]]; then
+        echo "  Systèmes détectés (lsblk) :"
+        local disk_name
+        disk_name=$(basename "$DISK")
+        while IFS= read -r line; do
+            local name fstype
+            name=$(echo "$line" | awk '{print $1}')
+            fstype=$(echo "$line" | awk '{print $2}')
+            case "$fstype" in
+                ntfs|ntfs-3g)        echo "    - Windows probable sur /dev/$name (NTFS)" ; found=true ;;
+                ext4|ext3|btrfs|xfs) echo "    - Linux probable sur /dev/$name ($fstype)" ; found=true ;;
+            esac
+        done < <(lsblk -lno NAME,FSTYPE "$DISK" 2>/dev/null | grep -v "^${disk_name} " || true)
+
+        if [[ "$found" = false ]]; then
+            echo "    Aucun système d'exploitation détecté"
+        fi
+    fi
+}
+
+detect_existing_esp() {
+    local esp_part=""
+
+    # Méthode 1 : via PARTTYPE GUID EFI
+    esp_part=$(lsblk -o NAME,PARTTYPE "$DISK" -ln 2>/dev/null \
+        | grep -i "c12a7328-f81f-11d2-ba4b-00a0c93ec93b" \
+        | awk '{print "/dev/" $1}' | head -1 || true)
+
+    # Méthode 2 : via fdisk
+    if [[ -z "$esp_part" ]]; then
+        esp_part=$(fdisk -l "$DISK" 2>/dev/null \
+            | grep -i "EFI System" \
+            | awk '{print $1}' | head -1 || true)
+    fi
+
+    if [[ -n "$esp_part" ]]; then
+        ALONGSIDE_ESP="$esp_part"
+        echo "  ESP existante trouvée : $ALONGSIDE_ESP"
+    else
+        echo "  Aucune ESP existante. Une partition EFI de 1 GiB sera créée."
+        ALONGSIDE_ESP="CREATE"
+    fi
+}
+
+create_alongside_partition() {
+    local start="$1"
+    local end="$2"
+
+    echo ""
+    echo "  Création de la partition NixOS sur $DISK (${start}GiB → ${end}GiB)..."
+    parted -s "$DISK" mkpart nixos btrfs "${start}GiB" "${end}GiB"
+    partprobe "$DISK"
+    sleep 2
+
+    ALONGSIDE_BTRFS="/dev/$(lsblk -lno NAME "$DISK" | tail -1)"
+    echo "  Nouvelle partition btrfs : $ALONGSIDE_BTRFS"
+}
+
+mount_alongside() {
+    local opts="compress-force=zstd:2,noatime,space_cache=v2"
+
+    echo ""
+    echo "  Montage des sous-volumes btrfs..."
+    mount -o "${opts},subvol=@" "$ALONGSIDE_BTRFS" /mnt
+    mkdir -p /mnt/home /mnt/boot
+    mount -o "${opts},subvol=@home" "$ALONGSIDE_BTRFS" /mnt/home
+    mount "$ALONGSIDE_ESP" /mnt/boot
+    echo "  /mnt est prêt."
+}
+
+install_alongside() {
+    clear_screen
+
+    echo "Etape 4b : Installation à côté d'un OS existant"
+    echo ""
+
+    # 1. Détecter l'ESP existante
+    detect_existing_esp
+    echo ""
+
+    # 2. Afficher l'espace libre
+    echo "  Espace libre sur $DISK :"
+    local free_output
+    free_output=$(LC_ALL=C parted -s "$DISK" unit GiB print free 2>/dev/null \
+        | grep "Free Space" || true)
+
+    if [[ -z "$free_output" ]]; then
+        echo ""
+        echo "  /!\\ Aucun espace libre disponible sur $DISK."
+        echo "  Libérez de l'espace avant de continuer."
+        echo ""
+        read -sp "Appuyez sur Entrée pour revenir au menu"
+        detect_existing_system
+        return
+    fi
+
+    local max_size_int=0
+    local best_start=""
+    local region_num=0
+    while IFS= read -r line; do
+        region_num=$((region_num + 1))
+        local start size
+        start=$(echo "$line" | awk '{v=$1; gsub(/GiB/,"",v); print v}')
+        local end_r
+        end_r=$(echo "$line" | awk '{v=$2; gsub(/GiB/,"",v); print v}')
+        size=$(echo "$line" | awk '{v=$3; gsub(/GiB/,"",v); print v}')
+        local size_int
+        size_int=$(awk "BEGIN{printf \"%d\", $size}")
+        echo "    Région $region_num : ${start} GiB → ${end_r} GiB (environ ${size_int} GiB libres)"
+        if [[ "$size_int" -gt "$max_size_int" ]]; then
+            max_size_int="$size_int"
+            best_start="$start"
+        fi
+    done <<< "$free_output"
+
+    echo ""
+
+    # Réserver 1 GiB pour ESP si besoin
+    local esp_reserve=0
+    if [[ "$ALONGSIDE_ESP" = "CREATE" ]]; then
+        esp_reserve=1
+        echo "  Note : 1 GiB réservé pour la nouvelle ESP."
+        echo ""
+    fi
+
+    local available=$((max_size_int - esp_reserve))
+    if [[ "$available" -lt 1 ]]; then
+        echo "  /!\\ Espace disponible insuffisant (${available} GiB)."
+        echo ""
+        read -sp "Appuyez sur Entrée pour revenir au menu"
+        detect_existing_system
+        return
+    fi
+
+    # 3. Demander la taille
+    local size_gib
+    while true; do
+        read -p "  Taille pour NixOS en GiB (max ~${available} GiB) : " size_gib
+        if [[ ! "$size_gib" =~ ^[0-9]+$ ]] || [[ "$size_gib" -lt 1 ]]; then
+            echo "  /!\\ Entrez un entier positif."
+            continue
+        fi
+        if [[ "$size_gib" -gt "$available" ]]; then
+            echo "  /!\\ Dépasse l'espace disponible (${available} GiB)."
+            continue
+        fi
+        break
+    done
+
+    # 3b. Demander la taille du swap
+    local swap_mib
+    while true; do
+        read -p "  Taille du swap en MiB (0 pour désactiver) : " swap_mib
+        if [[ ! "$swap_mib" =~ ^[0-9]+$ ]]; then
+            echo "  /!\\ Entrez un entier positif ou 0."
+            continue
+        fi
+        break
+    done
+
+    # 4. Créer ESP si nécessaire
+    local part_start="$best_start"
+    if [[ "$ALONGSIDE_ESP" = "CREATE" ]]; then
+        local esp_end
+        esp_end=$(awk "BEGIN{printf \"%.2f\", $part_start + 1}")
+        echo ""
+        echo "  Création de la partition EFI (${part_start}GiB → ${esp_end}GiB)..."
+        parted -s "$DISK" mkpart esp fat32 "${part_start}GiB" "${esp_end}GiB"
+        local esp_num
+        esp_num=$(parted -s "$DISK" print 2>/dev/null | awk '/^ *[0-9]/{last=$1} END{print last}')
+        parted -s "$DISK" set "$esp_num" esp on
+        partprobe "$DISK"
+        sleep 1
+        local esp_dev
+        esp_dev="/dev/$(lsblk -lno NAME "$DISK" | tail -1)"
+        mkfs.fat -F32 -n ESP "$esp_dev"
+        ALONGSIDE_ESP="$esp_dev"
+        echo "  ESP créée : $ALONGSIDE_ESP"
+        part_start="$esp_end"
+    fi
+
+    # 5. Créer la partition btrfs
+    local part_end
+    part_end=$(awk "BEGIN{printf \"%.2f\", $part_start + $size_gib}")
+    create_alongside_partition "$part_start" "$part_end"
+
+    # 6. Formater btrfs + sous-volumes
+    echo ""
+    echo "  Formatage de $ALONGSIDE_BTRFS en btrfs..."
+    mkfs.btrfs -L nixos -f "$ALONGSIDE_BTRFS"
+
+    echo "  Création des sous-volumes..."
+    mount "$ALONGSIDE_BTRFS" /mnt
+    btrfs subvolume create /mnt/@
+    btrfs subvolume create /mnt/@home
+    umount /mnt
+
+    # 7. Monter
+    mount_alongside
+
+    # 8. Mettre à jour mount.nix avec les vrais UUIDs
+    if [[ "$IS_NEW_HOST" = true ]]; then
+        local btrfs_uuid esp_uuid
+        btrfs_uuid=$(blkid -s UUID -o value "$ALONGSIDE_BTRFS")
+        esp_uuid=$(blkid -s UUID -o value "$ALONGSIDE_ESP")
+
+        local swap_block=""
+        if [[ "$swap_mib" -gt 0 ]]; then
+            swap_block="  swapDevices = [
+    {
+      device = \"/swapfile\";
+      size = ${swap_mib};
+      priority = 10;
+    }
+  ];
+
+  # Hibernation — après install, récupérer l'offset avec:
+  # sudo btrfs inspect-internal map-swapfile -r /swapfile
+  boot.resumeDevice = \"/dev/disk/by-uuid/${btrfs_uuid}\";
+  boot.kernelParams = [ \"resume_offset=XXXXXXXX\" ];"
+        else
+            swap_block="  swapDevices = [];"
+        fi
+
+        cat > "/tmp/nixos-config/hosts/${FLAKE_CONFIG}/mount.nix" << EOF
+_:
+
+{
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/${btrfs_uuid}";
+      fsType = "btrfs";
+      options = [ "subvol=@" "compress-force=zstd:2" "noatime" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/${btrfs_uuid}";
+      fsType = "btrfs";
+      options = [ "subvol=@home" "compress-force=zstd:2" "noatime" ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/${esp_uuid}";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+${swap_block}
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+    priority = 100;
+  };
+}
+EOF
+        echo "  mount.nix généré avec les UUIDs réels."
+    else
+        update_mount_uuids
+    fi
+
+    echo ""
+    echo "  Installation à côté configurée."
     sleep 2
 }
 
@@ -190,22 +558,29 @@ detect_existing_system() {
     echo "Etape 4 : Détection des partitions existantes"
     echo ""
 
-    # Récupérer les partitions (exclure le disque lui-même)
-    local disk_name=$(basename "$DISK")
-    local partitions=$(lsblk -ln -o NAME,FSTYPE,LABEL,SIZE "$DISK" | grep -v "^${disk_name} ")
+    local disk_name partitions
 
-    if [[ -z "$partitions" ]]; then
-        echo "Aucune partition existante détectée sur $DISK."
-        echo ""
-        read -sp "Appuyez sur Entrée pour continuer"
-        select_erase_method
-        return
-    else
+    while true; do
+        disk_name=$(basename "$DISK")
+        partitions=$(lsblk -ln -o NAME,FSTYPE,LABEL,SIZE "$DISK" | grep -v "^${disk_name} ")
+
+        if [[ -z "$partitions" ]]; then
+            echo "Aucune partition existante détectée sur $DISK."
+            echo ""
+            read -sp "Appuyez sur Entrée pour continuer"
+            run_disko
+            return
+        fi
+
         echo "Partitions existantes détectées :"
         echo "$partitions" | while read -r name fstype label size; do
             echo "  - /dev/$name ($size) [FS: ${fstype:-Inconnu}] [Label: ${label:-Aucun}]"
         done
 
+        echo ""
+        detect_existing_os
+        echo ""
+        echo "(Note : Les entrées bootloader pour l'autre OS devront être ajoutées manuellement dans bootloader.nix)"
         echo ""
         echo "Que souhaitez-vous faire ?"
         echo "  1) Tout effacer et installer NixOS"
@@ -213,70 +588,45 @@ detect_existing_system() {
         echo "  3) Recharger les partitions du disque"
         read -p "Votre choix [1/2/3] : " choice
 
-        if [ "$choice" = "1" ]; then
-            select_erase_method
-            return
-        fi
-
-        if [ "$choice" = "2" ]; then
-            echo ""
-            echo "/!\ Cette option n'est pas encore implémentée"
-            echo ""
-            exit 0
-        fi
-
-        if [ "$choice" = "3" ]; then
-            select_disk
-            detect_existing_system
-            return
-        fi
-
-        if [ "$choice" != "1" ] || [ "$choice" != "2" ] || [ "$choice" != "3" ]; then
-            echo ""
-            echo "/!\ Veuillez entrer un choix valide"
-            echo ""
-            sleep 2
-            detect_existing_system
-            return
-        fi
-    fi
+        case "$choice" in
+            1) select_erase_method ; return ;;
+            2) install_alongside   ; return ;;
+            3) select_disk ;;
+            *)
+                echo ""
+                echo "/!\\ Veuillez entrer un choix valide"
+                echo ""
+                sleep 2
+                ;;
+        esac
+    done
 }
 
 select_erase_method() {
-    clear_screen
+    while true; do
+        clear_screen
 
-    echo "Etape 5 : Méthode d'effacement du disque"
-    echo ""
-
-    echo "Sélectionnez la méthode d'effacement du disque $DISK:"
-    echo "  1) Formater complètement le disque avec shred (lent, plus sécurisé)"
-    echo "  2) Effacer les signatures des partitions avec wipefs (rapide, moins sécurisé)"
-    echo "  3) Revenir au menu précédent"
-    read -p "Votre choix [1/2/3] : " choice
-
-    if [ "$choice" = "1" ]; then
-        erase_disk_shred
-        return
-    fi
-
-    if [ "$choice" = "2" ]; then
-        erase_disk_wipefs
-        return
-    fi
-
-    if [ "$choice" = "3" ]; then
-        detect_existing_system
-        return
-    fi
-
-    if [ "$choice" != "1" ] || [ "$choice" != "2" ] || [ "$choice" != "3" ]; then
+        echo "Etape 5 : Méthode d'effacement du disque"
         echo ""
-        echo "/!\ Veuillez entrer un choix valide"
-        echo ""
-        sleep 2
-        select_erase_method
-        return
-    fi
+
+        echo "Sélectionnez la méthode d'effacement du disque $DISK:"
+        echo "  1) Formater complètement le disque avec shred (lent, plus sécurisé)"
+        echo "  2) Effacer les signatures des partitions avec wipefs (rapide, moins sécurisé)"
+        echo "  3) Revenir au menu précédent"
+        read -p "Votre choix [1/2/3] : " choice
+
+        case "$choice" in
+            1) erase_disk_shred  ; return ;;
+            2) erase_disk_wipefs ; return ;;
+            3) detect_existing_system ; return ;;
+            *)
+                echo ""
+                echo "/!\\ Veuillez entrer un choix valide"
+                echo ""
+                sleep 2
+                ;;
+        esac
+    done
 }
 
 erase_disk_shred() {
@@ -285,7 +635,7 @@ erase_disk_shred() {
     echo "Etape 6 : Effacement du disque (shred)"
     echo ""
 
-    echo "/!\ ATTENTION /!\  "
+    echo "/!\\ ATTENTION /!\\  "
     echo "Cela peut prendre beaucoup de temps"
     echo ""
     read -p "Voulez-vous continuer? (tapez 'OUI' en majuscules): " confirmation
@@ -299,7 +649,7 @@ erase_disk_shred() {
     echo "Formatage du disque $DISK avec shred..."
     shred -v -n 3 -z "$DISK"
     sleep 2
-    full_partition_disk
+    run_disko
 }
 
 erase_disk_wipefs() {
@@ -309,219 +659,60 @@ erase_disk_wipefs() {
     echo "Effacement des signatures des partitions du disque $DISK avec wipefs..."
     wipefs -a "$DISK"
     sleep 2
-    full_partition_disk
+    run_disko
 }
 
 
-# Partition disk
-full_partition_disk() {
+run_disko() {
     clear_screen
 
-    echo "Etape 7 : Partitionnement du disque"
+    echo "Etape 7 : Partitionnement avec Disko"
     echo ""
 
-    # Détecter le type de disque (nvme ou sda)
-    if [[ "$DISK" == "/dev/nvme"* ]]; then
-        PART_PREFIX="p"
-        IS_DISK_SSD=true
-    else
-        PART_PREFIX=""
-        IS_DISK_SSD=false
+    local disko_config="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/disko.nix"
+
+    if [[ ! -f "$disko_config" ]]; then
+        echo "/!\\ Fichier disko.nix introuvable pour l'hôte ${FLAKE_CONFIG}"
+        echo "    Chemin attendu: $disko_config"
+        exit 1
     fi
 
-    # Définir les noms des partitions
-    PART_BOOT="${DISK}${PART_PREFIX}1"
-    PART_BTRFS="${DISK}${PART_PREFIX}2"
-
-    # Chiffrement LUKS2 (Désactivé, a configurer plus tard)
-    #read -p "Voulez-vous chiffrer le disque en utilisant LUKS2 ? (o/n): " confirmation
-    #if [ "$confirmation" == "o" ]; then
-    #    ENCRYPT_DISK=true
-    #fi
-    #if [ "$confirmation" != "o" ] || [ "$confirmation" != "n" ]; then
-    #    echo ""
-    #    echo "/!\ Veuillez entrer un choix valide"
-    #    echo ""
-    #    sleep 2
-    #    full_partition_disk
-    #    return
-    #fi
-
-    if [ "$ENCRYPT_DISK" == true ] && [ "$IS_DISK_SSD" == false ]; then
-        echo "Le disque dur est détecté comme étant sur l'interface SATA"
-        echo ""
-        read -p "Est-ce que votre disque est un SSD? (o/n): " confirmation
-        if [ "$confirmation" == "o" ]; then
-            IS_DISK_SSD=true
-        fi
-        if [ "$confirmation" != "o" ] || [ "$confirmation" != "n" ]; then
-            echo ""
-            echo "/!\ Veuillez entrer un choix valide"
-            echo ""
-            sleep 2
-            full_partition_disk
-            return
-        fi
-    fi
-
-    read -p "Donnez la taille du fichier swap en Go: " SWAP_SIZE
-
-    if [ -z "${SWAP_SIZE}" ] || [ "${SWAP_SIZE}" -lt 1 ] || [ "${SWAP_SIZE}" -gt 128 ] || ! [[ "${SWAP_SIZE}" =~ ^[0-9]+$ ]]; then
-        echo ""
-        echo "/!\ Veuillez entrer une taille de swap valide"
-        echo ""
-        full_partition_disk
-        return
-    fi
+    export NIX_CONFIG="experimental-features = nix-command flakes"
+    nix run github:nix-community/disko -- \
+        --mode disko \
+        --argstr disk "${DISK}" \
+        "$disko_config"
 
     echo ""
-    echo "Les partitions suivantes seront créées:"
-    echo "  1. ${PART_BOOT} - 1024 Mo - FAT32 (boot/EFI)"
-    echo "  2. ${PART_BTRFS} - Reste - Btrfs (système)"
-    echo ""
-    echo "Un fichier swap de ${SWAP_SIZE} Go sera créé dans le système de fichiers Btrfs."
-    echo ""
-    read -p "Voulez-vous continuer? (tapez 'OUI' en majuscules pour confirmer, autre chose pour revenir en arrière): " confirmation
-
-    if [ "$confirmation" != "OUI" ]; then
-        full_partition_disk
-        return
-    fi
-    echo ""
-
-    # Création de la table de partition GPT
-    echo "Création de la table de partition GPT..."
-    parted -s "$DISK" mklabel gpt
-
-    # Partition 1: Boot (1024 Mo, FAT32)
-    echo "Création de la partition boot (1024 Mo)..."
-    parted -s "$DISK" mkpart boot fat32 1MiB 1025MiB
-    parted -s "$DISK" set 1 esp on
-
-    # Partition 2: Btrfs (tout l'espace restant)
-    echo "Création de la partition Btrfs (reste du disque)..."
-    parted -s "$DISK" mkpart nixos 1025MiB 100%
-
-    # Recharger la table de partitions
-    partprobe "$DISK"
+    echo "Partitionnement et montage terminés."
+    update_mount_uuids
     sleep 2
-
-    # Formater la partition boot en FAT32
-    echo "Formatage de la partition boot en FAT32..."
-    mkfs.vfat -F32 -n BOOT "${PART_BOOT}" > /dev/null
-
-    local temp_pass="test"
-    if [ "$ENCRYPT_DISK" == true ]; then
-        # Chiffrement LUKS2
-        echo "Configuration du chiffrement LUKS2 sur ${PART_BTRFS} avec un mot de passe temporaire..."
-        echo $temp_pass | cryptsetup luksFormat -c aes-xts-plain64 -h sha512 -S 1 -s 512 -i 5000 --use-random --type luks2 --pbkdf argon2id "${PART_BTRFS}" > /dev/null 2>&1
-
-        echo "Ouverture du volume LUKS..."
-        if [ "$IS_DISK_SSD" == true ]; then
-            echo $temp_pass | cryptsetup open --allow-discards "${PART_BTRFS}" nixos_crypt > /dev/null 2>&1
-        fi
-        if [ "$IS_DISK_SSD" == false ]; then
-            echo $temp_pass | cryptsetup open "${PART_BTRFS}" nixos_crypt > /dev/null 2>&1
-        fi
-
-        # Création d'une partition LVM
-        echo "Création d'une partition LVM et du groupe de volumes..."
-        pvcreate "/dev/mapper/nixos_crypt"
-        vgcreate nixos_vg "/dev/mapper/nixos_crypt"
-
-        # Création du swap
-        echo "Création des partitions dans le volume LVM..."
-        lvcreate -L "${SWAP_SIZE}G" nixos_vg -n swapfile
-        lvcreate -l 100%FREE nixos_vg -n root
-    fi
-
-    # Création du système de fichiers Btrfs
-    echo "Formatage du système de fichiers Btrfs..."
-    if [ "$ENCRYPT_DISK" == true ]; then
-        mkfs.btrfs -f -L nixos /dev/nixos_vg/root
-    else
-        mkfs.btrfs -f -L nixos "${PART_BTRFS}" > /dev/null 2>&1
-    fi
-
-    if [ "$ENCRYPT_DISK" == true ]; then
-        # Création du système de fichiers swap
-        echo "Formatage du système de fichiers swap..."
-        mkswap /dev/nixos_vg/swapfile
-    fi
-
-    echo ""
-    echo "Partitionnement terminé avec succès."
-    sleep 2
-    mount_partitions
 }
 
-mount_partitions() {
+fetch_config_tmp() {
     clear_screen
 
-    echo "Etape 8 : Montage des partitions"
+    echo "Etape 3b : Récupération de la configuration NixOS"
     echo ""
 
-    if [ "$ENCRYPT_DISK" == true ]; then
-        # Monter la partition système (Btrfs dans LUKS)
-        local btrfs_options
-        if [ "$IS_DISK_SSD" == true ]; then
-            btrfs_options="rw,noatime,ssd,compress-force=zstd:2,space_cache=v2,discard=async"
-        else
-            btrfs_options="rw,noatime,compress-force=zstd:2,space_cache=v2,autodefrag"
-        fi
+    echo "Clonage du dépôt dans /tmp/nixos-config..."
+    rm -rf /tmp/nixos-config
+    git clone -q "https://${GIT_REPO_URL}" /tmp/nixos-config
+    rm -rf /tmp/nixos-config/.git
 
-        mount -o $btrfs_options,subvolid=5 /dev/nixos_vg/root /mnt
-
-        # Création des sous-volumes
-        btrfs subvolume create /mnt/@
-        btrfs subvolume create /mnt/@home
-
-        # Démontage de la partition système
-        umount /mnt
-
-        # Montage des sous-volumes
-        mount -o $btrfs_options,subvol=@ /dev/nixos_vg/root /mnt
-        mkdir -p /mnt/{home,btrfs_pool,boot}
-        mount -o $btrfs_options,subvol=@home /dev/nixos_vg/root /mnt/home
-        mount -o $btrfs_options,subvolid=5 /dev/nixos_vg/root /mnt/btrfs_pool
-        chmod 700 /mnt/btrfs_pool
-    else
-        # Monter la partition système (Btrfs)
-        mount "${PART_BTRFS}" /mnt
-        mkdir -p /mnt/{home,boot}
-
-        # Creer le fichier swap
-        fallocate -l ${SWAP_SIZE}G /mnt/swapfile
-        chmod 600 /mnt/swapfile
-        mkswap /mnt/swapfile
-    fi
-
-    # Monter la partition boot
-    mount "${PART_BOOT}" /mnt/boot
-
-    if [ "$ENCRYPT_DISK" == true ]; then
-        # Activer le swap
-        swapon /dev/nixos_vg/swapfile
-    fi
+    echo "Configuration récupérée."
+    sleep 1
 }
 
-fetch_config() {
+copy_config_to_mnt() {
     clear_screen
 
-    echo "Etape 9 : Récupération de la configuration NixOS"
+    echo "Etape 8 : Copie de la configuration vers /mnt"
     echo ""
 
-    # Récupère la config sur le git + génère la config hardware
-    mkdir -p /home/nixos
-    cd /home/nixos
-    nixos-generate-config --root /mnt > /dev/null 2>&1
-
-    git clone -q "https://${gitusername}:${gitpassword}@${GIT_REPO_URL}" /home/nixos/nixos-config
-
-    rm -drf /home/nixos/nixos-config/.git
     mkdir -p /mnt/etc/nixos
-    cp -r /home/nixos/nixos-config/* /mnt/etc/nixos/
-    cp -r /home/nixos/nixos-config/.* /mnt/etc/nixos/
+    # Copie tout le contenu (fichiers visibles et cachés) sans inclure . ni ..
+    cp -r /tmp/nixos-config/. /mnt/etc/nixos/
 }
 
 install_nix() {
@@ -551,7 +742,8 @@ postinstall() {
     # Config du mot de passe root
     read -sp "Entrer le mot de passe root: " rootpasswd
     echo ""
-    { echo $rootpasswd; echo $rootpasswd; } | nixos-enter --silent -c passwd > /dev/null 2>&1
+    printf '%s\n%s\n' "$rootpasswd" "$rootpasswd" | nixos-enter --silent -c passwd > /dev/null 2>&1
+    unset rootpasswd
 
     # Configuration git
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
@@ -562,9 +754,21 @@ postinstall() {
     # Supprime la configuration NixOS
     nixos-enter --silent -c "rm -drf /etc/nixos"
 
+    # Copier les credentials dans le chroot pour le clone greep
+    local home_git_creds="/mnt/home/greep/.git-credentials"
+    cp "$GIT_CRED_FILE" "$home_git_creds"
+    nixos-enter --silent -c \
+        "chown greep:users /home/greep/.git-credentials 2>/dev/null || chown greep /home/greep/.git-credentials; chmod 600 /home/greep/.git-credentials"
+
     # Cloner proprement la configuration depuis la repo git
-    command="git clone -q https://${gitusername}:${gitpassword}@${GIT_REPO_URL} /home/greep/nixos-config"
-    nixos-enter --silent -c "su -c '${command}' greep" > /dev/null 2>&1
+    nixos-enter --silent -c \
+        "su -c 'git config --global credential.helper store && git clone -q https://${GIT_REPO_URL} /home/greep/nixos-config' greep" \
+        > /dev/null 2>&1
+
+    # Nettoyer les credentials du chroot
+    nixos-enter --silent -c "rm -f /home/greep/.git-credentials"
+    nixos-enter --silent -c "su -c 'git config --global --unset credential.helper || true' greep" > /dev/null 2>&1
+    rm -f "$home_git_creds"
 
     # Lien symbolique de la config
     nixos-enter --silent -c "ln -s /home/greep/nixos-config /etc/nixos"
@@ -575,22 +779,79 @@ postinstall() {
 
 finished() {
     clear_screen
-    echo "/!\ Installation terminée !"
+    echo "/!\\ Installation terminée !"
     echo "Vous pouvez maintenant redémarrer votre poste pour accéder a votre configuration NixOS"
     echo "ou sinon passer en mode chroot avec la commande 'nixos-enter'"
     echo ""
-
+    cleanup_git_auth
     exit 0
+}
+
+create_host_files() {
+    clear_screen
+
+    echo "Etape 9b : Création du répertoire du nouvel hôte"
+    echo ""
+
+    local -a template_hosts
+    for dir in /tmp/nixos-config/hosts/*/; do
+        local dname
+        dname=$(basename "$dir")
+        if [ -d "$dir" ] && [[ "$dname" != *.nix ]]; then
+            template_hosts+=("$dname")
+        fi
+    done
+
+    if [ ${#template_hosts[@]} -eq 0 ]; then
+        echo "/!\\ Aucun hôte existant trouvé pour servir de modèle"
+        exit 1
+    fi
+
+    echo "Choisissez un hôte existant comme modèle:"
+    select template in "${template_hosts[@]}"; do
+        if [ -n "$template" ]; then
+            break
+        fi
+        echo "/!\\ Veuillez entrer un choix valide"
+    done
+
+    echo ""
+    echo "Création du répertoire hosts/${FLAKE_CONFIG}/..."
+    cp -r "/tmp/nixos-config/hosts/${template}" "/tmp/nixos-config/hosts/${FLAKE_CONFIG}"
+    rm -f "/tmp/nixos-config/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
+
+    echo "Ajout de '${FLAKE_CONFIG}' dans flake.nix..."
+    # Insère le nouvel hôte avant "liveIso" (plus robuste que sed avec \n)
+    awk -v host="$FLAKE_CONFIG" '
+        !done && /"liveIso"/ {
+            line = $0
+            sub(/"liveIso"/, "\"" host "\"", line)
+            print line
+            done = 1
+        }
+        { print }
+    ' /tmp/nixos-config/flake.nix > /tmp/nixos-config/flake.nix.tmp \
+        && mv /tmp/nixos-config/flake.nix.tmp /tmp/nixos-config/flake.nix
+
+    echo ""
+    echo "Hôte '${FLAKE_CONFIG}' créé depuis le modèle '${template}'."
+    echo "Pensez à adapter les fichiers dans /tmp/nixos-config/hosts/${FLAKE_CONFIG}/ avant l'installation."
+    echo "(Ce dossier sera copié vers /mnt/etc/nixos/ après le partitionnement)"
+    echo ""
+    read -sp "Appuyez sur Entrée pour continuer"
 }
 
 main() {
     require_root
     get_git_credentials
     select_host
+    fetch_config_tmp
+    if [ "$IS_NEW_HOST" = true ]; then
+        create_host_files
+    fi
     select_disk
-    detect_existing_system
-
-    fetch_config
+    detect_existing_system  # → erase (optionnel) → run_disko → /mnt monté
+    copy_config_to_mnt
     install_nix
     postinstall
     finished
