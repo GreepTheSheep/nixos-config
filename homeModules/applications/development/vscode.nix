@@ -25,7 +25,7 @@
           "telemetry.enableCrashReporter" = false;
           "telemetry.telemetryLevel" = "off";
           "files.autoSave" = "off";
-          "window.title" = "\${dirty}\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}🐱‍💻\${separator}\${remoteName}";
+          "window.title" = "\${dirty}\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}\${separator}\${remoteName}";
           "window.titleSeparator" = " ➖ ";
           "window.newWindowDimensions" = "maximized";
           "extensions.ignoreRecommendations" = true;
@@ -125,6 +125,33 @@
           ritwickdey.liveserver
           ms-vscode-remote.remote-containers
           anthropic.claude-code
+        ];
+
+        keybindings = [
+          {
+            "key" = "ctrl+k ctrl+shift+b";
+            "command" = "workbench.action.tasks.test";
+          }
+          {
+            "key" = "ctrl+k ctrl+shift+t";
+            "command" = "workbench.action.terminal.new";
+          }
+          {
+            "key" = "ctrl+shift+t";
+            "command" = "workbench.action.reopenClosedEditor";
+          }
+          {
+            "key" = "ctrl+shift+n";
+            "command" = "workbench.action.files.newUntitledFile";
+          }
+          {
+            "key" = "ctrl+shift+w";
+            "command" = "workbench.action.closeAllEditors";
+          }
+          {
+            "key" = "ctrl+shift+s";
+            "command" = "workbench.action.files.saveAll";
+          }
         ];
       };
     };
