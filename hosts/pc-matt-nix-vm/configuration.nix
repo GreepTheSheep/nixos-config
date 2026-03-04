@@ -40,7 +40,6 @@
 
     nixos.hardware = {
       amdcpu.enable = true;
-      nvidiagpu.enable = true;
     };
 
     nixos.system.user.defaultuser = {
