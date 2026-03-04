@@ -9,8 +9,8 @@
     desktop.desktopEnvironment.plasma.panels = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = false;
-        example = true;
+        default = true;
+        example = false;
         description = "Enable plasma panels configs.";
       };
     };
