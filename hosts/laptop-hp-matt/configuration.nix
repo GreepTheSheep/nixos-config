@@ -47,5 +47,7 @@
     nixos.system.secureboot.enable = true;
 
     nixos.userEnvironment.enable = true;
+
+    config.nixos.userEnvironment.io.bluetooth.enable = true;
   };
 }

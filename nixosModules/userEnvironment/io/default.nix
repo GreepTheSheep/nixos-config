@@ -22,7 +22,7 @@
   config = lib.mkIf config.nixos.userEnvironment.io.enable {
     nixos.userEnvironment.io = {
       audio.enable = true;
-      bluetooth.enable = true;
+      bluetooth.enable = lib.mkDefault false;
       input.enable = true;
       printing.enable = true;
     };

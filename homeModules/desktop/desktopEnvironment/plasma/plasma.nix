@@ -21,9 +21,6 @@ in
 
   config = lib.mkIf config.homeManager.desktop.desktopEnvironment.plasma.plasma-default.enable {
 
-    # Most Plasma configuration is done system-wide in modules/desktop/plasma
-    # However, we can add user-specific Plasma settings here if needed.
-
     # Example: KDE Connect (phone integration)
     services.kdeconnect = {
       enable = true;
@@ -53,7 +50,7 @@ in
       workspace = {
         lookAndFeel = lib.mkForce "org.kde.breezedark.desktop";
         iconTheme = lib.mkForce "Papirus-Dark";
-        wallpaper = "${../../../../wallpaper/stolas.png}";
+        wallpaper = lib.mkForce "${../../../../wallpaper/stolas.png}";
       };
 
       kscreenlocker = {
@@ -68,7 +65,7 @@ in
         appearance = {
           alwaysShowClock = true;
           showMediaControls = true;
-          wallpaper = "${../../../../wallpaper/stolas.png}";
+          wallpaper = lib.mkForce "${../../../../wallpaper/stolas.png}";
           wallpaperPictureOfTheDay = null;
           wallpaperSlideShow = null;
           wallpaperPlainColor = null;
