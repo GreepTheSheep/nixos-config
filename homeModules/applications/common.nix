@@ -17,7 +17,6 @@
       qdirstat
       remmina
       bitwarden-desktop
-      mission-center
       #gearlever
     ];
   };
