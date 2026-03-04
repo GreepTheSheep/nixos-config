@@ -12,5 +12,23 @@ _:
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  swapDevices = [ { device = "/dev/disk/by-uuid/ffd81d86-209f-472c-870c-8f56ff19b40c"; } ];
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 8192;
+      priority = 10;
+    }
+  ];
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+    priority = 100;
+  };
+
+  # Hibernation — après install, récupérer l'offset avec:
+  # sudo btrfs inspect-internal map-swapfile -r /swapfile
+  boot.resumeDevice = "/dev/disk/by-uuid/1204b7ab-1366-46c5-8989-be545186b3b5";
+  boot.kernelParams = [ "resume_offset=XXXXXXXX" ];
 }

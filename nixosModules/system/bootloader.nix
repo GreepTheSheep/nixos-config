@@ -9,6 +9,11 @@
         example = true;
         description = "Enable limine Bootloader.";
       };
+      extraBootEntries = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "Entrées Limine supplémentaires par hôte (dual-boot, etc.).";
+      };
     };
   };
 
@@ -35,7 +40,7 @@
 
         /Firmware Setup
           protocol: fwsetup
-      '';
+      '' + config.nixos.system.bootloader.extraBootEntries;
     };
   };
 }
