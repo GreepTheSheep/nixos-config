@@ -19,7 +19,7 @@
   config = lib.mkIf config.homeManager.applications.browser.enable {
     homeManager.applications.browser = {
       firefox.enable = true;
-      # Helium is managed on nix modules: Home Manager can't manage tarballs
+      # Helium is managed on system config: Home Manager can't manage tarballs
     };
   };
 }
