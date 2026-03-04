@@ -93,11 +93,6 @@
           # Window Movement Between Screens
           "Window to Next Desktop" = "Meta+Shift+Right";
           "Window to Previous Desktop" = "Meta+Shift+Left";
-
-          # Zoom Controls
-          "view_actual_size" = "Meta+0";
-          "view_zoom_in" = ["Meta++" "Meta+="];
-          "view_zoom_out" = "Meta+-";
         };
 
         # Media Controls
@@ -137,6 +132,7 @@
           "activate task manager entry 7" = "Meta+è";
           "activate task manager entry 8" = "Meta+_";
           "activate task manager entry 9" = "Meta+ç";
+          "activate task manager entry 10" = "Meta+à";
 
           # Clipboard
           "clipboard_action" = "Meta+Ctrl+X";
@@ -148,7 +144,7 @@
           "next activity" = "Meta+A";
           "previous activity" = "Meta+Shift+A";
           "stop current activity" = "Meta+S";
-          "show dashboard" = "Ctrl+F12";
+          "show dashboard" = [ "Ctrl+F12" "Meta+M" ];
         };
       };
     };
