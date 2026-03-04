@@ -1,13 +1,9 @@
-{ lib, pkgs, config, osConfig, plasma-manager, ... }:
+{ lib, pkgs, config, osConfig, ... }:
 
 let
   isLaptop = osConfig.host.isLaptop == true;
 in
 {
-  imports = [
-    plasma-manager.homeModules.plasma-manager
-  ];
-
   options.homeManager = {
     desktop.desktopEnvironment.plasma.plasma-default = {
       enable = lib.mkOption {
