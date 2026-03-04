@@ -1,4 +1,4 @@
-{ lib, config, plasma-manager, ... }:
+{ lib, config, plasma-manager, osConfig, ... }:
 
 {
   imports = [
@@ -83,15 +83,16 @@
             }
             {
               iconTasks = {
-                launchers = [
-                  "applications:firefox.desktop"
-                  "applications:org.kde.dolphin.desktop"
-                  "applications:discord.desktop"
-                  "applications:feishin.desktop"
-                  "applications:org.kde.konsole.desktop"
-                  "applications:bitwarden.desktop"
-                  "applications:org.jellyfin.JellyfinDesktop.desktop"
-                ];
+                launchers = (
+                  lib.optional config.homeManager.applications.browser.firefox.enable "applications:firefox.desktop"
+                  ++ lib.optional osConfig.nixos.userEnvironment.non-nix-apps.helium.enable "applications:helium.desktop"
+                  ++ "applications:org.kde.dolphin.desktop"
+                  ++ lib.optional config.homeManager.applications.communication.discord.enable "applications:discord.desktop"
+                  ++ lib.optional osConfig.nixos.userEnvironment.non-nix-apps.feishin.enable "applications:feishin.desktop"
+                  ++ "applications:org.kde.konsole.desktop"
+                  ++ "applications:bitwarden.desktop"
+                  ++ lib.optional config.homeManager.applications.media.jellyfin.enable "applications:org.jellyfin.JellyfinDesktop.desktop"
+                );
               };
             }
             {
