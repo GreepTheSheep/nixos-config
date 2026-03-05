@@ -48,7 +48,8 @@ in
           echo "Updating Feishin: ''${CURRENT:-none} -> $LATEST"
 
           # Telecharge et extrait l'archive
-          TMPDIR=$(mktemp -d)
+          mkdir -p /tmp
+          TMPDIR=$(mktemp -d -p /tmp)
           ${pkgs.curl}/bin/curl -sL \
             "https://github.com/${githubRepo}/releases/download/$LATEST/Feishin-linux-x64.tar.xz" \
             -o "$TMPDIR/feishin.tar.xz"

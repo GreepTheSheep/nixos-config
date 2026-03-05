@@ -48,7 +48,8 @@ in
           echo "Updating Helium: ''${CURRENT:-none} -> $LATEST"
 
           # Telecharge et extrait l'archive
-          TMPDIR=$(mktemp -d)
+          mkdir -p /tmp
+          TMPDIR=$(mktemp -d -p /tmp)
           ${pkgs.curl}/bin/curl -sL \
             "https://github.com/${githubRepo}/releases/download/$LATEST/helium-$LATEST-x86_64_linux.tar.xz" \
             -o "$TMPDIR/helium.tar.xz"

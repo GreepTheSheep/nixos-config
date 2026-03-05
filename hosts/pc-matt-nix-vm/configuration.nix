@@ -24,6 +24,9 @@
   config = {
     virtualisation.vmware.guest.enable = true;
 
+    # Les variables EFI ne sont pas accessibles en écriture dans la VM
+    boot.loader.efi.canTouchEfiVariables = false;
+
     nixos.desktop = {
       enable = true;
       desktopEnvironment = {
