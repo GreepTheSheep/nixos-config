@@ -65,6 +65,7 @@
       nil
       nixd
       nixdoc
+      direnv
     ];
   };
 }
