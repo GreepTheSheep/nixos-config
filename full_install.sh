@@ -523,7 +523,7 @@ create_alongside_partition() {
 
     echo ""
     echo "  Création de la partition NixOS sur $DISK (${start}GiB → ${end}GiB)..."
-    parted -s "$DISK" mkpart nixos btrfs "${start}GiB" "${end}GiB"
+    parted -s -a optimal "$DISK" mkpart nixos btrfs "${start}GiB" "${end}GiB"
     partprobe "$DISK"
     sleep 2
 
@@ -571,6 +571,7 @@ install_alongside() {
 
     local max_size_int=0
     local best_start=""
+    local best_end=""
     local region_num=0
     while IFS= read -r line; do
         region_num=$((region_num + 1))
@@ -585,6 +586,7 @@ install_alongside() {
         if [[ "$size_int" -gt "$max_size_int" ]]; then
             max_size_int="$size_int"
             best_start="$start"
+            best_end="$end_r"
         fi
     done <<< "$free_output"
 
@@ -640,7 +642,7 @@ install_alongside() {
         esp_end=$(awk "BEGIN{printf \"%.2f\", $part_start + 1}")
         echo ""
         echo "  Création de la partition EFI (${part_start}GiB → ${esp_end}GiB)..."
-        parted -s "$DISK" mkpart esp fat32 "${part_start}GiB" "${esp_end}GiB"
+        parted -s -a optimal "$DISK" mkpart esp fat32 "${part_start}GiB" "${esp_end}GiB"
         local esp_num
         esp_num=$(parted -s "$DISK" print 2>/dev/null | awk '/^ *[0-9]/{last=$1} END{print last}')
         parted -s "$DISK" set "$esp_num" esp on
@@ -656,7 +658,7 @@ install_alongside() {
 
     # 5. Créer la partition btrfs
     local part_end
-    part_end=$(awk "BEGIN{printf \"%.2f\", $part_start + $size_gib}")
+    part_end=$(awk "BEGIN{v=$part_start + $size_gib; if(v > $best_end) v=$best_end; printf \"%.2f\", v}")
     create_alongside_partition "$part_start" "$part_end"
 
     # 6. Formater btrfs + sous-volumes (avec ou sans LUKS)
