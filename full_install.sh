@@ -654,12 +654,10 @@ install_alongside() {
 
     # 8. Mettre à jour mount.nix avec les vrais UUIDs
     if [[ "$IS_NEW_HOST" = true ]]; then
-        local btrfs_uuid esp_uuid
-        btrfs_uuid=$(blkid -s UUID -o value "$ALONGSIDE_BTRFS")
-        esp_uuid=$(blkid -s UUID -o value "$ALONGSIDE_ESP")
-
         local swap_block=""
         if [[ "$swap_mib" -gt 0 ]]; then
+            local btrfs_uuid
+            btrfs_uuid=$(blkid -s UUID -o value "$ALONGSIDE_BTRFS")
             swap_block="  swapDevices = [
     {
       device = \"/swapfile\";
@@ -696,24 +694,6 @@ install_alongside() {
 _:
 
 {
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/${btrfs_uuid}";
-      fsType = "btrfs";
-      options = [ "subvol=@" "compress-force=zstd:2" "noatime" ];
-    };
-
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/${btrfs_uuid}";
-      fsType = "btrfs";
-      options = [ "subvol=@home" "compress-force=zstd:2" "noatime" ];
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/${esp_uuid}";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
-
 ${swap_block}
 ${luks_block}
 
@@ -725,7 +705,7 @@ ${luks_block}
   };
 }
 EOF
-        echo "  mount.nix généré avec les UUIDs réels."
+        echo "  mount.nix généré."
     else
         update_mount_uuids
     fi
