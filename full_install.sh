@@ -970,6 +970,8 @@ install_nix() {
     echo ""
 
     nixos-generate-config --root /mnt
+    mv /mnt/etc/nixos/hardware-configuration.nix \
+        "/mnt/etc/nixos/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
 
     export NIX_CONFIG="experimental-features = nix-command flakes"
     nixos-install --root /mnt \
@@ -997,7 +999,7 @@ postinstall() {
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
 
     # Sauvegarde Hardware configuration
-    nixos-enter --silent -c "cp /etc/nixos/hardware-configuration.nix /root/"
+    nixos-enter --silent -c "cp /etc/nixos/hosts/${FLAKE_CONFIG}/hardware-configuration.nix /root/"
 
     # Supprime la configuration NixOS
     nixos-enter --silent -c "rm -drf /etc/nixos"
@@ -1022,7 +1024,7 @@ postinstall() {
     nixos-enter --silent -c "ln -s /home/greep/nixos-config /etc/nixos"
 
     # On replace le Hardware configuration sauvegardé dans le dossier de la config
-    nixos-enter --silent -c "mv /root/hardware-configuration.nix /home/greep/nixos-config/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
+    nixos-enter --silent -c "mkdir -p /home/greep/nixos-config/hosts/${FLAKE_CONFIG} && mv /root/hardware-configuration.nix /home/greep/nixos-config/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
 }
 
 finished() {
