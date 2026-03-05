@@ -83,6 +83,7 @@
         branch.sort = "-committerdate";
         column.ui = "auto";
         credential.helper = "store";
+        gpg.format = "ssh";
       };
 
       lfs.enable = true;
