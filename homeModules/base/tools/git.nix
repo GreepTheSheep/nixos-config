@@ -12,8 +12,8 @@
 
       signingkey = lib.mkOption {
         type = lib.types.str;
-        default = "/etc/ssh/ssh_host_ed25519_key.pub";
-        example = "/home/greep/.ssh/ssh_host_ed25519_key.pub";
+        default = "~/.ssh/id_ed25519.pub";
+        example = "~/.ssh/id_ed25519.pub";
         description = "Path to the public SSH key used for signing commits.";
       };
     };
