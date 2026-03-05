@@ -962,7 +962,7 @@ install_nix() {
         --no-root-passwd \
         --impure \
         --keep-going \
-        --option eval-cache false
+        --option eval-cache false || true
 }
 
 postinstall() {
