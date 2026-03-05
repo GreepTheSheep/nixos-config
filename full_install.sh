@@ -866,14 +866,42 @@ run_disko() {
 
     rm -f /tmp/luks-password
 
-    # Enrôlement TPM2 pendant que le container est encore ouvert et le mot de passe disponible
-    if [[ "$USE_LUKS" = true ]] && [[ "$USE_TPM2" = true ]]; then
-        local luks_dev
-        luks_dev=$(cryptsetup status cryptroot 2>/dev/null | awk '/device:/{print $2}' || true)
-        if [[ -n "$luks_dev" ]]; then
-            enroll_tpm2 "$luks_dev"
-        else
-            echo "  /!\\ Impossible de trouver la partition LUKS pour l'enrôlement TPM2"
+    # Disko a créé la partition brute ; on gère LUKS manuellement
+    # (évite de télécharger tpm2-tss via la closure Nix de cryptsetup)
+    if [[ "$USE_LUKS" = true ]]; then
+        local root_part esp_part
+        root_part="/dev/$(lsblk -lno NAME "$DISK" | tail -1)"
+
+        echo ""
+        echo "  Chiffrement LUKS de $root_part..."
+        cryptsetup luksFormat --batch-mode "$root_part" --key-file "$LUKS_PASSWORD_FILE"
+        echo "  Ouverture du container LUKS..."
+        cryptsetup luksOpen "$root_part" cryptroot --key-file "$LUKS_PASSWORD_FILE"
+
+        echo "  Formatage btrfs..."
+        mkfs.btrfs -L nixos -f /dev/mapper/cryptroot
+
+        echo "  Création des sous-volumes..."
+        mount /dev/mapper/cryptroot /mnt
+        btrfs subvolume create /mnt/@
+        btrfs subvolume create /mnt/@home
+        umount /mnt
+
+        echo "  Montage..."
+        local opts="compress-force=zstd:2,noatime,space_cache=v2"
+        mount -o "${opts},subvol=@" /dev/mapper/cryptroot /mnt
+        mkdir -p /mnt/home /mnt/boot
+        mount -o "${opts},subvol=@home" /dev/mapper/cryptroot /mnt/home
+
+        # Disko a monté l'ESP sur /boot ; la déplacer vers /mnt/boot
+        esp_part=$(findmnt -n -o SOURCE /boot || true)
+        if [[ -n "$esp_part" ]]; then
+            umount /boot
+            mount "$esp_part" /mnt/boot
+        fi
+
+        if [[ "$USE_TPM2" = true ]]; then
+            enroll_tpm2 "$root_part"
         fi
     fi
 

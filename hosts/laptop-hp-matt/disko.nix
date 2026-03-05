@@ -16,13 +16,10 @@ let
     };
   };
 
-  rootContent = if luks then {
-    type = "luks";
-    name = "cryptroot";
-    passwordFile = "/tmp/luks-password";
-    settings.allowDiscards = true;
-    content = btrfsContent;
-  } else btrfsContent;
+  # Quand luks=true, la partition est laissée brute : le script d'install
+  # gère cryptsetup manuellement (évite de télécharger tpm2-tss via la
+  # closure Nix de cryptsetup même sans TPM).
+  rootContent = if luks then null else btrfsContent;
 in
 
 {
@@ -45,8 +42,7 @@ in
           };
           root = {
             size = "100%";
-            content = rootContent;
-          };
+          } // (if luks then {} else { content = rootContent; });
         };
       };
     };
