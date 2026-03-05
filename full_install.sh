@@ -7,14 +7,19 @@ GIT_REPO_URL="git.greep.fr/greep/nixos-config"
 FLAKE_CONFIG=""
 DISK=""
 IS_NEW_HOST=false
-ALONGSIDE_ESP=""       # Chemin de l'ESP à utiliser (/dev/sdaX ou /dev/nvme...)
-ALONGSIDE_BTRFS=""     # Chemin de la nouvelle partition btrfs
-GIT_CRED_FILE=""       # Fichier de credentials git temporaire
+ALONGSIDE_ESP=""            # Chemin de l'ESP à utiliser (/dev/sdaX ou /dev/nvme...)
+ALONGSIDE_BTRFS=""          # Chemin de la nouvelle partition btrfs (ou /dev/mapper/cryptroot si LUKS)
+GIT_CRED_FILE=""            # Fichier de credentials git temporaire
+USE_LUKS=false
+USE_TPM2=false
+LUKS_PASSWORD_FILE=""
+ALONGSIDE_LUKS_PART=""      # Partition LUKS brute (alongside)
 
 abort() {
     echo ""
     echo "Installation interrompue par l'utilisateur"
     cleanup_git_auth
+    cleanup_luks_password
     exit 1
 }
 trap abort INT TERM
@@ -25,6 +30,13 @@ cleanup_git_auth() {
         GIT_CRED_FILE=""
     fi
     git config --global --unset credential.helper 2>/dev/null || true
+}
+
+cleanup_luks_password() {
+    if [[ -n "${LUKS_PASSWORD_FILE:-}" ]]; then
+        shred -u "$LUKS_PASSWORD_FILE" 2>/dev/null || rm -f "$LUKS_PASSWORD_FILE"
+        LUKS_PASSWORD_FILE=""
+    fi
 }
 
 clear_screen() {
@@ -178,7 +190,7 @@ select_host() {
 select_disk() {
     clear_screen
 
-    echo "Etape 3 : Sélection du disque"
+    echo "Etape 4 : Sélection du disque"
     echo ""
 
     local disks
@@ -234,6 +246,90 @@ select_disk() {
     sleep 2
 }
 
+select_luks() {
+    clear_screen
+
+    echo "Etape 5 : Chiffrement LUKS"
+    echo ""
+    echo "LUKS (Linux Unified Key Setup) permet de chiffrer intégralement la partition"
+    echo "NixOS. Les données seront illisibles sans le mot de passe au démarrage."
+    echo ""
+    read -p "Activer le chiffrement LUKS ? [o/N] : " luks_choice
+
+    case "${luks_choice,,}" in
+        o|oui|y|yes)
+            ;;
+        *)
+            echo ""
+            echo "Chiffrement LUKS désactivé."
+            sleep 1
+            return
+            ;;
+    esac
+
+    local pass1 pass2
+    while true; do
+        read -sp "Mot de passe LUKS : " pass1
+        echo ""
+        read -sp "Confirmer le mot de passe LUKS : " pass2
+        echo ""
+        if [[ "$pass1" != "$pass2" ]]; then
+            echo "/!\\ Les mots de passe ne correspondent pas. Réessayez."
+            continue
+        fi
+        if [[ -z "$pass1" ]]; then
+            echo "/!\\ Le mot de passe ne peut pas être vide."
+            continue
+        fi
+        break
+    done
+
+    LUKS_PASSWORD_FILE=$(mktemp /tmp/.luks-XXXXXX)
+    chmod 600 "$LUKS_PASSWORD_FILE"
+    printf '%s' "$pass1" > "$LUKS_PASSWORD_FILE"
+    unset pass1 pass2
+
+    # Copie dans /tmp/luks-password pour disko
+    cp "$LUKS_PASSWORD_FILE" /tmp/luks-password
+    chmod 600 /tmp/luks-password
+
+    USE_LUKS=true
+    echo ""
+    echo "Chiffrement LUKS activé."
+
+    # Proposer TPM2 si disponible
+    if [[ -e /dev/tpm0 ]] || [[ -e /dev/tpmrm0 ]]; then
+        echo ""
+        echo "Puce TPM2 détectée."
+        echo "Le TPM2 permet de déverrouiller LUKS automatiquement au démarrage,"
+        echo "lié à l'état du firmware (PCR 0+7 / Secure Boot)."
+        echo ""
+        read -p "Enrôler le TPM2 pour déverrouillage automatique ? [o/N] : " tpm_choice
+        case "${tpm_choice,,}" in
+            o|oui|y|yes)
+                USE_TPM2=true
+                echo "TPM2 sera enrôlé après le partitionnement."
+                ;;
+            *)
+                echo "TPM2 désactivé — déverrouillage par mot de passe uniquement."
+                ;;
+        esac
+    fi
+
+    sleep 1
+}
+
+enroll_tpm2() {
+    local luks_part="$1"
+    echo "  Enrôlement TPM2 sur $luks_part (PCR 0+7)..."
+    systemd-cryptenroll \
+        --tpm2-device=auto \
+        --tpm2-pcrs=0+7 \
+        --unlock-key-file="$LUKS_PASSWORD_FILE" \
+        "$luks_part"
+    echo "  TPM2 enrôlé avec succès."
+}
+
 update_mount_uuids() {
     local mount_nix="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/mount.nix"
 
@@ -264,6 +360,55 @@ update_mount_uuids() {
     if [[ -n "$old_esp_uuid" ]] && [[ "$old_esp_uuid" != "$new_esp_uuid" ]]; then
         sed -i "s/${old_esp_uuid}/${new_esp_uuid}/g" "$mount_nix"
         echo "  UUID ESP : $old_esp_uuid → $new_esp_uuid"
+    fi
+
+    # UUID LUKS (si activé)
+    if [[ "$USE_LUKS" = true ]]; then
+        local luks_device new_luks_uuid
+        luks_device=$(cryptsetup status cryptroot 2>/dev/null | awk '/device:/{print $2}' || true)
+        if [[ -n "$luks_device" ]]; then
+            new_luks_uuid=$(blkid -s UUID -o value "$luks_device" || true)
+            if [[ -n "$new_luks_uuid" ]]; then
+                if grep -q 'boot.initrd.luks.devices' "$mount_nix"; then
+                    # Remplacer l'ancien UUID LUKS
+                    local old_luks_uuid
+                    old_luks_uuid=$(grep -A2 'boot.initrd.luks.devices' "$mount_nix" \
+                        | grep -oP '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' \
+                        | head -1 || true)
+                    if [[ -n "$old_luks_uuid" ]] && [[ "$old_luks_uuid" != "$new_luks_uuid" ]]; then
+                        sed -i "s/${old_luks_uuid}/${new_luks_uuid}/g" "$mount_nix"
+                        echo "  UUID LUKS : $old_luks_uuid → $new_luks_uuid"
+                    fi
+                else
+                    # Insérer le bloc LUKS avant la dernière }
+                    awk -v uuid="$new_luks_uuid" '
+                        /^}$/ && !inserted {
+                            print ""
+                            print "  boot.initrd.luks.devices.\"cryptroot\" = {"
+                            print "    device = \"/dev/disk/by-uuid/" uuid "\";"
+                            print "    allowDiscards = true;"
+                            print "  };"
+                            inserted = 1
+                        }
+                        { print }
+                    ' "$mount_nix" > "${mount_nix}.tmp" && mv "${mount_nix}.tmp" "$mount_nix"
+                    echo "  Bloc LUKS inséré dans mount.nix (UUID: $new_luks_uuid)"
+                fi
+
+                # boot.initrd.systemd.enable requis pour systemd-cryptenroll/TPM2
+                if [[ "$USE_TPM2" = true ]]; then
+                    if ! grep -q 'boot.initrd.systemd.enable' "$mount_nix"; then
+                        awk '/^}$/ && !inserted {
+                            print "  boot.initrd.systemd.enable = true;"
+                            inserted = 1
+                        }
+                        { print }
+                        ' "$mount_nix" > "${mount_nix}.tmp" && mv "${mount_nix}.tmp" "$mount_nix"
+                        echo "  boot.initrd.systemd.enable ajouté dans mount.nix"
+                    fi
+                fi
+            fi
+        fi
     fi
 }
 
@@ -359,7 +504,7 @@ mount_alongside() {
 install_alongside() {
     clear_screen
 
-    echo "Etape 4b : Installation à côté d'un OS existant"
+    echo "Etape 6b : Installation à côté d'un OS existant"
     echo ""
 
     # 1. Détecter l'ESP existante
@@ -472,8 +617,18 @@ install_alongside() {
     part_end=$(awk "BEGIN{printf \"%.2f\", $part_start + $size_gib}")
     create_alongside_partition "$part_start" "$part_end"
 
-    # 6. Formater btrfs + sous-volumes
+    # 6. Formater btrfs + sous-volumes (avec ou sans LUKS)
     echo ""
+    if [[ "$USE_LUKS" = true ]]; then
+        echo "  Chiffrement LUKS de $ALONGSIDE_BTRFS..."
+        cryptsetup luksFormat --batch-mode "$ALONGSIDE_BTRFS" --key-file "$LUKS_PASSWORD_FILE"
+        echo "  Ouverture du container LUKS..."
+        cryptsetup luksOpen "$ALONGSIDE_BTRFS" cryptroot --key-file "$LUKS_PASSWORD_FILE"
+        ALONGSIDE_LUKS_PART="$ALONGSIDE_BTRFS"
+        ALONGSIDE_BTRFS="/dev/mapper/cryptroot"
+        echo "  Container LUKS ouvert : $ALONGSIDE_BTRFS"
+    fi
+
     echo "  Formatage de $ALONGSIDE_BTRFS en btrfs..."
     mkfs.btrfs -L nixos -f "$ALONGSIDE_BTRFS"
 
@@ -510,6 +665,22 @@ install_alongside() {
             swap_block="  swapDevices = [];"
         fi
 
+        local luks_block=""
+        if [[ "$USE_LUKS" = true ]]; then
+            local luks_uuid
+            luks_uuid=$(blkid -s UUID -o value "$ALONGSIDE_LUKS_PART")
+            luks_block="
+  boot.initrd.luks.devices.\"cryptroot\" = {
+    device = \"/dev/disk/by-uuid/${luks_uuid}\";
+    allowDiscards = true;
+  };"
+            if [[ "$USE_TPM2" = true ]]; then
+                luks_block="${luks_block}
+
+  boot.initrd.systemd.enable = true;"
+            fi
+        fi
+
         cat > "/tmp/nixos-config/hosts/${FLAKE_CONFIG}/mount.nix" << EOF
 _:
 
@@ -533,6 +704,7 @@ _:
     };
 
 ${swap_block}
+${luks_block}
 
   zramSwap = {
     enable = true;
@@ -547,6 +719,12 @@ EOF
         update_mount_uuids
     fi
 
+    # Enrôlement TPM2 pendant que le container est encore ouvert et le mot de passe disponible
+    if [[ "$USE_LUKS" = true ]] && [[ "$USE_TPM2" = true ]] && [[ -n "$ALONGSIDE_LUKS_PART" ]]; then
+        enroll_tpm2 "$ALONGSIDE_LUKS_PART"
+    fi
+    cleanup_luks_password
+
     echo ""
     echo "  Installation à côté configurée."
     sleep 2
@@ -555,7 +733,7 @@ EOF
 detect_existing_system() {
     clear_screen
 
-    echo "Etape 4 : Détection des partitions existantes"
+    echo "Etape 6 : Détection des partitions existantes"
     echo ""
 
     local disk_name partitions
@@ -606,7 +784,7 @@ select_erase_method() {
     while true; do
         clear_screen
 
-        echo "Etape 5 : Méthode d'effacement du disque"
+        echo "Etape 6c : Méthode d'effacement du disque"
         echo ""
 
         echo "Sélectionnez la méthode d'effacement du disque $DISK:"
@@ -632,7 +810,7 @@ select_erase_method() {
 erase_disk_shred() {
     clear_screen
 
-    echo "Etape 6 : Effacement du disque (shred)"
+    echo "Etape 7 : Effacement du disque (shred)"
     echo ""
 
     echo "/!\\ ATTENTION /!\\  "
@@ -654,7 +832,7 @@ erase_disk_shred() {
 
 erase_disk_wipefs() {
     clear_screen
-    echo "Etape 6 : Effacement du disque (wipefs)"
+    echo "Etape 7 : Effacement du disque (wipefs)"
     echo ""
     echo "Effacement des signatures des partitions du disque $DISK avec wipefs..."
     wipefs -a "$DISK"
@@ -666,7 +844,7 @@ erase_disk_wipefs() {
 run_disko() {
     clear_screen
 
-    echo "Etape 7 : Partitionnement avec Disko"
+    echo "Etape 8 : Partitionnement avec Disko"
     echo ""
 
     local disko_config="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/disko.nix"
@@ -681,7 +859,23 @@ run_disko() {
     nix run github:nix-community/disko -- \
         --mode disko \
         --argstr disk "${DISK}" \
+        --arg luks "${USE_LUKS}" \
         "$disko_config"
+
+    rm -f /tmp/luks-password
+
+    # Enrôlement TPM2 pendant que le container est encore ouvert et le mot de passe disponible
+    if [[ "$USE_LUKS" = true ]] && [[ "$USE_TPM2" = true ]]; then
+        local luks_dev
+        luks_dev=$(cryptsetup status cryptroot 2>/dev/null | awk '/device:/{print $2}' || true)
+        if [[ -n "$luks_dev" ]]; then
+            enroll_tpm2 "$luks_dev"
+        else
+            echo "  /!\\ Impossible de trouver la partition LUKS pour l'enrôlement TPM2"
+        fi
+    fi
+
+    cleanup_luks_password
 
     echo ""
     echo "Partitionnement et montage terminés."
@@ -692,7 +886,7 @@ run_disko() {
 fetch_config_tmp() {
     clear_screen
 
-    echo "Etape 3b : Récupération de la configuration NixOS"
+    echo "Etape 3 : Récupération de la configuration NixOS"
     echo ""
 
     echo "Clonage du dépôt dans /tmp/nixos-config..."
@@ -707,7 +901,7 @@ fetch_config_tmp() {
 copy_config_to_mnt() {
     clear_screen
 
-    echo "Etape 8 : Copie de la configuration vers /mnt"
+    echo "Etape 9 : Copie de la configuration vers /mnt"
     echo ""
 
     mkdir -p /mnt/etc/nixos
@@ -784,13 +978,14 @@ finished() {
     echo "ou sinon passer en mode chroot avec la commande 'nixos-enter'"
     echo ""
     cleanup_git_auth
+    cleanup_luks_password
     exit 0
 }
 
 create_host_files() {
     clear_screen
 
-    echo "Etape 9b : Création du répertoire du nouvel hôte"
+    echo "Etape 3b : Création du répertoire du nouvel hôte"
     echo ""
 
     local -a template_hosts
@@ -850,6 +1045,7 @@ main() {
         create_host_files
     fi
     select_disk
+    select_luks             # ← choix LUKS optionnel
     detect_existing_system  # → erase (optionnel) → run_disko → /mnt monté
     copy_config_to_mnt
     install_nix

@@ -1,4 +1,29 @@
-{ disk ? "/dev/sda", ... }:
+{ disk ? "/dev/sda", luks ? false, ... }:
+
+let
+  btrfsContent = {
+    type = "btrfs";
+    extraArgs = [ "-L" "nixos" "-f" ];
+    subvolumes = {
+      "@" = {
+        mountpoint = "/";
+        mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+      };
+      "@home" = {
+        mountpoint = "/home";
+        mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+      };
+    };
+  };
+
+  rootContent = if luks then {
+    type = "luks";
+    name = "cryptroot";
+    passwordFile = "/tmp/luks-password";
+    settings.allowDiscards = true;
+    content = btrfsContent;
+  } else btrfsContent;
+in
 
 {
   disko.devices = {
@@ -20,20 +45,7 @@
           };
           root = {
             size = "100%";
-            content = {
-              type = "btrfs";
-              extraArgs = [ "-L" "nixos" "-f" ];
-              subvolumes = {
-                "@" = {
-                  mountpoint = "/";
-                  mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
-                };
-                "@home" = {
-                  mountpoint = "/home";
-                  mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
-                };
-              };
-            };
+            content = rootContent;
           };
         };
       };
