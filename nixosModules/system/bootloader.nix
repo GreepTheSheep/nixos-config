@@ -19,7 +19,7 @@
 
   config = lib.mkIf config.nixos.system.bootloader.enable {
 
-    boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
+    boot.loader.efi.canTouchEfiVariables = true;
 
     boot.loader.efi.efiSysMountPoint = "/boot/";
 
