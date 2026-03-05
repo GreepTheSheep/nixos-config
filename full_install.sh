@@ -1072,7 +1072,7 @@ create_host_files() {
     echo "Ajout de '${FLAKE_CONFIG}' dans flake.nix..."
     # Insère le nouvel hôte avant "liveIso" (plus robuste que sed avec \n)
     awk -v host="$FLAKE_CONFIG" '
-        !done && /"liveIso"/ {
+        !done && /^\s*"liveIso"\s*$/ {
             line = $0
             sub(/"liveIso"/, "\"" host "\"", line)
             print line
