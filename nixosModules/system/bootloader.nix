@@ -41,6 +41,14 @@
         /Firmware Setup
           protocol: fwsetup
       '';
+
+      style = {
+        wallpapers = [
+          "${../../wallpaper/stolas.png}"
+        ];
+        wallpaperStyle = "centered";
+        interface.helpHidden = true;
+      };
     };
   };
 }
