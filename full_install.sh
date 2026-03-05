@@ -518,12 +518,12 @@ detect_existing_esp() {
 }
 
 create_alongside_partition() {
-    local start="$1"
-    local end="$2"
+    local start="$1"  # en MiB
+    local end="$2"    # en MiB
 
     echo ""
-    echo "  Création de la partition NixOS sur $DISK (${start}GiB → ${end}GiB)..."
-    parted -s -a optimal "$DISK" mkpart nixos btrfs "${start}GiB" "${end}GiB"
+    echo "  Création de la partition NixOS sur $DISK (${start}MiB → ${end}MiB)..."
+    parted -s "$DISK" unit MiB mkpart nixos btrfs "${start}MiB" "${end}MiB"
     partprobe "$DISK"
     sleep 2
 
@@ -556,7 +556,7 @@ install_alongside() {
     # 2. Afficher l'espace libre
     echo "  Espace libre sur $DISK :"
     local free_output
-    free_output=$(LC_ALL=C parted -s "$DISK" unit GiB print free 2>/dev/null \
+    free_output=$(LC_ALL=C parted -s "$DISK" unit MiB print free 2>/dev/null \
         | grep "Free Space" || true)
 
     if [[ -z "$free_output" ]]; then
@@ -569,38 +569,36 @@ install_alongside() {
         return
     fi
 
-    local max_size_int=0
-    local best_start=""
-    local best_end=""
+    local max_size_mib=0
+    local best_start_mib=""
+    local best_end_mib=""
     local region_num=0
     while IFS= read -r line; do
         region_num=$((region_num + 1))
-        local start size
-        start=$(echo "$line" | awk '{v=$1; gsub(/GiB/,"",v); print v}')
-        local end_r
-        end_r=$(echo "$line" | awk '{v=$2; gsub(/GiB/,"",v); print v}')
-        size=$(echo "$line" | awk '{v=$3; gsub(/GiB/,"",v); print v}')
-        local size_int
-        size_int=$(awk "BEGIN{printf \"%d\", $size}")
-        echo "    Région $region_num : ${start} GiB → ${end_r} GiB (environ ${size_int} GiB libres)"
-        if [[ "$size_int" -gt "$max_size_int" ]]; then
-            max_size_int="$size_int"
-            best_start="$start"
-            best_end="$end_r"
+        local start_mib size_mib
+        start_mib=$(echo "$line" | awk '{v=$1; gsub(/MiB/,"",v); printf "%d", int(v+0.9999)}')
+        local end_mib_r
+        end_mib_r=$(echo "$line" | awk '{v=$2; gsub(/MiB/,"",v); printf "%d", int(v)}')
+        size_mib=$(echo "$line" | awk '{v=$3; gsub(/MiB/,"",v); printf "%d", int(v)}')
+        echo "    Région $region_num : $(awk "BEGIN{printf \"%.1f\", $start_mib/1024}") GiB → $(awk "BEGIN{printf \"%.1f\", $end_mib_r/1024}") GiB (environ $((size_mib / 1024)) GiB libres)"
+        if [[ "$size_mib" -gt "$max_size_mib" ]]; then
+            max_size_mib="$size_mib"
+            best_start_mib="$start_mib"
+            best_end_mib="$end_mib_r"
         fi
     done <<< "$free_output"
 
     echo ""
 
     # Réserver 1 GiB pour ESP si besoin
-    local esp_reserve=0
+    local esp_reserve_mib=0
     if [[ "$ALONGSIDE_ESP" = "CREATE" ]]; then
-        esp_reserve=1
+        esp_reserve_mib=1024
         echo "  Note : 1 GiB réservé pour la nouvelle ESP."
         echo ""
     fi
 
-    local available=$((max_size_int - esp_reserve))
+    local available=$(( (max_size_mib - esp_reserve_mib) / 1024 ))
     if [[ "$available" -lt 1 ]]; then
         echo "  /!\\ Espace disponible insuffisant (${available} GiB)."
         echo ""
@@ -636,13 +634,12 @@ install_alongside() {
     done
 
     # 4. Créer ESP si nécessaire
-    local part_start="$best_start"
+    local part_start_mib="$best_start_mib"
     if [[ "$ALONGSIDE_ESP" = "CREATE" ]]; then
-        local esp_end
-        esp_end=$(awk "BEGIN{printf \"%.2f\", $part_start + 1}")
+        local esp_end_mib=$(( part_start_mib + 1024 ))
         echo ""
-        echo "  Création de la partition EFI (${part_start}GiB → ${esp_end}GiB)..."
-        parted -s -a optimal "$DISK" mkpart esp fat32 "${part_start}GiB" "${esp_end}GiB"
+        echo "  Création de la partition EFI (${part_start_mib}MiB → ${esp_end_mib}MiB)..."
+        parted -s "$DISK" unit MiB mkpart esp fat32 "${part_start_mib}MiB" "${esp_end_mib}MiB"
         local esp_num
         esp_num=$(parted -s "$DISK" print 2>/dev/null | awk '/^ *[0-9]/{last=$1} END{print last}')
         parted -s "$DISK" set "$esp_num" esp on
@@ -653,13 +650,16 @@ install_alongside() {
         mkfs.fat -F32 -n ESP "$esp_dev"
         ALONGSIDE_ESP="$esp_dev"
         echo "  ESP créée : $ALONGSIDE_ESP"
-        part_start="$esp_end"
+        part_start_mib="$esp_end_mib"
     fi
 
     # 5. Créer la partition btrfs
-    local part_end
-    part_end=$(awk "BEGIN{v=$part_start + $size_gib; if(v > $best_end) v=$best_end; printf \"%.2f\", v}")
-    create_alongside_partition "$part_start" "$part_end"
+    local size_mib=$(( size_gib * 1024 ))
+    local part_end_mib=$(( part_start_mib + size_mib ))
+    if [[ "$part_end_mib" -gt "$best_end_mib" ]]; then
+        part_end_mib="$best_end_mib"
+    fi
+    create_alongside_partition "$part_start_mib" "$part_end_mib"
 
     # 6. Formater btrfs + sous-volumes (avec ou sans LUKS)
     echo ""
