@@ -346,31 +346,33 @@ update_mount_uuids() {
 
     [[ ! -f "$mount_nix" ]] && return
 
-    echo "  Mise à jour des UUIDs dans mount.nix..."
+    echo "  Mise à jour de mount.nix..."
 
-    local new_btrfs_uuid new_esp_uuid
+    # Supprimer les blocs fileSystems (couverts par hardware-configuration.nix)
+    awk '
+        !in_fs && /^\s*fileSystems\."[^"]*"\s*=/ { in_fs=1; depth=0; next }
+        in_fs {
+            for (i=1; i<=length($0); i++) {
+                c = substr($0,i,1)
+                if (c=="{") depth++
+                else if (c=="}") { depth--; if (depth==0) { in_fs=0; next } }
+            }
+            next
+        }
+        { print }
+    ' "$mount_nix" > "${mount_nix}.tmp" && mv "${mount_nix}.tmp" "$mount_nix"
+
+    # Mettre à jour l'UUID btrfs (ex: boot.resumeDevice) si présent
+    local new_btrfs_uuid
     new_btrfs_uuid=$(blkid -s UUID -o value "$(findmnt -n -o SOURCE /mnt | sed 's/\[.*//')" 2>/dev/null || true)
-    new_esp_uuid=$(blkid -s UUID -o value "$(findmnt -n -o SOURCE /mnt/boot | sed 's/\[.*//')" 2>/dev/null || true)
 
-    if [[ -z "$new_btrfs_uuid" ]] || [[ -z "$new_esp_uuid" ]]; then
-        echo "  /!\\ Impossible de lire les UUIDs depuis /mnt"
-        return
-    fi
-
-    # UUID btrfs : format lowercase xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    local old_btrfs_uuid
-    old_btrfs_uuid=$(grep -oP '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$mount_nix" | head -1 || true)
-    if [[ -n "$old_btrfs_uuid" ]] && [[ "$old_btrfs_uuid" != "$new_btrfs_uuid" ]]; then
-        sed -i "s/${old_btrfs_uuid}/${new_btrfs_uuid}/g" "$mount_nix"
-        echo "  UUID btrfs : $old_btrfs_uuid → $new_btrfs_uuid"
-    fi
-
-    # UUID ESP : format uppercase XXXX-XXXX
-    local old_esp_uuid
-    old_esp_uuid=$(grep -oP '[0-9A-F]{4}-[0-9A-F]{4}' "$mount_nix" | head -1 || true)
-    if [[ -n "$old_esp_uuid" ]] && [[ "$old_esp_uuid" != "$new_esp_uuid" ]]; then
-        sed -i "s/${old_esp_uuid}/${new_esp_uuid}/g" "$mount_nix"
-        echo "  UUID ESP : $old_esp_uuid → $new_esp_uuid"
+    if [[ -n "$new_btrfs_uuid" ]]; then
+        local old_btrfs_uuid
+        old_btrfs_uuid=$(grep -oP '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$mount_nix" | head -1 || true)
+        if [[ -n "$old_btrfs_uuid" ]] && [[ "$old_btrfs_uuid" != "$new_btrfs_uuid" ]]; then
+            sed -i "s/${old_btrfs_uuid}/${new_btrfs_uuid}/g" "$mount_nix"
+            echo "  UUID btrfs : $old_btrfs_uuid → $new_btrfs_uuid"
+        fi
     fi
 
     # UUID LUKS (si activé)
