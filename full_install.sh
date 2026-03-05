@@ -1053,6 +1053,11 @@ create_host_files() {
     cp -r "/tmp/nixos-config/hosts/${template}" "/tmp/nixos-config/hosts/${FLAKE_CONFIG}"
     rm -f "/tmp/nixos-config/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
 
+    local net_nix="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/networking.nix"
+    if [[ -f "$net_nix" ]]; then
+        sed -i "s/hostName = \"${template}\"/hostName = \"${FLAKE_CONFIG}\"/" "$net_nix"
+    fi
+
     echo "Ajout de '${FLAKE_CONFIG}' dans flake.nix..."
     # Insère le nouvel hôte avant "liveIso" (plus robuste que sed avec \n)
     awk -v host="$FLAKE_CONFIG" '
