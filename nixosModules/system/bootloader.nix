@@ -31,7 +31,7 @@
       validateChecksums = true;
       panicOnChecksumMismatch = true;
 
-      extraEntries = ''
+      extraEntries = config.nixos.system.bootloader.extraBootEntries + ''
         /Reboot
           protocol: reboot
 
@@ -40,7 +40,7 @@
 
         /Firmware Setup
           protocol: fwsetup
-      '' + config.nixos.system.bootloader.extraBootEntries;
+      '';
     };
   };
 }
