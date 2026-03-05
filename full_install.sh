@@ -17,6 +17,9 @@ USE_TPM2=false
 LUKS_PASSWORD_FILE=""
 ALONGSIDE_LUKS_PART=""      # Partition LUKS brute (alongside)
 BOOT_MODE=""                # "efi" ou "bios"
+USE_SECURE_BOOT=false
+SB_ACTIVE=false
+SB_SETUP_MODE=false
 
 abort() {
     echo ""
@@ -1122,6 +1125,189 @@ create_host_files() {
     read -sp "Appuyez sur Entrée pour continuer"
 }
 
+detect_secure_boot_state() {
+    # Lit les variables EFI pour détecter l'état du Secure Boot
+    local sb_file="/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c"
+    local sm_file="/sys/firmware/efi/efivars/SetupMode-8be4df61-93ca-11d2-aa0d-00e098032b8c"
+
+    if [[ -f "$sb_file" ]]; then
+        local sb_val
+        sb_val=$(od -An -tu1 -j4 -N1 "$sb_file" 2>/dev/null | tr -d ' \n' || echo "0")
+        if [[ "$sb_val" = "1" ]]; then
+            SB_ACTIVE=true
+        fi
+    fi
+
+    if [[ -f "$sm_file" ]]; then
+        local sm_val
+        sm_val=$(od -An -tu1 -j4 -N1 "$sm_file" 2>/dev/null | tr -d ' \n' || echo "0")
+        if [[ "$sm_val" = "1" ]]; then
+            SB_SETUP_MODE=true
+        fi
+    fi
+}
+
+run_sbctl() {
+    if command -v sbctl &>/dev/null; then
+        sbctl "$@"
+    else
+        export NIX_CONFIG="experimental-features = nix-command flakes"
+        nix run nixpkgs#sbctl -- "$@"
+    fi
+}
+
+select_secure_boot() {
+    # Ignorée si pas en mode EFI
+    if [[ "$BOOT_MODE" != "efi" ]]; then
+        return
+    fi
+
+    clear_screen
+
+    echo "Etape 5b : Secure Boot"
+    echo ""
+
+    detect_secure_boot_state
+
+    # Détecter si la config de l'hôte impose déjà Secure Boot
+    local host_config_dir="/tmp/nixos-config/hosts/${FLAKE_CONFIG}"
+    local host_forces_sb=false
+    if grep -r "secureboot\.enable\s*=\s*true" "$host_config_dir" &>/dev/null 2>&1; then
+        host_forces_sb=true
+        USE_SECURE_BOOT=true
+        echo "  [INFO] La configuration de l'hôte '${FLAKE_CONFIG}' active le Secure Boot."
+        echo "         (nixos.system.secureboot.enable = true détecté)"
+        echo ""
+    fi
+
+    # Afficher l'état du firmware
+    if [[ "$SB_ACTIVE" = true ]]; then
+        echo "  Etat firmware : Secure Boot ACTIF"
+    else
+        echo "  Etat firmware : Secure Boot inactif"
+    fi
+
+    if [[ "$SB_SETUP_MODE" = true ]]; then
+        echo "  Setup Mode    : OUI (enrollment automatique possible)"
+    else
+        echo "  Setup Mode    : NON (enrollment manuel requis après démarrage)"
+    fi
+    echo ""
+
+    if [[ "$host_forces_sb" = true ]]; then
+        echo "  Le Secure Boot sera configuré automatiquement."
+        sleep 2
+        return
+    fi
+
+    read -p "Activer le Secure Boot ? [o/N] : " sb_choice
+    case "${sb_choice,,}" in
+        o|oui|y|yes)
+            USE_SECURE_BOOT=true
+            echo ""
+            echo "  Secure Boot activé."
+            ;;
+        *)
+            if [[ "$SB_ACTIVE" = true ]]; then
+                echo ""
+                echo "  /!\\ ATTENTION : Le Secure Boot est actuellement ACTIF dans le firmware."
+                echo "  Sans signature des binaires EFI, le système NixOS ne démarrera pas."
+                echo ""
+                read -p "  Continuer sans Secure Boot ? (tapez 'OUI' en majuscules) : " sb_confirm
+                if [[ "$sb_confirm" != "OUI" ]]; then
+                    abort
+                fi
+            fi
+            echo ""
+            echo "  Secure Boot désactivé."
+            ;;
+    esac
+
+    sleep 1
+}
+
+sign_efi_binaries() {
+    echo "  Signature des binaires EFI dans /mnt/boot..."
+    local signed=0
+    local failed=0
+    while IFS= read -r -d '' efi; do
+        if run_sbctl sign "$efi" 2>/dev/null; then
+            echo "    [OK] $efi"
+            signed=$((signed + 1))
+        else
+            echo "    [SKIP] $efi (échec ignoré)"
+            failed=$((failed + 1))
+        fi
+    done < <(find /mnt/boot -iname "*.efi" -print0 2>/dev/null)
+    echo "  Signature terminée : ${signed} signés, ${failed} ignorés."
+}
+
+prepare_secure_boot() {
+    if [[ "$USE_SECURE_BOOT" = false ]]; then
+        return
+    fi
+
+    clear_screen
+    echo "Etape Secure Boot (avant install) : Génération des clés sbctl"
+    echo ""
+
+    echo "  Génération des clés Secure Boot..."
+    run_sbctl create-keys
+
+    echo "  Copie des clés dans le chroot /mnt/var/lib/sbctl/..."
+    mkdir -p /mnt/var/lib/sbctl
+    cp -r /var/lib/sbctl/. /mnt/var/lib/sbctl/
+    echo "  Clés disponibles pour limine-install.py dans le chroot."
+
+    sleep 1
+}
+
+setup_secure_boot() {
+    if [[ "$USE_SECURE_BOOT" = false ]]; then
+        return
+    fi
+
+    clear_screen
+    echo "Etape Secure Boot (après install) : Signature et enrôlement"
+    echo ""
+
+    # Signer tous les .efi dans /mnt/boot
+    sign_efi_binaries
+
+    # Mettre à jour la copie des clés dans /mnt (limine peut en avoir ajouté)
+    echo "  Synchronisation des clés sbctl dans /mnt..."
+    mkdir -p /mnt/var/lib/sbctl
+    cp -r /var/lib/sbctl/. /mnt/var/lib/sbctl/
+
+    echo ""
+
+    # Enrôlement des clés dans le firmware
+    if [[ "$SB_SETUP_MODE" = true ]]; then
+        echo "  Setup Mode détecté — enrôlement automatique des clés (avec clés Microsoft)..."
+        run_sbctl enroll-keys --microsoft
+        echo "  Clés enrôlées avec succès."
+    else
+        echo "  /!\\ Setup Mode NON actif — enrôlement manuel requis."
+        echo ""
+        echo "  Après le redémarrage en NixOS, exécutez :"
+        echo "    sudo sbctl enroll-keys --microsoft"
+        echo "  (Activez d'abord le Setup Mode dans le firmware UEFI si nécessaire)"
+    fi
+
+    # Avertissement si l'hôte n'a pas nixos.system.secureboot.enable
+    local host_config_dir="/tmp/nixos-config/hosts/${FLAKE_CONFIG}"
+    if ! grep -r "secureboot\.enable\s*=\s*true" "$host_config_dir" &>/dev/null 2>&1; then
+        echo ""
+        echo "  /!\\ ATTENTION : nixos.system.secureboot.enable n'est pas activé dans la config."
+        echo "  Les futures 'nixos-rebuild switch' ne re-signeront pas automatiquement les binaires."
+        echo "  Ajoutez 'nixos.system.secureboot.enable = true' à votre configuration pour"
+        echo "  que limine-install.py signe automatiquement à chaque rebuild."
+    fi
+
+    echo ""
+    sleep 2
+}
+
 main() {
     require_root
     detect_boot_mode
@@ -1133,9 +1319,12 @@ main() {
     fi
     select_disk
     select_luks             # ← choix LUKS optionnel
+    select_secure_boot      # ← choix Secure Boot optionnel (Etape 5b)
     detect_existing_system  # → erase (optionnel) → run_disko → /mnt monté
     copy_config_to_mnt
+    prepare_secure_boot     # ← génère les clés sbctl avant nixos-install
     install_nix
+    setup_secure_boot       # ← signe les EFI et enrôle les clés après nixos-install
     postinstall
     finished
 }
