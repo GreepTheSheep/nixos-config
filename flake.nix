@@ -104,6 +104,7 @@
     hosts = [
       "laptop-hp-matt"
       "pc-matt-nix-vm"
+      "dualboot-test"
       "liveIso"
     ];
   in

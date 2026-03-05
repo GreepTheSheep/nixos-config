@@ -2,9 +2,11 @@
 keys:
   - &laptop_hp_matt age19hgrs33stkh44ujk03gzu0hkvpvfqyu4w5qu99t4xwkms5056plqhsfzae
   - &pc_matt_nix_vm age1n05g09zwgcdazvngtuzmaju02hylmg9mhukl4szy6l974pc5yq2q24593l
+  - &dualboot_test age10g0zcsuaw0yttaqs5c2h4ejaj0j5plsfhqee5p546dw2vv0hp49s9p0tva
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *laptop_hp_matt
       - *pc_matt_nix_vm
+      - *dualboot_test
