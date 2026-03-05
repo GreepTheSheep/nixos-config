@@ -843,11 +843,70 @@ erase_disk_wipefs() {
 }
 
 
+partition_and_setup_luks() {
+    # Partitionnement entièrement manuel quand LUKS est actif :
+    # nix run disko télécharge cryptsetup dont tpm2-tss est une dépendance
+    # dans nixpkgs (même sans TPM matériel), ce qui plante les VMs à faible RAM.
+    echo "  Partitionnement manuel de $DISK..."
+    wipefs -a "$DISK"
+    parted -s "$DISK" mklabel gpt
+    parted -s "$DISK" mkpart ESP fat32 1MiB 1GiB
+    parted -s "$DISK" set 1 esp on
+    parted -s "$DISK" mkpart root 1GiB 100%
+    partprobe "$DISK"
+    sleep 2
+
+    local esp_part root_part
+    esp_part="/dev/$(lsblk -lno NAME "$DISK" | grep -v "^$(basename "$DISK")$" | head -1 || true)"
+    root_part="/dev/$(lsblk -lno NAME "$DISK" | grep -v "^$(basename "$DISK")$" | tail -1 || true)"
+
+    echo "  Formatage ESP : $esp_part"
+    mkfs.fat -F32 -n ESP "$esp_part"
+
+    echo "  Chiffrement LUKS de $root_part..."
+    cryptsetup luksFormat --batch-mode "$root_part" --key-file "$LUKS_PASSWORD_FILE"
+    echo "  Ouverture du container LUKS..."
+    cryptsetup luksOpen "$root_part" cryptroot --key-file "$LUKS_PASSWORD_FILE"
+
+    echo "  Formatage btrfs..."
+    mkfs.btrfs -L nixos -f /dev/mapper/cryptroot
+
+    echo "  Création des sous-volumes..."
+    mount /dev/mapper/cryptroot /mnt
+    btrfs subvolume create /mnt/@
+    btrfs subvolume create /mnt/@home
+    umount /mnt
+
+    echo "  Montage..."
+    local opts="compress-force=zstd:2,noatime,space_cache=v2"
+    mount -o "${opts},subvol=@" /dev/mapper/cryptroot /mnt
+    mkdir -p /mnt/home /mnt/boot
+    mount -o "${opts},subvol=@home" /dev/mapper/cryptroot /mnt/home
+    mount "$esp_part" /mnt/boot
+
+    if [[ "$USE_TPM2" = true ]]; then
+        enroll_tpm2 "$root_part"
+    fi
+}
+
 run_disko() {
     clear_screen
 
     echo "Etape 8 : Partitionnement avec Disko"
     echo ""
+
+    # Quand LUKS est actif, on court-circuite disko entièrement :
+    # disko télécharge cryptsetup dont tpm2-tss est une dépendance
+    # dans nixpkgs même sans TPM, ce qui plante les VMs à faible RAM.
+    if [[ "$USE_LUKS" = true ]]; then
+        partition_and_setup_luks
+        cleanup_luks_password
+        echo ""
+        echo "Partitionnement et montage terminés."
+        update_mount_uuids
+        sleep 2
+        return
+    fi
 
     local disko_config="/tmp/nixos-config/hosts/${FLAKE_CONFIG}/disko.nix"
 
@@ -861,51 +920,7 @@ run_disko() {
     nix run github:nix-community/disko -- \
         --mode disko \
         --argstr disk "${DISK}" \
-        --arg luks "${USE_LUKS}" \
         "$disko_config"
-
-    rm -f /tmp/luks-password
-
-    # Disko a créé la partition brute ; on gère LUKS manuellement
-    # (évite de télécharger tpm2-tss via la closure Nix de cryptsetup)
-    if [[ "$USE_LUKS" = true ]]; then
-        local root_part esp_part
-        root_part="/dev/$(lsblk -lno NAME "$DISK" | tail -1)"
-
-        echo ""
-        echo "  Chiffrement LUKS de $root_part..."
-        cryptsetup luksFormat --batch-mode "$root_part" --key-file "$LUKS_PASSWORD_FILE"
-        echo "  Ouverture du container LUKS..."
-        cryptsetup luksOpen "$root_part" cryptroot --key-file "$LUKS_PASSWORD_FILE"
-
-        echo "  Formatage btrfs..."
-        mkfs.btrfs -L nixos -f /dev/mapper/cryptroot
-
-        echo "  Création des sous-volumes..."
-        mount /dev/mapper/cryptroot /mnt
-        btrfs subvolume create /mnt/@
-        btrfs subvolume create /mnt/@home
-        umount /mnt
-
-        echo "  Montage..."
-        local opts="compress-force=zstd:2,noatime,space_cache=v2"
-        mount -o "${opts},subvol=@" /dev/mapper/cryptroot /mnt
-        mkdir -p /mnt/home /mnt/boot
-        mount -o "${opts},subvol=@home" /dev/mapper/cryptroot /mnt/home
-
-        # Disko a monté l'ESP sur /boot ; la déplacer vers /mnt/boot
-        esp_part=$(findmnt -n -o SOURCE /boot || true)
-        if [[ -n "$esp_part" ]]; then
-            umount /boot
-            mount "$esp_part" /mnt/boot
-        fi
-
-        if [[ "$USE_TPM2" = true ]]; then
-            enroll_tpm2 "$root_part"
-        fi
-    fi
-
-    cleanup_luks_password
 
     echo ""
     echo "Partitionnement et montage terminés."
