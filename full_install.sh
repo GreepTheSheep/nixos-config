@@ -959,10 +959,9 @@ install_nix() {
     nixos-install --root /mnt \
         --flake "/mnt/etc/nixos#${FLAKE_CONFIG}" \
         --no-write-lock-file \
-        --no-root-passwd \
         --impure \
         --keep-going \
-        --option eval-cache false || true
+        --option eval-cache false
 }
 
 postinstall() {
@@ -970,12 +969,6 @@ postinstall() {
 
     echo "Etape 11 : Finalisation de l'installation"
     echo ""
-
-    # Config du mot de passe root
-    read -sp "Entrer le mot de passe root: " rootpasswd
-    echo ""
-    printf '%s\n%s\n' "$rootpasswd" "$rootpasswd" | nixos-enter --silent -c passwd > /dev/null 2>&1
-    unset rootpasswd
 
     # Configuration git
     nixos-enter --silent -c "git config --global credential.helper store" > /dev/null 2>&1
