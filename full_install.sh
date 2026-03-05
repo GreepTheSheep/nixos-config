@@ -2,6 +2,8 @@
 
 set -euo pipefail  # Arrêter en cas d'erreur
 
+trap 'echo ""; echo "/!\\ Erreur ligne ${LINENO} : ${BASH_COMMAND}" >&2' ERR
+
 # Global variables
 GIT_REPO_URL="git.greep.fr/greep/nixos-config"
 FLAKE_CONFIG=""
@@ -740,7 +742,7 @@ detect_existing_system() {
 
     while true; do
         disk_name=$(basename "$DISK")
-        partitions=$(lsblk -ln -o NAME,FSTYPE,LABEL,SIZE "$DISK" | grep -v "^${disk_name} ")
+        partitions=$(lsblk -ln -o NAME,FSTYPE,LABEL,SIZE "$DISK" | grep -v "^${disk_name} " || true)
 
         if [[ -z "$partitions" ]]; then
             echo "Aucune partition existante détectée sur $DISK."
