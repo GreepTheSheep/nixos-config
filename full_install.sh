@@ -95,22 +95,29 @@ get_git_credentials() {
 get_hosts_from_flake() {
     local tmpfile="/tmp/nix_flake.txt"
 
-    nix flake show "git+https://${GIT_REPO_URL}.git" \
+    if ! nix flake show "git+https://${GIT_REPO_URL}.git" \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
-        --accept-flake-config > "$tmpfile" 2>&1
+        --accept-flake-config > "$tmpfile" 2>&1; then
+        echo ""
+        echo "/!\\ Erreur lors de la récupération du flake :"
+        echo ""
+        cat "$tmpfile"
+        rm -f "$tmpfile"
+        return 1
+    fi
 
     local hosts
     hosts=$(sed 's/\x1b\[[0-9;]*m//g' "$tmpfile" \
         | grep ": NixOS configuration" \
         | sed 's/^[^A-Za-z]*//' \
         | cut -d':' -f1 \
-        | sort -u)
+        | sort -u || true)
 
     rm -f "$tmpfile"
 
     # Remove liveIso from hosts as it is not a real host
-    hosts=$(echo "$hosts" | grep -v "liveIso")
+    hosts=$(echo "$hosts" | grep -v "liveIso" || true)
 
     echo "$hosts"
 }
@@ -148,7 +155,9 @@ select_host() {
     echo "Chargement en cours..."
 
     local hosts_raw
-    hosts_raw=$(get_hosts_from_flake)
+    if ! hosts_raw=$(get_hosts_from_flake); then
+        exit 1
+    fi
 
     clear_screen
     echo "Etape 2 : Sélection de l'hôte"
