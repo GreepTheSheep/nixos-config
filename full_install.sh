@@ -958,7 +958,9 @@ install_nix() {
     # Monter efivarfs dans le chroot pour que le bootloader puisse écrire
     # les entrées NVRAM via efibootmgr pendant nixos-install
     if [[ -d /sys/firmware/efi/efivars ]]; then
-        mount --bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars 2>/dev/null || true
+        mkdir -p /mnt/sys/firmware/efi/efivars
+        mount --bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars 2>/dev/null || \
+            mount -t efivarfs efivarfs /mnt/sys/firmware/efi/efivars 2>/dev/null || true
     fi
 
     export NIX_CONFIG="experimental-features = nix-command flakes"
