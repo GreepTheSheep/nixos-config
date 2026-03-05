@@ -46,7 +46,6 @@
         wallpapers = [
           "${../../wallpaper/stolas.png}"
         ];
-        wallpaperStyle = "centered";
         interface.helpHidden = true;
       };
     };
