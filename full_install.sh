@@ -16,6 +16,7 @@ USE_LUKS=false
 USE_TPM2=false
 LUKS_PASSWORD_FILE=""
 ALONGSIDE_LUKS_PART=""      # Partition LUKS brute (alongside)
+BOOT_MODE=""                # "efi" ou "bios"
 
 abort() {
     echo ""
@@ -66,6 +67,31 @@ require_root() {
         echo "Ce script doit être exécuté en tant que root (sudo)"
         exit 1
     fi
+}
+
+detect_boot_mode() {
+    if [[ -d /sys/firmware/efi ]]; then
+        BOOT_MODE="efi"
+        echo "Mode de démarrage détecté : UEFI"
+    else
+        BOOT_MODE="bios"
+        echo ""
+        echo "/!\\ Mode de démarrage détecté : BIOS (Legacy)"
+        echo ""
+        echo "La configuration NixOS utilise le bootloader Limine en mode EFI."
+        echo "Veuillez redémarrer le live ISO en mode UEFI pour continuer."
+        echo ""
+        read -p "Continuer malgré tout ? (tapez 'OUI' en majuscules) : " bios_confirm
+        if [[ "$bios_confirm" != "OUI" ]]; then
+            echo "Installation annulée."
+            exit 1
+        fi
+        echo ""
+        echo "/!\\ Attention : l'installation du bootloader EFI échouera probablement."
+        sleep 3
+    fi
+    echo ""
+    sleep 1
 }
 
 setup_git_auth() {
@@ -841,8 +867,14 @@ partition_and_setup_luks() {
     echo "  Partitionnement manuel de $DISK..."
     wipefs -a "$DISK"
     parted -s "$DISK" mklabel gpt
-    parted -s "$DISK" mkpart ESP fat32 1MiB 1GiB
-    parted -s "$DISK" set 1 esp on
+    if [[ "$BOOT_MODE" = "efi" ]]; then
+        parted -s "$DISK" mkpart ESP fat32 1MiB 1GiB
+        parted -s "$DISK" set 1 esp on
+    else
+        # En mode BIOS, créer une partition BIOS boot (1 MiB) + pas d'ESP
+        parted -s "$DISK" mkpart bios_grub 1MiB 2MiB
+        parted -s "$DISK" set 1 bios_grub on
+    fi
     parted -s "$DISK" mkpart root 1GiB 100%
     partprobe "$DISK"
     sleep 2
@@ -851,8 +883,12 @@ partition_and_setup_luks() {
     esp_part="/dev/$(lsblk -lno NAME "$DISK" | grep -v "^$(basename "$DISK")$" | head -1 || true)"
     root_part="/dev/$(lsblk -lno NAME "$DISK" | grep -v "^$(basename "$DISK")$" | tail -1 || true)"
 
-    echo "  Formatage ESP : $esp_part"
-    mkfs.fat -F32 -n ESP "$esp_part"
+    if [[ "$BOOT_MODE" = "efi" ]]; then
+        echo "  Formatage ESP : $esp_part"
+        mkfs.fat -F32 -n ESP "$esp_part"
+    else
+        echo "  Partition BIOS boot : $esp_part (pas de formatage nécessaire)"
+    fi
 
     echo "  Chiffrement LUKS de $root_part..."
     cryptsetup luksFormat --batch-mode "$root_part" --key-file "$LUKS_PASSWORD_FILE"
@@ -871,9 +907,12 @@ partition_and_setup_luks() {
     echo "  Montage..."
     local opts="compress-force=zstd:2,noatime,space_cache=v2"
     mount -o "${opts},subvol=@" /dev/mapper/cryptroot /mnt
-    mkdir -p /mnt/home /mnt/boot
+    mkdir -p /mnt/home
     mount -o "${opts},subvol=@home" /dev/mapper/cryptroot /mnt/home
-    mount "$esp_part" /mnt/boot
+    if [[ "$BOOT_MODE" = "efi" ]]; then
+        mkdir -p /mnt/boot
+        mount "$esp_part" /mnt/boot
+    fi
 
     if [[ "$USE_TPM2" = true ]]; then
         enroll_tpm2 "$root_part"
@@ -955,6 +994,12 @@ install_nix() {
     mv /mnt/etc/nixos/hardware-configuration.nix \
         "/mnt/etc/nixos/hosts/${FLAKE_CONFIG}/hardware-configuration.nix"
 
+    # Monter efivars dans le chroot pour que efibootmgr (utilisé par Limine) fonctionne
+    if [[ -d /sys/firmware/efi/efivars ]]; then
+        mkdir -p /mnt/sys/firmware/efi/efivars
+        mount --bind /sys/firmware/efi/efivars /mnt/sys/firmware/efi/efivars
+    fi
+
     export NIX_CONFIG="experimental-features = nix-command flakes"
     nixos-install --root /mnt \
         --flake "/mnt/etc/nixos#${FLAKE_CONFIG}" \
@@ -962,6 +1007,11 @@ install_nix() {
         --impure \
         --keep-going \
         --option eval-cache false
+
+    # Démonter efivars après l'installation
+    if mountpoint -q /mnt/sys/firmware/efi/efivars 2>/dev/null; then
+        umount /mnt/sys/firmware/efi/efivars
+    fi
 }
 
 postinstall() {
@@ -1074,6 +1124,7 @@ create_host_files() {
 
 main() {
     require_root
+    detect_boot_mode
     get_git_credentials
     select_host
     fetch_config_tmp
