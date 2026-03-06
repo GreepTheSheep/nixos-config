@@ -115,9 +115,11 @@
 
         extensions = with pkgs.vscode-extensions; [
           shardulm94.trailing-spaces
+          ms-vscode.test-adapter-converter
           hbenl.vscode-test-explorer
           vscode-icons-team.vscode-icons
           esbenp.prettier-vscode
+          bbenoist.nix
           jnoortheen.nix-ide
           usernamehw.errorlens
           editorconfig.editorconfig
