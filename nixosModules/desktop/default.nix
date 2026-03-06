@@ -6,6 +6,7 @@
     ./displayManager
     ./windowManager
     ./xdg.nix
+    ./xrdp.nix
     ./xserver.nix
   ];
 
@@ -26,6 +27,7 @@
       displayManager.enable = true;
       windowManager.enable = true;
       xdg.enable = true;
+      xrdp.enable = true;
       xserver.enable = true;
     };
   };
