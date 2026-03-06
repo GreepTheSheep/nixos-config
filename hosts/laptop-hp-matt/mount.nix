@@ -2,12 +2,19 @@ _:
 
 {
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/1204b7ab-1366-46c5-8989-be545186b3b5";
+    { device = "/dev/mapper/cryptroot";
       fsType = "btrfs";
+      options = [ "subvol=@" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/mapper/cryptroot";
+      fsType = "btrfs";
+      options = [ "subvol=@home" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/C1F9-4D48";
+    { device = "/dev/disk/by-uuid/4150-8593";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -30,5 +37,5 @@ _:
   # Hibernation — après install, récupérer l'offset avec:
   # sudo btrfs inspect-internal map-swapfile -r /swapfile
   boot.resumeDevice = "/dev/disk/by-uuid/1204b7ab-1366-46c5-8989-be545186b3b5";
-  boot.kernelParams = [ "resume_offset=XXXXXXXX" ];
+  boot.kernelParams = [ "resume_offset=4728064" ];
 }
