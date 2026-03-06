@@ -19,7 +19,7 @@
     };
 
     home.packages = with pkgs; [
-      openasar # Replace the original Discord's app.asar to OpenAsar
+      #openasar # Replace the original Discord's app.asar to OpenAsar
       legcord # Include Legcord, an alternative lightweight Discord client.
     ];
   };
