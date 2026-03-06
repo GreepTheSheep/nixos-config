@@ -37,15 +37,22 @@
 
     services.udisks2.enable = true; # power managment events
 
-    # Enable num lock early on boot
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.kbd}/bin/setleds
-    '';
-    boot.initrd.preDeviceCommands = ''
-      INITTY=/dev/tty[1-6]
-      for tty in $INITTY; do
-        /bin/setleds -D +num < $tty
-      done
-    '';
+    boot.initrd.systemd.services.numlock = {
+      description = "Enable NumLock on TTYs";
+
+      wantedBy = [ "initrd.target" ];
+      after = [ "systemd-vconsole-setup.service" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      script = ''
+        for tty in /dev/tty{1..6}; do
+          ${pkgs.kbd}/bin/setleds -D +num < $tty
+        done
+      '';
+    };
   };
 }
