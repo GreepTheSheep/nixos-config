@@ -11,7 +11,7 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = [ "acpi_backlight=video" ];
+  boot.kernelParams = lib.mkAfter [ "acpi_backlight=video" ];
   boot.extraModulePackages = [ ];
 
   boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/be6815b7-0883-407d-9413-42da89612581";
