@@ -66,6 +66,8 @@
       nixd
       nixdoc
       direnv
+
+      ntfs3g # NTFS file system driver
     ];
   };
 }
