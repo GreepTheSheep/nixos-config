@@ -48,6 +48,6 @@
 
     nixos.userEnvironment.enable = true;
 
-    config.nixos.userEnvironment.io.bluetooth.enable = true;
+    nixos.userEnvironment.io.bluetooth.enable = true;
   };
 }
