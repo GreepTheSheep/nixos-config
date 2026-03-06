@@ -17,10 +17,5 @@
       obs-studio.enable = lib.mkForce false;
       qbittorrent.enable = lib.mkForce false;
     };
-
-    development = {
-      antigravity.enable = true;
-      claudecode.enable = true;
-    };
   };
 }
