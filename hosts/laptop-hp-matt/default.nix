@@ -8,6 +8,5 @@ _:
     ./hardware-configuration.nix
     ./mount.nix
     ./networking.nix
-    ./bluetooth.nix
   ];
 }
