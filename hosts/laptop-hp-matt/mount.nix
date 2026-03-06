@@ -36,6 +36,6 @@ _:
 
   # Hibernation — après install, récupérer l'offset avec:
   # sudo btrfs inspect-internal map-swapfile -r /swapfile
-  boot.resumeDevice = "/dev/disk/by-uuid/1204b7ab-1366-46c5-8989-be545186b3b5";
+  boot.resumeDevice = "/dev/disk/by-uuid/be6815b7-0883-407d-9413-42da89612581";
   boot.kernelParams = [ "resume_offset=4728064" ];
 }
