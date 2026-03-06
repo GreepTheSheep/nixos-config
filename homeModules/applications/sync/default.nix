@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./barrier.nix
+    ./deskflow.nix
     ./kdeconnect.nix
     ./rclone.nix
   ];
@@ -20,7 +20,7 @@
 
   config = lib.mkIf config.homeManager.applications.sync.enable {
     homeManager.applications.sync = {
-      barrier.enable = lib.mkDefault false;
+      deskflow.enable = lib.mkDefault false;
       kdeconnect.enable = true;
       rclone.enable = lib.mkDefault false;
     };
