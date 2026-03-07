@@ -29,8 +29,7 @@
       enable = true;
       services = [ "sshd" ];
       whitelist = [
-        "10.75.0.40"
-        "10.75.0.80"
+        "192.168.1.0"
       ];
       blocktime = 3600;
       detection_time = 30758400;
