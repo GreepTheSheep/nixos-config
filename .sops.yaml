@@ -1,12 +1,12 @@
 # Age keys for each host (derived from SSH host keys)
 keys:
-  - &laptop_hp_matt age1cw8cwj7464wq7wvd67mgeghngdtygsxu9u4t2zazax83pfehppwq3mcpxd
+  - &pomni age1282q29p0s6uy8u05evtaqx8cr685w3z2zj2mqvf467jzhq4f39xs2c6n0t
   - &pc_matt_nix_vm age1n05g09zwgcdazvngtuzmaju02hylmg9mhukl4szy6l974pc5yq2q24593l
   - &dualboot_test age10g0zcsuaw0yttaqs5c2h4ejaj0j5plsfhqee5p546dw2vv0hp49s9p0tva
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
-      - *laptop_hp_matt
+      - *pomni
       - *pc_matt_nix_vm
       - *dualboot_test
