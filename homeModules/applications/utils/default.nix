@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./streamdeck.nix
   ];
 
   options.homeManager = {
@@ -11,14 +10,13 @@
         type = lib.types.bool;
         default = false;
         example = true;
-        description = "Enable terminal modules bundle.";
+        description = "Enable utils bundle.";
       };
     };
   };
 
   config = lib.mkIf config.homeManager.applications.utils.enable {
     homeManager.applications.utils = {
-      streamdeck.enable = lib.mkDefault false;
     };
   };
 }

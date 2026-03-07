@@ -50,6 +50,7 @@ config = {
     nixos.userEnvironment = {
       enable = true;
       game.enable = true;
+      io.streamdeck.enable = true;
     };
 
     nixos.virtualisation = {

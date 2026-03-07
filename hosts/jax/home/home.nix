@@ -12,7 +12,6 @@ _:
       diff.enable = true;
     };
 
-    utils.streamdeck.enable = true;
     editing.video.enableDavinciResolve = true;
 
     flatpak.enable = true;

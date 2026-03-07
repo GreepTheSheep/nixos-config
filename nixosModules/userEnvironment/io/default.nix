@@ -6,6 +6,7 @@
     ./bluetooth.nix
     ./input.nix
     ./printing.nix
+    ./streamdeck.nix
   ];
 
   options.nixos = {
@@ -25,6 +26,7 @@
       bluetooth.enable = lib.mkDefault false;
       input.enable = true;
       printing.enable = true;
+      streamdeck.enable = lib.mkDefault false;
     };
   };
 }
