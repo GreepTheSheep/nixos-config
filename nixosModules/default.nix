@@ -4,7 +4,6 @@
   imports = [
     ./base
     ./desktop
-    #./disko
     ./hardware
     ./pkgs
     #./server
@@ -29,7 +28,6 @@
     nixos = {
       base.enable = true;
       desktop.enable = lib.mkDefault false;
-      #disko.enable = true;
       hardware.enable = true;
       pkgs.enable = true;
       #server.enable = false;
