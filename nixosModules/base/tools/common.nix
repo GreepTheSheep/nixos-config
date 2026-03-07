@@ -47,6 +47,7 @@
       hardinfo2
       wayland-utils
       junction
+      aha
 
       # networking tools
       inetutils
