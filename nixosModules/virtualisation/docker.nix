@@ -16,14 +16,15 @@
     virtualisation.docker = {
       enable = true;
       enableOnBoot = true;
-      enableNvidia = lib.mkIf (
-        config.nixos.hardware.nvidiagpu.enable && config.nixos.virtualisation.docker.enable
-      ) true;
       extraPackages = with pkgs; [
         lazydocker
         oxker
       ];
     };
+
+    hardware.nvidia-container-toolkit.enable = lib.mkIf (
+      config.nixos.hardware.nvidiagpu.enable && config.nixos.virtualisation.docker.enable
+    ) true;
 
     users.users."${config.nixos.system.user.defaultuser.name}" = {
       extraGroups = [
