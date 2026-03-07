@@ -114,6 +114,7 @@
         };
 
         extensions = with pkgs.vscode-extensions; [
+          ms-ceintl.vscode-language-pack-fr
           shardulm94.trailing-spaces
           ms-vscode.test-adapter-converter
           hbenl.vscode-test-explorer
