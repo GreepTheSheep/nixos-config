@@ -14,7 +14,7 @@ _:
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4150-8593";
+    { device = "/dev/disk/by-uuid/2DE5-EA50";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -36,6 +36,6 @@ _:
 
   # Hibernation — après install, récupérer l'offset avec:
   # sudo btrfs inspect-internal map-swapfile -r /swapfile
-  boot.resumeDevice = "/dev/disk/by-uuid/be6815b7-0883-407d-9413-42da89612581";
+  boot.resumeDevice = "/dev/disk/by-uuid/665ae564-7aed-4ba8-be31-b7653e850493";
   boot.kernelParams = [ "resume_offset=4728064" ];
 }

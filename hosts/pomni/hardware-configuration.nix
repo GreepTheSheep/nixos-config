@@ -14,7 +14,7 @@
   boot.kernelParams = lib.mkAfter [ "acpi_backlight=video" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/be6815b7-0883-407d-9413-42da89612581";
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/665ae564-7aed-4ba8-be31-b7653e850493";
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
