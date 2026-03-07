@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, osConfig, ... }:
 
 {
   imports = [
@@ -19,8 +19,8 @@
 
   config = lib.mkIf config.homeManager.desktop.desktopEnvironment.enable {
     homeManager.desktop.desktopEnvironment = {
-      gnome.enable = true;
-      plasma.enable = true;
+      gnome.enable = lib.mkIf osConfig.nixos.desktop.desktopEnvironment.gnome.enable true;
+      plasma.enable = lib.mkIf osConfig.nixos.desktop.desktopEnvironment.plasma6.enable true;
     };
   };
 }

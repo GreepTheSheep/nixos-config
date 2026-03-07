@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, osConfig, ... }:
 
 {
   imports = [
@@ -22,8 +22,8 @@
 
   config = lib.mkIf config.homeManager.desktop.enable {
     homeManager.desktop = {
-      desktopEnvironment.enable = true;
-      windowManager.enable = true;
+      desktopEnvironment.enable = lib.mkIf osConfig.nixos.desktop.desktopEnvironment.enable true;
+      windowManager.enable = lib.mkIf osConfig.nixos.desktop.windowManager.enable true;
 
       xdg.enable = true;
       xserver.enable = true;
