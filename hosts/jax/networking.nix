@@ -3,5 +3,25 @@ _:
 {
   networking = {
     hostName = "jax";
+
+    interfaces = {
+      enp12s0 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.1.50";
+            prefixLength = 24;
+          }
+        ];
+        ipv6.addresses = [];
+      };
+    };
+
+    defaultGateway.interface = "enp12s0";
+    defaultGateway6.interface = "enp12s0";
+  };
+
+  nixos.system.networking = {
+    enable = true;
+    localIP = "192.168.1.50";
   };
 }
