@@ -588,6 +588,30 @@ install_alongside() {
         fi
     done <<< "$free_output"
 
+    # Recalculer best_start_mib / best_end_mib depuis les secteurs réels pour
+    # éviter les erreurs d'alignement dues à l'arrondi MiB de parted.
+    local sector_free
+    sector_free=$(LC_ALL=C parted -s "$DISK" unit s print free 2>/dev/null \
+        | grep "Free Space" || true)
+    local best_sectors=0 real_start_s="" real_end_s=""
+    while IFS= read -r line; do
+        local s_start s_end s_size
+        s_start=$(echo "$line" | awk '{v=$1; gsub(/s/,"",v); print int(v)}')
+        s_end=$(echo "$line"   | awk '{v=$2; gsub(/s/,"",v); print int(v)}')
+        s_size=$(echo "$line"  | awk '{v=$3; gsub(/s/,"",v); print int(v)}')
+        if [[ "$s_size" -gt "$best_sectors" ]]; then
+            best_sectors="$s_size"
+            real_start_s="$s_start"
+            real_end_s="$s_end"
+        fi
+    done <<< "$sector_free"
+    if [[ -n "$real_start_s" && -n "$real_end_s" ]]; then
+        # Arrondir le début au prochain MiB (multiple de 2048 secteurs)
+        best_start_mib=$(( (real_start_s + 2047) / 2048 ))
+        # Arrondir la fin au MiB précédent (ne pas dépasser le dernier secteur libre)
+        best_end_mib=$(( real_end_s / 2048 ))
+    fi
+
     echo ""
 
     # Réserver 1 GiB pour ESP si besoin
@@ -598,7 +622,7 @@ install_alongside() {
         echo ""
     fi
 
-    local available=$(( max_size_mib - esp_reserve_mib ))
+    local available=$(( best_end_mib - best_start_mib - esp_reserve_mib ))
     if [[ "$available" -lt 1 ]]; then
         echo "  /!\\ Espace disponible insuffisant (${available} MiB)."
         echo ""
