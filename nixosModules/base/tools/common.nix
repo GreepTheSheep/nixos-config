@@ -68,7 +68,7 @@
       nixdoc
       direnv
 
-      ntfs3g # NTFS file system driver
+      exfatprogs # exFAT file system driver
     ];
   };
 }

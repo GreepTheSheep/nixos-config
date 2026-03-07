@@ -24,6 +24,12 @@
     boot.kernelModules = [ "fuse" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.exfat-nofuse # exFAT support
+    ];
+    boot.supportedFilesystems = [
+      "ntfs"
+    ];
 
     boot.initrd.systemd.enable = true;
 
