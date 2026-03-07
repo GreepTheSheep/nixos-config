@@ -553,6 +553,46 @@ install_alongside() {
     detect_existing_esp
     echo ""
 
+    # 1b. Choisir entre créer une partition ou en utiliser une existante
+    echo "  Comment souhaitez-vous fournir la partition NixOS ?"
+    echo "    1) Créer une nouvelle partition depuis l'espace libre"
+    echo "    2) Utiliser une partition déjà existante (formatée ou non)"
+    local part_mode
+    while true; do
+        read -p "  Choix [1/2] : " part_mode
+        if [[ "$part_mode" = "1" || "$part_mode" = "2" ]]; then break; fi
+        echo "  /!\\ Entrez 1 ou 2."
+    done
+    echo ""
+
+    local use_existing_partition=false
+    if [[ "$part_mode" = "2" ]]; then
+        echo "  Partitions sur $DISK :"
+        lsblk -o NAME,SIZE,FSTYPE,LABEL,MOUNTPOINT "$DISK" | grep -v "^loop"
+        echo ""
+        local existing_part
+        while true; do
+            read -p "  Chemin de la partition à utiliser (ex: /dev/sda3) : " existing_part
+            if [[ ! -b "$existing_part" ]]; then
+                echo "  /!\\ Périphérique introuvable : $existing_part"
+                continue
+            fi
+            echo ""
+            echo "  /!\\ ATTENTION : $existing_part sera entièrement formatée (btrfs)."
+            local confirm_part
+            read -p "  Confirmer ? [oui/non] : " confirm_part
+            if [[ "$confirm_part" != "oui" ]]; then
+                echo "  Annulé."
+                continue
+            fi
+            break
+        done
+        ALONGSIDE_BTRFS="$existing_part"
+        use_existing_partition=true
+        echo ""
+    fi
+
+    if [[ "$use_existing_partition" = false ]]; then
     # 2. Afficher l'espace libre
     echo "  Espace libre sur $DISK :"
     local free_output
@@ -646,17 +686,6 @@ install_alongside() {
         break
     done
 
-    # 3b. Demander la taille du swap
-    local swap_mib
-    while true; do
-        read -p "  Taille du swap en MiB (0 pour désactiver) : " swap_mib
-        if [[ ! "$swap_mib" =~ ^[0-9]+$ ]]; then
-            echo "  /!\\ Entrez un entier positif ou 0."
-            continue
-        fi
-        break
-    done
-
     # 4. Créer ESP si nécessaire
     local part_start_mib="$best_start_mib"
     if [[ "$ALONGSIDE_ESP" = "CREATE" ]]; then
@@ -684,6 +713,18 @@ install_alongside() {
         part_end_mib="$((best_end_mib - 1))"
     fi
     create_alongside_partition "$part_start_mib" "$part_end_mib"
+    fi # fin du bloc "nouvelle partition"
+
+    # 3b. Demander la taille du swap
+    local swap_mib
+    while true; do
+        read -p "  Taille du swap en MiB (0 pour désactiver) : " swap_mib
+        if [[ ! "$swap_mib" =~ ^[0-9]+$ ]]; then
+            echo "  /!\\ Entrez un entier positif ou 0."
+            continue
+        fi
+        break
+    done
 
     # 6. Formater btrfs + sous-volumes (avec ou sans LUKS)
     echo ""
