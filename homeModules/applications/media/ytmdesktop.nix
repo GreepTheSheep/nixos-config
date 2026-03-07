@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.nixos = {
+  options.homeManager = {
     applications.media.ytmdesktop = {
       enable = lib.mkOption {
         type = lib.types.bool;
