@@ -598,9 +598,9 @@ install_alongside() {
         echo ""
     fi
 
-    local available=$(( (max_size_mib - esp_reserve_mib) / 1024 ))
+    local available=$(( max_size_mib - esp_reserve_mib ))
     if [[ "$available" -lt 1 ]]; then
-        echo "  /!\\ Espace disponible insuffisant (${available} GiB)."
+        echo "  /!\\ Espace disponible insuffisant (${available} MiB)."
         echo ""
         read -sp "Appuyez sur Entrée pour revenir au menu"
         detect_existing_system
@@ -608,15 +608,15 @@ install_alongside() {
     fi
 
     # 3. Demander la taille
-    local size_gib
+    local size_mib_input
     while true; do
-        read -p "  Taille pour NixOS en GiB (max ~${available} GiB) : " size_gib
-        if [[ ! "$size_gib" =~ ^[0-9]+$ ]] || [[ "$size_gib" -lt 1 ]]; then
+        read -p "  Taille pour NixOS en MiB (max ~${available} MiB) : " size_mib_input
+        if [[ ! "$size_mib_input" =~ ^[0-9]+$ ]] || [[ "$size_mib_input" -lt 1 ]]; then
             echo "  /!\\ Entrez un entier positif."
             continue
         fi
-        if [[ "$size_gib" -gt "$available" ]]; then
-            echo "  /!\\ Dépasse l'espace disponible (${available} GiB)."
+        if [[ "$size_mib_input" -gt "$available" ]]; then
+            echo "  /!\\ Dépasse l'espace disponible (${available} MiB)."
             continue
         fi
         break
@@ -654,7 +654,7 @@ install_alongside() {
     fi
 
     # 5. Créer la partition btrfs
-    local size_mib=$(( size_gib * 1024 ))
+    local size_mib="$size_mib_input"
     local part_end_mib=$(( part_start_mib + size_mib ))
     if [[ "$part_end_mib" -ge "$best_end_mib" ]]; then
         part_end_mib="$((best_end_mib - 1))"
