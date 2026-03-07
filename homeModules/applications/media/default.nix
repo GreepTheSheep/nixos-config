@@ -10,6 +10,7 @@
     ./obs-studio.nix
     ./qbittorrent.nix
     ./yt-dlp.nix
+    ./ytmdesktop.nix
   ];
 
   options.homeManager = {
@@ -33,6 +34,7 @@
       obs-studio.enable = true;
       qbittorrent.enable = true;
       yt-dlp.enable = true;
+      ytmdesktop.enable = true;
     };
   };
 }
