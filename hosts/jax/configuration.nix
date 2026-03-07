@@ -10,7 +10,7 @@
 
     isVM = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Is the host a VM ?";
     };
 
@@ -21,9 +21,7 @@
     };
   };
 
-  config = {
-    virtualisation.vmware.guest.enable = true;
-
+config = {
     nixos.desktop = {
       enable = true;
       desktopEnvironment = {
@@ -40,14 +38,28 @@
 
     nixos.hardware = {
       amdcpu.enable = true;
+      nvidiagpu.enable = true;
     };
 
     nixos.system.user.defaultuser = {
-      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+      pass = "$y$j9T$Gmd5se3DKJe4508IpvpNK.$Yq2XI4JqqbBrBIOSfjlWHYcKx.Po.ZEkqcKYm7LEtx/";
     };
 
-    nixos.userEnvironment.enable = true;
-
     nixos.system.secureboot.enable = true;
+
+    nixos.userEnvironment = {
+      enable = true;
+      game.enable = true;
+    };
+
+    nixos.virtualisation = {
+      enable = true;
+      docker.enable = true;
+      vmware.enable = true;
+      waydroid.enable = true;
+    };
+
+    nixos.system.cloudmount.enable = true;
+    sops.age.keyFile = "/root/.secrets/keys.txt";
   };
 }

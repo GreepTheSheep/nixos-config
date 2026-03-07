@@ -102,9 +102,9 @@
       };
 
     hosts = [
-      "laptop-hp-matt"
-      "pc-matt-nix-vm"
-      "dualboot-test"
+      "jax"
+      "pomni"
+      "jax-vm"
       "liveIso"
     ];
   in
