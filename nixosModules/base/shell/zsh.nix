@@ -40,6 +40,7 @@
       shellAliases = {
         ll = "ls -l";
         "nix-update" = "sudo nixos-rebuild switch";
+        "nix-clean-update" = "sudo nix-collect-garbage -d && sudo rm /nix/var/nix/profiles/system-* || true && sudo nixos-rebuild boot";
         ".." = "cd ..";
         "q" = "exit";
         "cls" = "clear";
