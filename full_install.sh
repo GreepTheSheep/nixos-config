@@ -656,8 +656,8 @@ install_alongside() {
     # 5. Créer la partition btrfs
     local size_mib=$(( size_gib * 1024 ))
     local part_end_mib=$(( part_start_mib + size_mib ))
-    if [[ "$part_end_mib" -gt "$best_end_mib" ]]; then
-        part_end_mib="$best_end_mib"
+    if [[ "$part_end_mib" -ge "$best_end_mib" ]]; then
+        part_end_mib="$((best_end_mib - 1))"
     fi
     create_alongside_partition "$part_start_mib" "$part_end_mib"
 
