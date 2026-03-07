@@ -12,6 +12,7 @@
     ./screenshot
     ./sync
     ./terminal
+    ./utils
 
     ./common.nix
     ./flatpak.nix
@@ -40,6 +41,7 @@
       screenshot.enable = true;
       sync.enable = true;
       terminal.enable = lib.mkDefault false;
+      utils.enable = true;
 
       common.enable = true;
       flatpak.enable = lib.mkDefault false;
