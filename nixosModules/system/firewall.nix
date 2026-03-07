@@ -16,6 +16,15 @@
     networking.firewall = {
       enable = true;
       allowPing = true;
+
+      allowedTCPPorts = [
+        22
+        24800
+      ];
+
+      allowedUDPPorts = [
+        24800
+      ];
     };
   };
 }
