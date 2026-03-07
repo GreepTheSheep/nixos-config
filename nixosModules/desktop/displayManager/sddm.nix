@@ -1,10 +1,5 @@
 { config, lib, pkgs, ...}:
 
-let
-  background-package = pkgs.runCommand "background-image" {} ''
-  cp ${../../../wallpaper/stolas.png} $out
-'';
-in
 {
   options.nixos = {
     desktop.displayManager.sddm = {
@@ -14,10 +9,21 @@ in
         example = true;
         description = "Enable SDDM display manager.";
       };
+
+      wallpaper = lib.mkOption {
+        type = lib.types.path;
+        default = ../../../wallpaper/nuzi.jpg;
+        example = ../../../wallpaper/stolas.png;
+        description = "Wallpaper in SDDM display manager.";
+      };
     };
   };
 
-  config = lib.mkIf config.nixos.desktop.displayManager.sddm.enable {
+  config = lib.mkIf config.nixos.desktop.displayManager.sddm.enable (let
+    background-package = pkgs.runCommand "background-image" {} ''
+      cp ${config.nixos.desktop.displayManager.sddm.wallpaper} $out
+    '';
+  in {
     services.displayManager = {
       sddm = {
         enable = true;
@@ -41,5 +47,5 @@ in
         background = "${background-package}"
       '')
     ];
-  };
+  });
 }

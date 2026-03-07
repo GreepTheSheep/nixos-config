@@ -46,7 +46,7 @@ in
       workspace = {
         lookAndFeel = lib.mkForce "org.kde.breezedark.desktop";
         iconTheme = lib.mkForce "Papirus-Dark";
-        wallpaper = lib.mkForce "${../../../../wallpaper/stolas.png}";
+        wallpaper = lib.mkDefault "${../../../../wallpaper/stolas.png}";
       };
 
       kscreenlocker = {
@@ -61,7 +61,7 @@ in
         appearance = {
           alwaysShowClock = true;
           showMediaControls = true;
-          wallpaper = lib.mkForce "${../../../../wallpaper/stolas.png}";
+          wallpaper = lib.mkDefault "${../../../../wallpaper/nuzi.jpg}";
           wallpaperPictureOfTheDay = null;
           wallpaperSlideShow = null;
           wallpaperPlainColor = null;

@@ -45,7 +45,9 @@
       style = {
         wallpapers = [
           "${../../wallpaper/stolas.png}"
+          "${../../wallpaper/nuzi.jpg}"
         ];
+        wallpaperStyle = "centered";
         interface.helpHidden = true;
       };
     };
