@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   options.nixos = {
@@ -49,6 +49,18 @@
       extraGroups = [
         "dialout"
       ];
+    };
+
+    # Block clipboard paste on mouse middle click
+    environment.systemPackages = [ pkgs.xmousepasteblock ];
+    systemd.user.services.xmousepasteblock = {
+      description = "Block middle-click paste";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.xmousepasteblock}/bin/xmousepasteblock";
+        Restart = "on-failure";
+      };
     };
   };
 }
