@@ -1,8 +1,7 @@
-{ config, lib, plasma-manager, osConfig, ... }:
+{ config, lib, osConfig, ... }:
 
 {
   imports = [
-    plasma-manager.homeModules.plasma-manager
     ./plasma.nix
     ./panels.nix
     ./shortcuts.nix

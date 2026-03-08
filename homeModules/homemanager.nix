@@ -1,4 +1,4 @@
-{ config, home-manager, specialArgs, ... }:
+{ config, home-manager, specialArgs, plasma-manager, nix-flatpak, ... }:
 
 {
   imports = [
@@ -9,6 +9,11 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
+
+    sharedModules = {
+      plasma-manager.homeModules.plasma-manager
+      nix-flatpak.homeManagerModules.nix-flatpak
+    };
 
     extraSpecialArgs = specialArgs;
 
