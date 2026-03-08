@@ -161,6 +161,9 @@ in
       };
     };
 
-    home.file.".config/Code/User/settings.json".text = vsCodeSettings;
+    home.file.".config/Code/User/settings.json" = {
+      text = vsCodeSettings;
+      force = true;
+    };
   };
 }
