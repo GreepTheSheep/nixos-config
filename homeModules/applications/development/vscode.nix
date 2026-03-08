@@ -113,9 +113,6 @@ in
       mutableExtensionsDir = true;
 
       profiles.default = {
-        enableExtensionUpdateCheck = false;
-        enableUpdateCheck = true;
-
         extensions = with pkgs.vscode-extensions; [
           ms-ceintl.vscode-language-pack-fr
           shardulm94.trailing-spaces
