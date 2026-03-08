@@ -1,4 +1,4 @@
-_:
+{ pkgs, config, ... }:
 
 {
 
@@ -26,6 +26,30 @@ _:
       fsType = "ntfs";
     };
 
+  sops.secrets."bitlocker/windows-drive-password" = {};
+
+  systemd.services."mnt-Windows" = {
+    description = "Mount BitLocker encrypted NTFS /mnt/Windows";
+    after = [ "local-fs.target" ];
+    wantedBy = [ "multi-user.target" ];
+    unitConfig.ConditionPathExists = "/dev/disk/by-uuid/6e2f4d75-a462-402e-a422-f8a3c82584ce";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = pkgs.writeShellScript "mount-windows" ''
+        ${pkgs.cryptsetup}/bin/cryptsetup open --type bitlk \
+          /dev/disk/by-uuid/6e2f4d75-a462-402e-a422-f8a3c82584ce \
+          cryptwindows \
+          --key-file ${config.sops.secrets."bitlocker/windows-drive-password".path}
+        mkdir -p /mnt/Windows
+        ${pkgs.ntfs3g}/bin/ntfs-3g /dev/mapper/cryptwindows /mnt/Windows
+      '';
+      ExecStop = pkgs.writeShellScript "umount-windows" ''
+        umount /mnt/Windows || true
+        ${pkgs.cryptsetup}/bin/cryptsetup close cryptwindows || true
+      '';
+    };
+  };
 
   swapDevices = [
     {
