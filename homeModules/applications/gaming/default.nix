@@ -5,6 +5,7 @@
     ./lutris.nix
     ./parsec.nix
     ./prismlauncher.nix
+    ./sober.nix
   ];
 
   options.homeManager = {
@@ -23,6 +24,7 @@
       lutris.enable = true;
       parsec.enable = true;
       prismlauncher.enable = true;
+      sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;
     };
   };
 }

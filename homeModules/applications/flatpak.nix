@@ -19,17 +19,12 @@
   config = lib.mkIf config.homeManager.applications.flatpak.enable {
     services.flatpak = {
       enable = true;
-      remotes = [
-        {
-          name = "flathub";
-          location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-        }
-      ];
+      #remotes = {
+        #flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      #};
       packages = [
         "com.github.tchx84.Flatseal"
         "it.mijorus.gearlever"
-      ]++ lib.optionals (config.homeManager.applications.gaming.enable) [
-        "org.vinegarhq.Sober"
       ];
     };
   };
