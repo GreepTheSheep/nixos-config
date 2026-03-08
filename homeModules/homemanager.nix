@@ -10,10 +10,10 @@
     useUserPackages = true;
     backupFileExtension = "backup";
 
-    sharedModules = {
+    sharedModules = [
       plasma-manager.homeModules.plasma-manager
       nix-flatpak.homeManagerModules.nix-flatpak
-    };
+    ];
 
     extraSpecialArgs = specialArgs;
 
