@@ -17,6 +17,8 @@
       libinput = {
         enable = true;
         mouse = {
+          scrollMethod = "button";
+          scrollButton = 2; # middle button
           accelProfile = "flat";
         };
 
