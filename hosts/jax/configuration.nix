@@ -49,8 +49,12 @@ config = {
 
     nixos.userEnvironment = {
       enable = true;
+      flatpak.enable = true;
       game.enable = true;
-      io.streamdeck.enable = true;
+      io = {
+        streamdeck.enable = true;
+        bluetooth.enable = true;
+      };
     };
 
     nixos.virtualisation = {
@@ -61,8 +65,6 @@ config = {
     };
 
     nixos.pkgs.wallpaper-engine-kde-plugin.enable = true;
-
-    nixos.userEnvironment.io.bluetooth.enable = true;
 
     nixos.system.cloudmount.enable = true;
     sops.age.keyFile = "/root/.secrets/keys.txt";

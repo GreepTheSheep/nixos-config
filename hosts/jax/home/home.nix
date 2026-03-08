@@ -13,7 +13,5 @@ _:
     };
 
     editing.video.enableDavinciResolve = true;
-
-    flatpak.enable = true;
   };
 }

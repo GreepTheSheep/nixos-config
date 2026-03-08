@@ -44,7 +44,7 @@
       #utils.enable = true;
 
       common.enable = true;
-      flatpak.enable = lib.mkDefault false;
+      flatpak.enable = lib.mkIf osConfig.nixos.userEnvironment.flatpak.enable true;
     };
   };
 }

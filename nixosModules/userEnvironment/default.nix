@@ -9,6 +9,7 @@
     ./runtimes
 
     ./appimage.nix
+    ./flatpak.nix
     ./fonts.nix
     ./kdeconnect.nix
     ./samba-client.nix
@@ -35,6 +36,7 @@
       runtimes.enable = true;
 
       appimage.enable = true;
+      flatpak.enable = lib.mkDefault false;
       fonts.enable = true;
       kdeconnect.enable = true;
       samba-client.enable = true;
