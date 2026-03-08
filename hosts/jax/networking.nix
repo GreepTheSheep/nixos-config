@@ -6,6 +6,7 @@ _:
 
     interfaces = {
       enp12s0 = {
+        wakeOnLan.enable = true;
         ipv4.addresses = [
           {
             address = "192.168.1.50";

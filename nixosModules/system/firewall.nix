@@ -23,6 +23,7 @@
       ];
 
       allowedUDPPorts = [
+        9 # Wake-on-LAN
         24800
       ];
     };
