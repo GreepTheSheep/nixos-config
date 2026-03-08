@@ -28,6 +28,8 @@
       packages = [
         "com.github.tchx84.Flatseal"
         "it.mijorus.gearlever"
+      ]++ lib.optionals (config.homeManager.applications.gaming.enable) [
+        "org.vinegarhq.Sober"
       ];
     };
   };
