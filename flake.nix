@@ -29,7 +29,10 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
