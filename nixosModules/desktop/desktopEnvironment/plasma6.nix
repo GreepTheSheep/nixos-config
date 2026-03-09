@@ -121,6 +121,7 @@ in
           plasma-wayland-protocols
           print-manager
           libplasma
+          libkgapi
           systemsettings
           powerdevil
           kpipewire
