@@ -28,6 +28,7 @@ in
       with pkgs;
       [
         papirus-icon-theme
+        sweet-nova
         # libsForQt5.qt5.qtgraphicaleffects
       ]
     ) ++ (
@@ -44,6 +45,8 @@ in
       enable = true;
 
       workspace = {
+        enableMiddleClickPaste = false;
+        theme = lib.mkForce "Sweet";
         lookAndFeel = lib.mkForce "org.kde.breezedark.desktop";
         iconTheme = lib.mkForce "Papirus-Dark";
         wallpaper = lib.mkDefault "${../../../../wallpaper/stolas.png}";
@@ -72,10 +75,15 @@ in
         AC = {
           powerButtonAction = "lockScreen";
           whenLaptopLidClosed = "doNothing";
-          dimDisplay = lib.mkIf isLaptop {
-            enable = true;
-            idleTimeout = 300;
-          };
+          dimDisplay = lib.mkMerge [
+            (lib.mkIf isLaptop {
+              enable = true;
+              idleTimeout = 300;
+            })
+            (lib.mkIf (!isLaptop) {
+              enable = false;
+            })
+          ];
           turnOffDisplay = lib.mkMerge [
             (lib.mkIf isLaptop {
               idleTimeout = 900;
