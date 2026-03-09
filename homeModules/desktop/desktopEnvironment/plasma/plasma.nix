@@ -47,7 +47,7 @@ in
       workspace = {
         enableMiddleClickPaste = false;
         theme = "Sweet";
-        windowDecoration = {
+        windowDecorations = {
           library = "org.kde.kwin.aurorae.v2";
           theme = "__aurorae__svg__Sweet-Dark-transparent";
         };
