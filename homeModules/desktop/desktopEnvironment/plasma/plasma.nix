@@ -51,7 +51,6 @@ in
           library = "org.kde.kwin.aurorae.v2";
           theme = "__aurorae__svg__Sweet-Dark-transparent";
         };
-        lookAndFeel = "org.kde.breezedark.desktop";
         iconTheme = "Papirus-Dark";
         colorScheme = "SweetAmbarBlue";
         wallpaper = lib.mkDefault "${../../../../wallpaper/stolas.png}";
