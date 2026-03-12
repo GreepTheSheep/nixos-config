@@ -105,6 +105,7 @@
       "jax"
       "pomni"
       "jax-vm"
+      "jax-server-vm"
       "liveIso"
     ];
   in
