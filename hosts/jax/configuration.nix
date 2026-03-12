@@ -68,5 +68,7 @@ config = {
 
     nixos.system.cloudmount.enable = true;
     sops.age.keyFile = "/root/.secrets/keys.txt";
+
+    systemd.tpm2.enable = true;
   };
 }
