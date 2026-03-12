@@ -43,6 +43,7 @@
 
     nixos.system.motd = {
       enable = true;
+      content = builtins.readFile ./motd;
     };
   };
 }
