@@ -30,6 +30,7 @@
 
   config = lib.mkIf config.nixos.system.locals.enable {
     time.timeZone = "${config.nixos.system.locals.timezone}";
+    time.hardwareClockInLocalTime = true; # Set hardware clock to local time (instead of UTC) to avoid issues with dual-booting Windows and Linux
 
     i18n.defaultLocale = "${config.nixos.system.locals.lang}";
 
