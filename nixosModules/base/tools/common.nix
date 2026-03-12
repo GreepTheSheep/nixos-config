@@ -17,6 +17,7 @@
       # fetchers
       fastfetch
       cpufetch
+      hwinfo
 
       # terminal file manager
       ranger
