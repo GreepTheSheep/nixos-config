@@ -20,6 +20,6 @@
   };
 
   config = lib.mkIf config.nixos.system.motd.enable {
-    environment.etc.motd.text = config.nixos.system.motd.content;
+    users.motd = config.nixos.system.motd.content;
   };
 }

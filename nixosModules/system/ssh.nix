@@ -22,6 +22,7 @@
         KbdInteractiveAuthentication = false;
         PermitRootLogin = "prohibit-password";
         X11Forwarding = false;
+        PrintMotd = true;
       };
     };
 
