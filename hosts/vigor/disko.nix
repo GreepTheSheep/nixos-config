@@ -26,19 +26,19 @@
               subvolumes = {
                 "@" = {
                   mountpoint = "/";
-                  mountOptions = [ "subvol=@" "noatime" "compress=zstd" ];
+                  mountOptions = [ "subvol=@" "noatime" "compress-force=zstd:2" "space_cache=v2" ];
                 };
                 "@home" = {
                   mountpoint = "/home";
-                  mountOptions = [ "subvol=@home" "noatime" "compress=zstd" ];
+                  mountOptions = [ "subvol=@home" "noatime" "compress=zstd:2" "space_cache=v2" ];
                 };
                 "@nix" = {
                   mountpoint = "/nix";
-                  mountOptions = [ "subvol=@nix" "noatime" ];
+                  mountOptions = [ "subvol=@nix" "noatime" "space_cache=v2" ];
                 };
                 "@log" = {
                   mountpoint = "/var/log";
-                  mountOptions = [ "subvol=@log" "noatime" "compress=zstd:6" ];
+                  mountOptions = [ "subvol=@log" "noatime" "compress=zstd:6" "space_cache=v2" ];
                 };
                 "@snapshots" = {
                   mountpoint = "/.snapshots";

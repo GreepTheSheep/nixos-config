@@ -2,29 +2,43 @@
 
 {
 
-  fileSystems."/" =
-    { device = "/dev/mapper/cryptroot";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
-    };
+  fileSystems = {
+    "/" =
+      { device = "/dev/mapper/cryptroot";
+        fsType = "btrfs";
+        options = [ "subvol=@" "compress=zstd" ];
+      };
 
-  fileSystems."/home" =
-    { device = "/dev/mapper/cryptroot";
-      fsType = "btrfs";
-      options = [ "subvol=@home" ];
-    };
+    "/home" =
+      { device = "/dev/mapper/cryptroot";
+        fsType = "btrfs";
+        options = [ "subvol=@home" "compress=zstd:2" ];
+      };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B88F-9482";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+    "/nix" =
+      { device = "/dev/mapper/cryptroot";
+        fsType = "btrfs";
+        options = [ "subvol=@nix" "compress=zstd:2" ];
+      };
 
-  fileSystems."/mnt/DATA" =
-    {
-      device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
-      fsType = "ntfs";
-    };
+    "/var/log" =
+      { device = "/dev/mapper/cryptroot";
+        fsType = "btrfs";
+        options = [ "subvol=@log" "compress=zstd:6" ];
+      };
+
+    "/boot" =
+      { device = "/dev/disk/by-uuid/B88F-9482";
+        fsType = "vfat";
+        options = [ "fmask=0022" "dmask=0022" ];
+      };
+
+    "/mnt/DATA" =
+      {
+        device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
+        fsType = "ntfs";
+      };
+  };
 
   sops.secrets."bitlocker/windows-drive-password" = {};
 

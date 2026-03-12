@@ -7,11 +7,19 @@ let
     subvolumes = {
       "@" = {
         mountpoint = "/";
-        mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+        mountOptions = [ "subvol=@" "compress=zstd" "noatime" "space_cache=v2" ];
       };
       "@home" = {
         mountpoint = "/home";
-        mountOptions = [ "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+        mountOptions = [ "subvol=@home" "compress=zstd:2" "noatime" "space_cache=v2" ];
+      };
+      "@nix" = {
+        mountpoint = "/nix";
+        mountOptions = [ "subvol=@nix" "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+      };
+      "@log" = {
+        mountpoint = "/var/log";
+        mountOptions = [ "subvol=@log" "compress-force=zstd:6" "noatime" "space_cache=v2" ];
       };
     };
   };
