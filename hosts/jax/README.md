@@ -8,6 +8,6 @@ Configuration:
     - Windows 11 Partition under BitLocker (~1TB)
     - Btrfs partition for NixOS under LUKS (~1TB)
   - WD_BLACK SN770 2TB
-    - NTFS partition under BitLocker, mostly used for games under Windows (100%). This can be subject to change in the future
+    - NTFS partition, mostly used for games under Windows (100%).
 - NVIDIA GeForce RTX 3060Ti 8GB VRAM
 - TPM Chip must be enabled for every encrypted partition
