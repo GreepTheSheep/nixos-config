@@ -15,11 +15,11 @@ let
       };
       "@nix" = {
         mountpoint = "/nix";
-        mountOptions = [ "subvol=@nix" "compress-force=zstd:2" "noatime" "space_cache=v2" ];
+        mountOptions = [ "subvol=@nix" "compress=zstd:2" "noatime" "space_cache=v2" ];
       };
       "@log" = {
         mountpoint = "/var/log";
-        mountOptions = [ "subvol=@log" "compress-force=zstd:6" "noatime" "space_cache=v2" ];
+        mountOptions = [ "subvol=@log" "compress=zstd:6" "noatime" "space_cache=v2" ];
       };
     };
   };
