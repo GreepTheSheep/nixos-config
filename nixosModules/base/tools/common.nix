@@ -43,6 +43,7 @@
       usbutils
       flac
       aha
+      kbd
       jp2a
 
       # networking tools
