@@ -23,8 +23,32 @@
             content = {
               type = "btrfs";
               extraArgs = [ "-L" "nixos" "-f" ];
-              mountpoint = "/";
-              mountOptions = [ "noatime" ];
+              subvolumes = {
+                "@" = {
+                  mountpoint = "/";
+                  mountOptions = [ "subvol=@" "noatime" "compress=zstd" ];
+                };
+                "@home" = {
+                  mountpoint = "/home";
+                  mountOptions = [ "subvol=@home" "noatime" "compress=zstd" ];
+                };
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [ "subvol=@nix" "noatime" ];
+                };
+                "@log" = {
+                  mountpoint = "/var/log";
+                  mountOptions = [ "subvol=@log" "noatime" "compress=zstd:6" ];
+                };
+                "@snapshots" = {
+                  mountpoint = "/.snapshots";
+                  mountOptions = [ "subvol=@snapshots" "noatime" ];
+                };
+                "@home-snapshots" = {
+                  mountpoint = "/home/.snapshots";
+                  mountOptions = [ "subvol=@home-snapshots" "noatime" ];
+                };
+              };
             };
           };
         };
