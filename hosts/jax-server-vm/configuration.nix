@@ -40,5 +40,9 @@
       enable = true;
       docker.enable = true;
     };
+
+    nixos.system.motd = {
+      enable = true;
+    };
   };
 }

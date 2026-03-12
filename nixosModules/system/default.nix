@@ -10,6 +10,7 @@
     ./dbus.nix
     ./firewall.nix
     ./locals.nix
+    ./motd.nix
     ./networking.nix
     ./nh.nix
     ./nix-ld.nix
@@ -43,6 +44,7 @@
       dbus.enable = true;
       firewall.enable = true;
       locals.enable = true;
+      motd.enable = lib.mkDefault false;
       networking.enable = true;
       nh.enable = true;
       nix-ld.enable = true;
