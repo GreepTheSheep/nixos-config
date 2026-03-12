@@ -2,7 +2,13 @@
 
 set -euo pipefail  # Arrêter en cas d'erreur
 
-trap 'echo ""; echo "/!\\ Erreur ligne ${LINENO} : ${BASH_COMMAND}" >&2' ERR
+on_error() {
+    echo ""
+    echo "/!\\ Erreur ligne $1 : $2" >&2
+    cleanup_git_auth
+    cleanup_luks_password
+}
+trap 'on_error "$LINENO" "$BASH_COMMAND"' ERR
 
 # Global variables
 GIT_REPO_URL="git.greep.fr/greep/nixos-config"
@@ -43,6 +49,7 @@ cleanup_luks_password() {
         shred -u "$LUKS_PASSWORD_FILE" 2>/dev/null || rm -f "$LUKS_PASSWORD_FILE"
         LUKS_PASSWORD_FILE=""
     fi
+    shred -u /tmp/luks-password 2>/dev/null || rm -f /tmp/luks-password
 }
 
 clear_screen() {
