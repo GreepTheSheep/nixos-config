@@ -15,11 +15,14 @@
   config = lib.mkIf config.nixos.system.boot.enable {
     boot.initrd.availableKernelModules = [ "sr_mod" ];
     boot.kernelParams = [
+      "udev.log-priority=3"
+      "vt.global_cursor_default=1"
+    ] ++ lib.optionals config.nixos.desktop.enable [
       "quiet"
       "splash"
       "loglevel=3"
-      "udev.log-priority=3"
-      "vt.global_cursor_default=1"
+    ] ++ lib.optionals (!config.nixos.desktop.enable) [
+      "loglevel=5"
     ];
     boot.kernelModules = [ "fuse" ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
