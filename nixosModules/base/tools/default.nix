@@ -27,7 +27,7 @@
       common.enable = true;
       git.enable = true;
       htop.enable = true;
-      java.enable = true;
+      java.enable = lib.mkDefault false;
       usbtop.enable = true;
     };
   };
