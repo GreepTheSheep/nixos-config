@@ -41,12 +41,7 @@
       ncdu
       jq
       usbutils
-      wl-clipboard
-      imagemagick
       flac
-      hardinfo2
-      wayland-utils
-      junction
       aha
 
       # networking tools

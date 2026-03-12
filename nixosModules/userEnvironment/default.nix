@@ -9,6 +9,7 @@
     ./runtimes
 
     ./appimage.nix
+    ./common.nix
     ./flatpak.nix
     ./fonts.nix
     ./kdeconnect.nix
@@ -36,6 +37,7 @@
       runtimes.enable = true;
 
       appimage.enable = true;
+      common.enable = true;
       flatpak.enable = lib.mkDefault false;
       fonts.enable = true;
       kdeconnect.enable = true;
