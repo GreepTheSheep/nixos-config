@@ -43,6 +43,7 @@
       usbutils
       flac
       aha
+      jp2a
 
       # networking tools
       inetutils
