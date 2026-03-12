@@ -1,6 +1,17 @@
 _:
 
 {
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/63dc0d8b-897d-4ce1-a964-bab9cfdc006f";
+      fsType = "btrfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/3B09-B28E";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
   swapDevices = [
     {
       device = "/swapfile";
@@ -15,9 +26,4 @@ _:
     memoryPercent = 50;
     priority = 100;
   };
-
-  # Hibernation — après install, récupérer l'offset avec:
-  # sudo btrfs inspect-internal map-swapfile -r /swapfile
-  #boot.resumeDevice = "/dev/disk/by-uuid/1153cd46-0b8c-4017-8383-fd99132dd4f5";
-  #boot.kernelParams = [ "resume_offset=XXXXXXXX" ];
 }
