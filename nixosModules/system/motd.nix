@@ -12,8 +12,8 @@
 
       content = lib.mkOption {
         type = lib.types.str;
-        default = "Hello from ${networking.hostName}";
-        example = "Hello !";
+        default = "Hello !";
+        example = "This is the content of the MOTD";
         description = "motd content";
       };
     };
