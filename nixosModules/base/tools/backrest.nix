@@ -19,7 +19,7 @@
     ];
 
     # Backrest is accessed via web port 9898, we need to open it up using a firewall rule and environment variable
-    networking.firewall.allowedTCPPorts = [ 9898 ];
+    nixos.system.firewall.extraAllowedTCPPorts = [ 9898 ];
     environment.variables = {
       BACKREST_PORT = "0.0.0.0:9898";
       BACKREST_RESTIC_COMMAND = "${pkgs.restic}/bin/restic";

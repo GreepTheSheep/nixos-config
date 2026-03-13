@@ -179,6 +179,17 @@
           startupNotify = false;
           categories = [ "Utility" "FileTools" ];
         };
+
+        # Scrutiny (opens http://scrutiny:9899)
+        scrutiny = lib.mkIf (osConfig.nixos.base.tools.scrutiny.enable) {
+          name = "Scrutiny";
+          comment = "Utilitaire de surveillance de disque.";
+          genericName = "Disk Monitoring Tool";
+          exec = "xdg-open http://scrutiny:9899/";
+          terminal = false;
+          startupNotify = false;
+          categories = [ "Utility" "Monitor" ];
+        };
       };
     };
   };
