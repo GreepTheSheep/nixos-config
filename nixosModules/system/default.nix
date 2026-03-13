@@ -8,6 +8,7 @@
     ./cloudmount.nix
     ./cron.nix
     ./dbus.nix
+    ./earlyoom.nix
     ./firewall.nix
     ./locals.nix
     ./motd.nix
@@ -42,6 +43,7 @@
       cloudmount.enable = lib.mkDefault false;
       cron.enable = true;
       dbus.enable = true;
+      earlyoom.enable = true;
       firewall.enable = true;
       locals.enable = true;
       motd.enable = lib.mkDefault false;
