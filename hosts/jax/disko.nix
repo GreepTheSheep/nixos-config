@@ -15,7 +15,7 @@ let
       };
       "@nix" = {
         mountpoint = "/nix";
-        mountOptions = [ "subvol=@nix" "compress=zstd:2" "noatime" "space_cache=v2" ];
+        mountOptions = [ "subvol=@nix" "noatime" "space_cache=v2" ];
       };
       "@log" = {
         mountpoint = "/var/log";
