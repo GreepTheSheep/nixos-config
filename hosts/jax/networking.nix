@@ -25,4 +25,14 @@ _:
     enable = true;
     localIP = "192.168.1.50";
   };
+
+  nixos.system.firewall = {
+    extraAllowedTCPPorts = [
+      24800
+    ];
+
+    extraAllowedUDPPorts = [
+      24800
+    ];
+  };
 }
