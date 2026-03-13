@@ -47,12 +47,12 @@
       after = [ "systemd-vconsole-setup.service" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = pkgs.writeShellScript "numlock" ''
-          for tty in /dev/tty{1..6}; do
-            ${pkgs.kbd}/bin/setleds -D +num < $tty
-          done
-        '';
       };
+      script = ''
+        for tty in /dev/tty{1..6}; do
+          ${pkgs.kbd}/bin/setleds -D +num < $tty
+        done
+      '';
     };
   };
 }
