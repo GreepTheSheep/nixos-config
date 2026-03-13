@@ -9,6 +9,13 @@
         example = true;
         description = "Enable the default NixOS settings.";
       };
+
+      garbageCollect = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Whether to enable automatic garbage collection.";
+      };
     };
   };
 
@@ -42,9 +49,9 @@
       };
 
       gc = {
-        automatic = false;
+        automatic = config.nixos.system.nixos.garbageCollect;
         dates = "weekly";
-        options = "--delete-older-than 7d";
+        options = "--delete-older-than 14d";
       };
     };
 

@@ -22,6 +22,8 @@
   };
 
   config = {
+    nixos.system.nixos.garbageCollect = true;
+
     nixos.desktop.enable = false;
 
     nixos.hardware = {
