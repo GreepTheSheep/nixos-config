@@ -22,6 +22,8 @@
   };
 
   config = {
+    nixos.system.bootloader.timeout = 1;
+
     nixos.desktop.enable = false;
 
     nixos.hardware = {
