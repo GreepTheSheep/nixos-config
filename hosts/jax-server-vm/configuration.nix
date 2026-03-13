@@ -22,8 +22,6 @@
   };
 
   config = {
-    nixos.system.bootloader.timeout = 1;
-
     virtualisation.vmware.guest.enable = true;
 
     nixos.desktop.enable = false;

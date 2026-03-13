@@ -1,4 +1,4 @@
-**The "Vigor" host is a NAS server**
+**The "Vigor" host is the NAS server**
 
 Configuration:
 - AMD FX-6300
