@@ -45,12 +45,13 @@
       description = "Enable NumLock on TTYs";
       wantedBy = [ "initrd.target" ];
       after = [ "systemd-vconsole-setup.service" ];
+      path = [ pkgs.kbd ];
       serviceConfig = {
         Type = "oneshot";
       };
       script = ''
         for tty in /dev/tty{1..6}; do
-          ${pkgs.kbd}/bin/setleds -D +num < $tty
+          setleds -D +num < $tty
         done
       '';
     };
