@@ -9,6 +9,25 @@
         example = true;
         description = "Enable network firewall.";
       };
+
+      extraAllowedTCPPorts = lib.mkOption {
+        type = lib.types.listOf lib.types.port;
+        default = [];
+        example = [
+          80
+          443
+        ];
+        description = "A list of extra allowed TCP ports.";
+      };
+
+      extraAllowedUDPPorts = lib.mkOption {
+        type = lib.types.listOf lib.types.port;
+        default = [];
+        example = [
+          7777
+        ];
+        description = "A list of extra allowed UDP ports.";
+      };
     };
   };
 
@@ -18,14 +37,11 @@
       allowPing = true;
 
       allowedTCPPorts = [
-        22
-        24800
-      ];
+      ] ++ config.nixos.system.firewall.extraAllowedTCPPorts;
 
       allowedUDPPorts = [
         9 # Wake-on-LAN
-        24800
-      ];
+      ] ++ config.nixos.system.firewall.extraAllowedUDPPorts;
     };
   };
 }

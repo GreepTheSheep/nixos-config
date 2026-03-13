@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, osConfig, ... }:
 
 {
   options.homeManager = {
@@ -16,5 +16,8 @@
     home.packages = with pkgs; [
       deskflow
     ];
+
+    osConfig.nixos.system.firewall.extraAllowedTCPPorts = [ 24800 ];
+    osConfig.nixos.system.firewall.extraAllowedUDPPorts = [ 24800 ];
   };
 }
