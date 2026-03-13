@@ -41,17 +41,17 @@
 
     services.udisks2.enable = true; # power managment events
 
+    boot.initrd.systemd.storePaths = [ pkgs.kbd ];
     boot.initrd.systemd.services.numlock = {
       description = "Enable NumLock on TTYs";
       wantedBy = [ "initrd.target" ];
       after = [ "systemd-vconsole-setup.service" ];
-      path = [ pkgs.kbd ];
       serviceConfig = {
         Type = "oneshot";
       };
       script = ''
         for tty in /dev/tty{1..6}; do
-          setleds -D +num < $tty
+          ${pkgs.kbd}/bin/setleds -D +num < $tty
         done
       '';
     };
