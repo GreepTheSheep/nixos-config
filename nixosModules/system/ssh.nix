@@ -39,6 +39,6 @@
     };
 
     services.sshd.enable = true;
-    config.nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
+    nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
   };
 }
