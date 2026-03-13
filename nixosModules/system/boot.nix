@@ -51,6 +51,7 @@
         Type = "oneshot";
         RemainAfterExit = true;
       };
+      path = with pkgs; [ kbd ];
 
       script = ''
         for tty in /dev/tty{1..6}; do
