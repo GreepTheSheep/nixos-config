@@ -47,6 +47,7 @@
       kbd
       jp2a
       nss
+      nss.tools
 
       # networking tools
       inetutils
