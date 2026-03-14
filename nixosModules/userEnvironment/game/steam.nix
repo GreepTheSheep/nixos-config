@@ -17,8 +17,8 @@
       enable = true;
       protontricks.enable = true;
       gamescopeSession.enable = true;
-      remotePlay.openFirewall = false;
-      dedicatedServer.openFirewall = false; # Open ports in the firewall for Source Dedicated Server
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
       extest.enable = true;
       localNetworkGameTransfers.openFirewall = true;
     };
