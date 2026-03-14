@@ -1,6 +1,8 @@
 # Greep's NixOS Configuration
 
-![NixOS](./nixos_greep_cfg_1.png)
+![NixOS on Plasma Desktop](./nixos_greep_cfg_1.png)
+
+![NixOS Server on jax-server-vm](./nixos_greep_cfg_server.png)
 
 ## Installation
 
