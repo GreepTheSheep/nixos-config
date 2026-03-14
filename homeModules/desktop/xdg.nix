@@ -128,16 +128,16 @@
           name = "AFFiNE";
           comment = "AFFiNE Desktop App";
           genericName = "AFFiNE";
-          exec = "/opt/affine/affine %U";
-          icon = "/opt/affine/affine";
+          exec = "/opt/affine/AFFiNE %U";
+          icon = "/opt/affine/AFFiNE";
           startupNotify = true;
           terminal = false;
           categories = [ "Utility" ];
           mimeType = [ "x-scheme-handler/affine" ];
           settings = {
             Type = "Application";
-            StartupWMClass = "affine";
-            Keywords = "affine";
+            StartupWMClass = "AFFiNE";
+            Keywords = "AFFiNE";
           };
         };
 
