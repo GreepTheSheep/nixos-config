@@ -175,7 +175,7 @@
           comment = "Utilitaire de sauvegardes avec Restic.";
           genericName = "Backup utility";
           exec = lib.mkMerge [
-            (lib.mkIf osConfig.nixos.base.caddy.enable "xdg-open https://backrest.local/")
+            (lib.mkIf osConfig.nixos.base.caddy.enable "xdg-open http://backrest.local/")
             (lib.mkIf (!osConfig.nixos.base.caddy.enable) "xdg-open http://backrest:9898/")
           ];
           terminal = false;
@@ -189,7 +189,7 @@
           comment = "Utilitaire de surveillance de disque.";
           genericName = "Disk Monitoring Tool";
           exec = lib.mkMerge [
-            (lib.mkIf osConfig.nixos.base.caddy.enable "xdg-open https://scrutiny.local/")
+            (lib.mkIf osConfig.nixos.base.caddy.enable "xdg-open http://scrutiny.local/")
             (lib.mkIf (!osConfig.nixos.base.caddy.enable) "xdg-open http://scrutiny:9899/")
           ];
           terminal = false;

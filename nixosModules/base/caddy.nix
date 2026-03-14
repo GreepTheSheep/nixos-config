@@ -25,16 +25,14 @@
     services.caddy = {
       enable = true;
       virtualHosts = {
-        "backrest.local" = lib.mkIf config.nixos.base.tools.backrest.enable {
+        "http://backrest.local" = lib.mkIf config.nixos.base.tools.backrest.enable {
           extraConfig = ''
             reverse_proxy localhost:9898
-            tls internal
           '';
         };
-        "scrutiny.local" = lib.mkIf config.nixos.base.tools.scrutiny.enable {
+        "http://scrutiny.local" = lib.mkIf config.nixos.base.tools.scrutiny.enable {
           extraConfig = ''
             reverse_proxy localhost:9899
-            tls internal
           '';
         };
       };
