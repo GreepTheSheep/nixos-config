@@ -123,6 +123,24 @@
           };
         };
 
+        # AFFiNE
+        affine = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.affine.enable) {
+          name = "AFFiNE";
+          comment = "AFFiNE Desktop App";
+          genericName = "AFFiNE";
+          exec = "/opt/affine/affine %U";
+          icon = "/opt/affine/affine";
+          startupNotify = true;
+          terminal = false;
+          categories = [ "Utility" ];
+          mimeType = [ "x-scheme-handler/affine" ];
+          settings = {
+            Type = "Application";
+            StartupWMClass = "affine";
+            Keywords = "affine";
+          };
+        };
+
         # Helium
         helium = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.helium.enable) {
           name = "Helium";
