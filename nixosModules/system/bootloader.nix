@@ -57,10 +57,7 @@
       '';
 
       style = {
-        wallpapers = [
-          "${../../wallpaper/stolas.png}"
-          "${../../wallpaper/nuzi.jpg}"
-        ];
+        wallpapers = [ "${../../wallpaper/greep_background_3840x1080.png}" ];
         wallpaperStyle = "centered";
         interface.helpHidden = true;
       };
