@@ -46,6 +46,7 @@
       aha
       kbd
       jp2a
+      nss
 
       # networking tools
       inetutils
