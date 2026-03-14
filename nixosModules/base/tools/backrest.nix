@@ -15,6 +15,7 @@
         default = false;
         example = true;
         description = "Open firewall for backrest.";
+      };
     };
   };
 
