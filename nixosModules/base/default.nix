@@ -5,6 +5,8 @@
     ./shell
     ./texteditor
     ./tools
+
+    ./caddy.nix
   ];
 
   options.nixos = {
@@ -23,6 +25,7 @@
       shell.enable = true;
       texteditor.enable = true;
       tools.enable = true;
+      caddy.enable = true;
     };
   };
 }
