@@ -6,6 +6,7 @@
     ./ffmpeg.nix
     ./jellyfin.nix
     ./mediaplayer.nix
+    ./mixxx.nix
     ./mpv.nix
     ./obs-studio.nix
     ./qbittorrent.nix
@@ -30,6 +31,7 @@
       ffmpeg.enable = true;
       jellyfin.enable = true;
       mediaplayer.enable = true;
+      mixxx.enable = true;
       mpv.enable = true;
       obs-studio.enable = true;
       qbittorrent.enable = true;
