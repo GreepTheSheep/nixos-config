@@ -36,6 +36,11 @@ config = {
       };
     };
 
+    nixos.base.tools = {
+      backrest.enable = true;
+      scrutiny.enable = true;
+    };
+
     nixos.hardware = {
       amdcpu.enable = true;
       nvidiagpu.enable = true;
