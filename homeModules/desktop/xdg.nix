@@ -129,7 +129,7 @@
           comment = "AFFiNE Desktop App";
           genericName = "AFFiNE";
           exec = "/opt/affine/AFFiNE %U";
-          icon = "/opt/affine/AFFiNE";
+          icon = "/opt/affine/icon.ico";
           startupNotify = true;
           terminal = false;
           categories = [ "Utility" ];

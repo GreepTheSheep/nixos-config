@@ -61,6 +61,10 @@ in
           echo "$LATEST" > "$VERSION_FILE"
           rm -rf "$TMPDIR"
 
+          ${pkgs.curl}/bin/curl -sL \
+            "https://app.affine.pro/imgs/app-icon-stable.ico" \
+            -o "$AFFINE_DIR/icon.ico"
+
           echo "AFFiNE $LATEST installed successfully"
         else
           echo "AFFiNE $CURRENT is up to date"
