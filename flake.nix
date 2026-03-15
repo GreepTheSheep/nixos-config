@@ -16,6 +16,8 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     catppuccin.url = "github:catppuccin/nix";
 
     home-manager = {
@@ -73,10 +75,8 @@
     catppuccin,
     ...
   }: let
-    system = "x86_64-linux";
-
     mkHost =
-      hostname: nixpkgs.lib.nixosSystem {
+      hostname: system: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = inputs // { inherit inputs; };
         modules = (
@@ -101,21 +101,19 @@
         );
       };
 
-    hosts = [
-      "jax"
-      "pomni"
-      "jax-vm"
-      "jax-server-vm"
-      "vigor"
-      "liveIso"
-    ];
+    hosts = {
+      "jax"           = "x86_64-linux";
+      "pomni"         = "x86_64-linux";
+      "jax-vm"        = "x86_64-linux";
+      "jax-server-vm" = "x86_64-linux";
+      "vigor"         = "x86_64-linux";
+      "liveIso"       = "x86_64-linux";
+      "varian"        = "aarch64-linux";
+    };
   in
   {
-    nixosConfigurations = builtins.listToAttrs (
-      map (host: {
-        name = host;
-        value = mkHost host;
-      }) hosts
-    );
+    nixosConfigurations = builtins.mapAttrs (host: system:
+      mkHost host system
+    ) hosts;
   };
 }
