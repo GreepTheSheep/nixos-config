@@ -66,7 +66,7 @@ config = {
       enable = true;
       docker.enable = true;
       vmware.enable = true;
-      waydroid.enable = true;
+      kvm.enable = true;
     };
 
     nixos.pkgs.wallpaper-engine-kde-plugin.enable = true;
