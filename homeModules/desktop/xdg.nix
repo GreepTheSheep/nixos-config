@@ -220,7 +220,7 @@
           name = "NixOS Sandbox";
           comment = "Bac à sable NixOS utilisant la même configuration.";
           genericName = "Bac à sable NixOS";
-          exec = "./result/bin/run-${osConfig.networking.hostName}-vm";
+          exec = "sudo /opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
           terminal = true;
           startupNotify = false;
           categories = [ "System" "Emulator" ];
