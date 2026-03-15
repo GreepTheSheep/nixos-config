@@ -38,6 +38,11 @@
           example = pkgs.bash;
           description = "Set the default shell.";
         };
+        uid = ib.mkOption {
+          type = lib.types.int;
+          default = 1000;
+          description = "The uid of the user.";
+        };
         settings = lib.mkOption {
           default = { };
           description = "The default settings per user.";
@@ -49,6 +54,7 @@
   config = lib.mkIf config.nixos.system.user.enable {
     users.users."${config.nixos.system.user.defaultuser.name}" = {
       name = "${config.nixos.system.user.defaultuser.name}";
+      uid = config.nixos.system.user.defaultuser.uid;
       isNormalUser = true;
       group = "users";
       createHome = true;
