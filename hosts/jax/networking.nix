@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 
 {
   networking = {
@@ -24,6 +24,11 @@ _:
   nixos.system.networking = {
     enable = true;
     localIP = "192.168.1.50";
+  };
+
+  # In VM builds, enp12s0 is not available
+  virtualisation.vmVariant = {
+    networking.interfaces.enp12s0 = lib.mkForce { };
   };
 
   nixos.system.firewall = {

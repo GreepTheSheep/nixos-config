@@ -13,8 +13,12 @@
   };
 
   config = lib.mkIf config.homeManager.applications.development.github-desktop.enable {
-    home.packages = with pkgs; [
-      github-desktop
+    #home.packages = with pkgs; [
+      #github-desktop
+    #];
+
+    services.flatpak.packages = [
+      "io.github.pol_rivero.github-desktop-plus"
     ];
   };
 }

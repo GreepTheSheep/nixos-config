@@ -15,6 +15,16 @@
   config = lib.mkIf config.nixos.hardware.nvidiagpu.enable {
     boot.initrd.kernelModules = [ "nvidia" ];
 
+    # In VM builds, the nvidia kernel module is not available, so disable
+    # all nvidia-specific settings that would cause the build to fail.
+    virtualisation.vmVariant = {
+      boot.initrd.kernelModules = lib.mkForce (
+        lib.filter (m: m != "nvidia") config.boot.initrd.kernelModules
+      );
+      services.xserver.videoDrivers = lib.mkForce [ ];
+      hardware.nvidia.modesetting.enable = lib.mkForce false;
+    };
+
     # Make sure opengl is enabled
     hardware.graphics.enable = true;
 

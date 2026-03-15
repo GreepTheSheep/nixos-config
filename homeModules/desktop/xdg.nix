@@ -214,6 +214,33 @@
           startupNotify = false;
           categories = [ "Utility" "Monitor" ];
         };
+
+        # Sandbox (uses the vmVariant if it was built)
+        sandbox = lib.mkIf (osConfig.nixos.system.nixosvm.enable) {
+          name = "NixOS Sandbox";
+          comment = "Bac à sable NixOS utilisant la même configuration.";
+          genericName = "Bac à sable NixOS";
+          exec = "sudo /opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
+          terminal = true;
+          startupNotify = false;
+          categories = [ "System" "Emulator" ];
+          settings = {
+            Path = "/opt/nixos-sandbox/";
+          };
+        };
+
+        buildSandbox = lib.mkIf (osConfig.nixos.system.nixosvm.enable) {
+          name = "Build NixOS Sandbox";
+          comment = "Construire le bac à sable NixOS utilisant la même configuration.";
+          genericName = "Construire le bac à sable NixOS";
+          exec = "sudo nixos-rebuild build-vm";
+          terminal = true;
+          startupNotify = false;
+          categories = [ "System" "Emulator" ];
+          settings = {
+            Path = "/opt/nixos-sandbox/";
+          };
+        };
       };
     };
   };

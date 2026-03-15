@@ -41,6 +41,7 @@
         ll = "ls -l";
         "nix-update" = "sudo nixos-rebuild switch";
         "nix-clean-update" = "sudo nix-collect-garbage -d && sudo rm /nix/var/nix/profiles/system-* || true && sudo nixos-rebuild boot";
+        "nix-build-vm" = "sudo nixos-rebuild build-vm";
         ".." = "cd ..";
         "q" = "exit";
         "cls" = "clear";

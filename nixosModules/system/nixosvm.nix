@@ -13,6 +13,10 @@
   };
 
   config = lib.mkIf config.nixos.system.nixosvm.enable {
+    systemd.tmpfiles.rules = [
+      "d /opt/nixos-sandbox 0755 root root -"
+    ];
+
     virtualisation.vmVariant = {
       virtualisation = {
         #diskSize = 32768;

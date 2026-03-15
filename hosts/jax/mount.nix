@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 
 {
 
@@ -21,14 +21,26 @@
     };
 
   fileSystems."/mnt/DATA" =
+    let
+      username = config.nixos.system.user.defaultuser.name;
+      uid = toString config.users.users.${username}.uid;
+      gid = toString config.users.groups.users.gid;
+    in
     {
       device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
-      fsType = "ntfs";
+      fsType = "ntfs3";
+      options = [ "uid=${uid}" "gid=${gid}" ];
     };
 
   sops.secrets."bitlocker/windows-drive-password" = {};
 
-  systemd.services."mnt-Windows" = {
+  systemd.services."mnt-Windows" =
+    let
+      username = config.nixos.system.user.defaultuser.name;
+      uid = toString config.users.users.${username}.uid;
+      gid = toString config.users.groups.users.gid;
+    in
+    {
     description = "Mount BitLocker encrypted NTFS /mnt/Windows";
     after = [ "local-fs.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -42,13 +54,23 @@
           cryptwindows \
           --key-file ${config.sops.secrets."bitlocker/windows-drive-password".path}
         mkdir -p /mnt/Windows
-        ${pkgs.ntfs3g}/bin/ntfs-3g /dev/mapper/cryptwindows /mnt/Windows
+        ${pkgs.ntfs3g}/bin/ntfs-3g /dev/mapper/cryptwindows /mnt/Windows \
+          -o uid=${uid},gid=${gid}
       '';
       ExecStop = pkgs.writeShellScript "umount-windows" ''
         umount /mnt/Windows || true
         ${pkgs.cryptsetup}/bin/cryptsetup close cryptwindows || true
       '';
     };
+  };
+
+  # In VM builds, external drives are not available.
+  virtualisation.vmVariant = {
+    fileSystems."/mnt/DATA" = lib.mkForce { device = "none"; fsType = "tmpfs"; options = [ "ro" ]; };
+    systemd.services."mnt-Windows".wantedBy = lib.mkForce [ ];
+    boot.initrd.luks.devices."cryptroot".device = lib.mkForce "";
+    boot.resumeDevice = lib.mkForce "";
+    boot.kernelParams = lib.mkForce [ ];
   };
 
   swapDevices = [
