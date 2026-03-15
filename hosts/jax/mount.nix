@@ -68,6 +68,9 @@
   virtualisation.vmVariant = {
     fileSystems."/mnt/DATA" = lib.mkForce { device = "none"; fsType = "tmpfs"; options = [ "ro" ]; };
     systemd.services."mnt-Windows".wantedBy = lib.mkForce [ ];
+    boot.initrd.luks.devices."cryptroot".device = lib.mkForce "";
+    boot.resumeDevice = lib.mkForce "";
+    boot.kernelParams = lib.mkForce [ ];
   };
 
   swapDevices = [
