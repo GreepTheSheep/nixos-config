@@ -233,7 +233,7 @@
           name = "Build NixOS Sandbox";
           comment = "Construire la Machine Virtuelle NixOS utilisant la même configuration.";
           genericName = "NixOS VM Builder";
-          exec = "sudo mkdir -p /opt/nixos-sandbox/ && sudo nixos-rebuild build-vm";
+          exec = "sudo nixos-rebuild build-vm";
           terminal = true;
           startupNotify = false;
           categories = [ "System" "Emulator" ];
