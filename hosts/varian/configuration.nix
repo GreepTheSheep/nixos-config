@@ -41,6 +41,11 @@
       docker.enable = true;
     };
 
+    nixos.system.motd = {
+      enable = true;
+      content = builtins.readFile ./motd;
+    };
+
     # Swap via zram uniquement (pas de swapfile sur microSD pour réduire l'usure)
     zramSwap = {
       enable = true;
