@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   options.nixos = {
@@ -15,6 +15,10 @@
   config = lib.mkIf config.nixos.userEnvironment.game.steam.enable {
     programs.steam = {
       enable = true;
+      extraCompatPackages = with pkgs; [
+        steam-play-none
+        proton-ge-bin
+      ];
       protontricks.enable = true;
       gamescopeSession.enable = true;
       remotePlay.openFirewall = true;
