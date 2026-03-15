@@ -30,7 +30,7 @@
       bottles.enable = true;
       diff.enable = lib.mkDefault false;
       filezilla.enable = true;
-      github-desktop.enable = true;
+      github-desktop.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;
       claudecode.enable = lib.mkDefault false;
       nixd.enable = true;
       virtualisation.enable = lib.mkIf osConfig.nixos.virtualisation.kvm.enable true;
