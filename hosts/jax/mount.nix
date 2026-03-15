@@ -28,7 +28,7 @@
     in
     {
       device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
-      fsType = "ntfs";
+      fsType = "ntfs3";
       options = [ "uid=${uid}" "gid=${gid}" ];
     };
 
