@@ -218,8 +218,8 @@
         # Sandbox (uses the vmVariant if it was built)
         sandbox = lib.mkIf (osConfig.nixos.system.nixosvm.enable) {
           name = "NixOS Sandbox";
-          comment = "Machine Virtuelle NixOS utilisant la même configuration.";
-          genericName = "NixOS VM";
+          comment = "Bac à sable NixOS utilisant la même configuration.";
+          genericName = "Bac à sable NixOS";
           exec = "/opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
           terminal = true;
           startupNotify = false;
@@ -231,8 +231,8 @@
 
         buildSandbox = lib.mkIf (osConfig.nixos.system.nixosvm.enable) {
           name = "Build NixOS Sandbox";
-          comment = "Construire la Machine Virtuelle NixOS utilisant la même configuration.";
-          genericName = "NixOS VM Builder";
+          comment = "Construire le bac à sable NixOS utilisant la même configuration.";
+          genericName = "Construire le bac à sable NixOS";
           exec = "sudo nixos-rebuild build-vm";
           terminal = true;
           startupNotify = false;
