@@ -64,6 +64,12 @@
     };
   };
 
+  # In VM builds, external drives are not available.
+  virtualisation.vmVariant = {
+    fileSystems."/mnt/DATA" = lib.mkForce { device = "none"; fsType = "tmpfs"; options = [ "ro" ]; };
+    systemd.services."mnt-Windows".wantedBy = lib.mkForce [ ];
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
