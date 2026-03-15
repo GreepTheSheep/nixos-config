@@ -36,6 +36,10 @@
                   mountpoint = "/nix";
                   mountOptions = [ "subvol=@nix" "noatime" "space_cache=v2" ];
                 };
+                "@docker" = {
+                  mountpoint = "/var/lib/docker";
+                  mountOptions = [ "subvol=@docker" "noatime" "space_cache=v2" ];
+                };
                 "@log" = {
                   mountpoint = "/var/log";
                   mountOptions = [ "subvol=@log" "noatime" "compress=zstd:6" "space_cache=v2" ];
