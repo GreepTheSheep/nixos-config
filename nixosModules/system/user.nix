@@ -38,7 +38,7 @@
           example = pkgs.bash;
           description = "Set the default shell.";
         };
-        uid = ib.mkOption {
+        uid = lib.mkOption {
           type = lib.types.int;
           default = 1000;
           description = "The uid of the user.";
