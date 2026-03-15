@@ -104,7 +104,6 @@
     hosts = [
       "jax"
       "pomni"
-      "jax-vm"
       "jax-server-vm"
       "vigor"
       "liveIso"
