@@ -22,9 +22,7 @@
       ];
     };
 
-    hardware.nvidia-container-toolkit.enable = lib.mkIf (
-      config.nixos.hardware.nvidiagpu.enable && config.nixos.virtualisation.docker.enable
-    ) true;
+    hardware.nvidia-container-toolkit.enable = lib.mkIf config.nixos.hardware.nvidiagpu.enable true;
 
     # Suppress the nvidia-container-toolkit driver assertion in VM builds,
     # since the nvidia driver is not available in the VM variant.
