@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib,... }:
 
 {
   imports = [
@@ -14,13 +14,6 @@
         example = false;
         description = "Enable desktopEnvironment modules bundle.";
       };
-    };
-  };
-
-  config = lib.mkIf config.nixos.desktop.desktopEnvironment.enable {
-    nixos.desktop.desktopEnvironment = {
-      gnome.enable = lib.mkDefault false;
-      plasma.enable = lib.mkDefault false;
     };
   };
 }
