@@ -13,7 +13,7 @@
 
   config =
   let
-    directory = "${users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers/caddy";
+    directory = "${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers/caddy";
   in lib.mkIf config.host.containers.caddy.enable
   {
     systemd.tmpfiles.rules = [

@@ -17,7 +17,7 @@
 
   config = lib.mkIf (config.host.containers.enable && config.nixos.virtualisation.docker.enable) {
     systemd.tmpfiles.rules = [
-      "d ${users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers 0755 ${config.nixos.system.user.defaultuser.name} users"
+      "d ${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers 0755 ${config.nixos.system.user.defaultuser.name} users"
     ];
 
     virtualisation.oci-containers.backend = "docker";
