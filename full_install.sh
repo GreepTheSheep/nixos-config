@@ -1056,6 +1056,7 @@ copy_config_to_mnt() {
     echo "Etape 9 : Copie de la configuration vers /mnt"
     echo ""
 
+    rm -rf /mnt/etc/nixos 2>/dev/null || true
     mkdir -p /mnt/etc/nixos
     # Copie tout le contenu (fichiers visibles et cachés) sans inclure . ni ..
     cp -r /tmp/nixos-config/. /mnt/etc/nixos/
