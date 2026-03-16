@@ -31,6 +31,8 @@
       templates = lib.mkForce {};
     };
 
+    host.containers.enable = true;
+
     nixos.desktop.enable = false;
 
     nixos.hardware = {
