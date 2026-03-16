@@ -24,6 +24,13 @@
   config = {
     virtualisation.vmware.guest.enable = true;
 
+    # Disable sops secrets for this host (nothing to save at the moment)
+    sops = {
+      age.sshKeyPaths = lib.mkForce [];
+      secrets = lib.mkForce {};
+      templates = lib.mkForce {};
+    };
+
     nixos.desktop.enable = false;
 
     nixos.hardware = {
