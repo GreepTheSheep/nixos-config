@@ -1105,7 +1105,7 @@ postinstall() {
     nixos-enter --silent -c "cp /etc/nixos/hosts/${FLAKE_CONFIG}/hardware-configuration.nix /root/"
 
     # Supprime la configuration NixOS
-    nixos-enter --silent -c "rm -drf /etc/nixos"
+    nixos-enter --silent -c "rm -drf /etc/nixos || true" || true
 
     # Copier les credentials dans le chroot pour le clone greep
     local home_git_creds="/mnt/home/greep/.git-credentials"
