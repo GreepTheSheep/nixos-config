@@ -23,13 +23,7 @@
 
   config = {
     virtualisation.vmware.guest.enable = true;
-
-    # Disable sops secrets for this host (nothing to save at the moment)
-    sops = {
-      age.sshKeyPaths = lib.mkForce [];
-      secrets = lib.mkForce {};
-      templates = lib.mkForce {};
-    };
+    sops.age.keyFile = "/root/.secrets/keys.txt";
 
     host.containers.enable = true;
 

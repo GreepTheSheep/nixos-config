@@ -23,8 +23,15 @@
       "d ${directory}/templates 0755 ${config.nixos.system.user.defaultuser.name} users"
     ];
 
+    sops.secrets."gitea/registry-password" = {};
+
     virtualisation.oci-containers.containers.caddy = {
       image = "git.greep.fr/greep/caddy";
+      login = {
+        registry = "https://git.greep.fr";
+        username = "greep";
+        passwordFile = config.sops.secrets."gitea/registry-password".path;
+      };
       hostname = config.networking.hostName;
       ports = [
         "80:80"
