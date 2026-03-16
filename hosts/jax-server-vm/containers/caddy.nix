@@ -25,7 +25,7 @@
 
     virtualisation.oci-containers.containers.caddy = {
       image = "git.greep.fr/greep/caddy";
-      hostname = config.network.hostName;
+      hostname = config.networking.hostName;
       ports = [
         "80:80"
         "443:443"
