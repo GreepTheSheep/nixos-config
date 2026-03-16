@@ -51,7 +51,7 @@
       nh.enable = true;
       nix-ld.enable = true;
       nixos.enable = true;
-      nixosvm.enable = true;
+      nixosvm.enable = lib.mkDefault false;
       powermanagement.enable = true;
       secureboot.enable = lib.mkDefault false;
       sops.enable = true;

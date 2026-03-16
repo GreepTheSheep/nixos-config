@@ -46,11 +46,14 @@ config = {
       nvidiagpu.enable = true;
     };
 
-    nixos.system.user.defaultuser = {
-      pass = "$y$j9T$Gmd5se3DKJe4508IpvpNK.$Yq2XI4JqqbBrBIOSfjlWHYcKx.Po.ZEkqcKYm7LEtx/";
-    };
+    nixos.system = {
+      secureboot.enable = true;
+      nixosvm.enable = true;
 
-    nixos.system.secureboot.enable = true;
+      user.defaultuser = {
+        pass = "$y$j9T$Gmd5se3DKJe4508IpvpNK.$Yq2XI4JqqbBrBIOSfjlWHYcKx.Po.ZEkqcKYm7LEtx/";
+      };
+    };
 
     nixos.userEnvironment = {
       enable = true;
