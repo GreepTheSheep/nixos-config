@@ -28,7 +28,7 @@
     virtualisation.oci-containers.containers.caddy = {
       image = "git.greep.fr/greep/caddy";
       login = {
-        registry = "https://git.greep.fr";
+        registry = "git.greep.fr";
         username = "greep";
         passwordFile = config.sops.secrets."gitea/registry-password".path;
       };
@@ -50,8 +50,8 @@
         TEMPLATES_DIR = "/etc/caddy/templates";
       };
       extraOptions = [
-        "container_name: caddy"
-        "restart: always"
+        "--name caddy"
+        "--restart always"
       ];
     };
   };
