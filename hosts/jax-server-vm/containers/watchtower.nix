@@ -20,7 +20,7 @@
       ];
       environment = {
         WATCHTOWER_SCHEDULE = "0 0 6 * * *";
-        WATCHTOWER_CLEANUP = true;
+        WATCHTOWER_CLEANUP = "true";
         TZ = "Europe/Paris";
       };
       extraOptions = [
