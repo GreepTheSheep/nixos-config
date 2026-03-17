@@ -50,7 +50,6 @@
         TEMPLATES_DIR = "/etc/caddy/templates";
       };
       extraOptions = [
-        "--name caddy"
         "--restart always"
       ];
     };
