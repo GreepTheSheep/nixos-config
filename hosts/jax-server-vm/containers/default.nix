@@ -3,6 +3,7 @@
 {
   imports = [
     ./caddy.nix
+    ./watchtower.nix
   ];
 
   options.host = {
@@ -23,7 +24,8 @@
     virtualisation.oci-containers.backend = "docker";
 
     host.containers = {
-      caddy.enable = true;
+      caddy.enable = lib.mkDefault false;
+      watchtower.enable = true;
     };
   };
 }
