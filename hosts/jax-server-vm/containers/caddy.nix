@@ -50,5 +50,10 @@
         TEMPLATES_DIR = "/etc/caddy/templates";
       };
     };
+
+    nixos.system.firewall = {
+      extraAllowedTCPPorts = [ 80 443 ];
+      extraAllowedUDPPorts = [ 443 ];
+    };
   };
 }

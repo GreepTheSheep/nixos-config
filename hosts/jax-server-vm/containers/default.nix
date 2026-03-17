@@ -4,6 +4,7 @@
   imports = [
     ./caddy.nix
     ./watchtower.nix
+    ./whoami.nix
   ];
 
   options.host = {
@@ -26,6 +27,7 @@
     host.containers = {
       caddy.enable = lib.mkDefault false;
       watchtower.enable = true;
+      whoami.enable = true;
     };
   };
 }
