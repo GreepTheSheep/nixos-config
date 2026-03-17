@@ -49,9 +49,6 @@
         SITES_DIR = "/etc/caddy/sites";
         TEMPLATES_DIR = "/etc/caddy/templates";
       };
-      extraOptions = [
-        "--restart always"
-      ];
     };
   };
 }
