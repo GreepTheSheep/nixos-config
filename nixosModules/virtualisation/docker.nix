@@ -20,6 +20,9 @@
         lazydocker
         oxker
       ];
+      daemon.settings = {
+        registry-mirrors = [ "https://mirror.gcr.io" ];
+      };
     };
 
     hardware.nvidia-container-toolkit.enable = lib.mkIf config.nixos.hardware.nvidiagpu.enable true;
