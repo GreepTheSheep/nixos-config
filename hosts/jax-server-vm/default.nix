@@ -2,6 +2,8 @@ _:
 
 {
   imports = [
+    ./containers
+
     ./bootloader.nix
     ./configuration.nix
     ./hardware-configuration.nix

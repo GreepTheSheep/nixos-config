@@ -23,6 +23,9 @@
 
   config = {
     virtualisation.vmware.guest.enable = true;
+    sops.age.keyFile = "/root/.secrets/keys.txt";
+
+    host.containers.enable = true;
 
     nixos.desktop.enable = false;
 

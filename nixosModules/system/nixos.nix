@@ -24,10 +24,7 @@
 
     programs.nix-ld.enable = true;
 
-    system.autoUpgrade = {
-      enable = true;
-      channel = "https://nixos.org/channels/nixos-unstable";
-    };
+    system.autoUpgrade.enable = false;
 
     nix = {
       settings = {

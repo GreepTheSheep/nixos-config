@@ -40,15 +40,18 @@
       intelcpu.enable = true;
     };
 
-    nixos.system.user.defaultuser = {
-      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+    nixos.system = {
+      secureboot.enable = true;
+
+      user.defaultuser = {
+        pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+      };
     };
 
-    nixos.system.secureboot.enable = true;
-
-    nixos.userEnvironment.enable = true;
-
-    nixos.userEnvironment.io.bluetooth.enable = true;
+    nixos.userEnvironment = {
+      enable = true;
+      io.bluetooth.enable = true;
+    };
 
     nixos.system.cloudmount.enable = true;
     sops.age.keyFile = "/root/.secrets/keys.txt";

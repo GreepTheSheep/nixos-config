@@ -21,6 +21,7 @@
 
   config = lib.mkIf config.homeManager.enable {
     homeManager = {
+      applications.enable = lib.mkDefault true;
       base.enable = lib.mkIf osConfig.nixos.base.enable true;
       desktop.enable = lib.mkIf osConfig.nixos.desktop.enable true;
       home.enable = true;

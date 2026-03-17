@@ -1056,6 +1056,7 @@ copy_config_to_mnt() {
     echo "Etape 9 : Copie de la configuration vers /mnt"
     echo ""
 
+    rm -rf /mnt/etc/nixos 2>/dev/null || true
     mkdir -p /mnt/etc/nixos
     # Copie tout le contenu (fichiers visibles et cachés) sans inclure . ni ..
     cp -r /tmp/nixos-config/. /mnt/etc/nixos/
@@ -1104,7 +1105,7 @@ postinstall() {
     nixos-enter --silent -c "cp /etc/nixos/hosts/${FLAKE_CONFIG}/hardware-configuration.nix /root/"
 
     # Supprime la configuration NixOS
-    nixos-enter --silent -c "rm -drf /etc/nixos"
+    nixos-enter --silent -c "rm -drf /etc/nixos || true" || true
 
     # Copier les credentials dans le chroot pour le clone greep
     local home_git_creds="/mnt/home/greep/.git-credentials"
