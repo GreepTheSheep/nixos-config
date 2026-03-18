@@ -57,5 +57,9 @@
       enable = true;
       content = builtins.readFile ./motd;
     };
+
+    host.containers = {
+      enable = false;
+    };
   };
 }
