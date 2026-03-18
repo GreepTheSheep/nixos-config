@@ -16,12 +16,11 @@
     };
   };
 
-  config = lib.mkIf config.nixos.userEnvironment.spotify.enable {
-    programs.spicetify =
-      let
-        spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-      in
-      {
+  config =
+    let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
+    in lib.mkIf config.nixos.userEnvironment.spotify.enable {
+    programs.spicetify = {
       enable = true;
       enabledExtensions = with spicePkgs.extensions; [
         beautifulLyrics
@@ -37,9 +36,5 @@
         ncsVisualizer
       ];
     };
-
-    environment.defaultPackages = with pkgs; [
-      spotify
-    ];
   };
 }
