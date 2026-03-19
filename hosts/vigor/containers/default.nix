@@ -36,9 +36,9 @@
       caddy.enable = true;
       cfddns.enable = false;
       h5ai.enable = true;
-      jellyfin.enable = false;
+      jellyfin.enable = true;
       nextcloud.enable = true;
-      seerr.enable = false;
+      seerr.enable = true;
       watchtower.enable = true;
     };
   };
