@@ -11,5 +11,43 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/f8c56ad0-2cb2-475e-853b-afa73d959d5b";
+      fsType = "btrfs";
+      options = [ "subvol=@" ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/9D72-A898";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/f8c56ad0-2cb2-475e-853b-afa73d959d5b";
+      fsType = "btrfs";
+      options = [ "subvol=@home" ];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/f8c56ad0-2cb2-475e-853b-afa73d959d5b";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" ];
+    };
+
+  fileSystems."/var/lib/docker" =
+    { device = "/dev/disk/by-uuid/f8c56ad0-2cb2-475e-853b-afa73d959d5b";
+      fsType = "btrfs";
+      options = [ "subvol=@docker" ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/f8c56ad0-2cb2-475e-853b-afa73d959d5b";
+      fsType = "btrfs";
+      options = [ "subvol=@log" ];
+    };
+
+  swapDevices = [ ];
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
