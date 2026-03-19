@@ -12,7 +12,7 @@
     ./watchtower.nix
   ];
 
-  # TODO: Jellyfin, immich, cf-ddns
+  # TODO: Immich
 
   options.host = {
     containers = {
@@ -34,11 +34,11 @@
     host.containers = {
       arr.enable = true;
       caddy.enable = true;
-      cfddns.enable = true;
+      cfddns.enable = false;
       h5ai.enable = true;
-      jellyfin.enable = true;
+      jellyfin.enable = false;
       nextcloud.enable = true;
-      seerr.enable = true;
+      seerr.enable = false;
       watchtower.enable = true;
     };
   };
