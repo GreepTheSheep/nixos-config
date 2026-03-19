@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   options.nixos = {
@@ -13,8 +13,10 @@
   };
 
   config = lib.mkIf config.nixos.userEnvironment.game.steam.enable {
+    nixpkgs.overlays = [ inputs.millennium.overlays.default ];
     programs.steam = {
       enable = true;
+      package = pkgs.millennium-steam;
       extraCompatPackages = with pkgs; [
         steam-play-none
         proton-ge-bin
