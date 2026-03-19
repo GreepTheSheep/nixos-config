@@ -34,7 +34,11 @@
       ])
     ];
 
-    sops.secrets."docker/nextcloud/nextcloud-database-password" = {};
+    sops.secrets = {
+      "docker/nextcloud/nextcloud-database-password" = {};
+      "docker/nextcloud/nextcloud-database-database" = {};
+      "docker/nextcloud/nextcloud-database-user" = {};
+    };
 
     sops.templates = {
       "nextcloud.env".content = ''
