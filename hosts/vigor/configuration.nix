@@ -59,7 +59,7 @@
     };
 
     host.containers = {
-      enable = false;
+      enable = true;
     };
   };
 }
