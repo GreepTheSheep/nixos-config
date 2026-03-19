@@ -56,6 +56,18 @@
       '';
     };
 
+    systemd.services.create-nextcloud-network-network = {
+      description = "Create nextcloud-network docker network";
+      after = [ "docker.service" ];
+      before = [ "docker-nextcloud-mariadb.service" ];
+      wantedBy = [ "docker-nextcloud-mariadb.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.docker}/bin/docker network create nextcloud-network || true";
+      };
+    };
+
     virtualisation.oci-containers.containers = {
       "nextcloud-mariadb" = {
         image = "mariadb:lts";

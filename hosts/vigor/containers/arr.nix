@@ -30,6 +30,18 @@
       "d ${directory}/qbittorrent-config 0755 ${user} users"
     ];
 
+    systemd.services.create-arr-stack-network = {
+      description = "Create arr-stack docker network";
+      after = [ "docker.service" ];
+      before = [ "docker-flaresolverr.service" ];
+      wantedBy = [ "docker-flaresolverr.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.docker}/bin/docker network create arr-stack || true";
+      };
+    };
+
     virtualisation.oci-containers.containers = {
       flaresolverr = {
         image = "ghcr.io/flaresolverr/flaresolverr";

@@ -109,6 +109,19 @@
       ''}"
     ];
 
+    systemd.services.create-caddy-bridge-network = {
+      description = "Create caddy-bridge docker network";
+      after = [ "docker.service" ];
+      before = [ "docker-caddy.service" ];
+      wantedBy = [ "docker-caddy.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.docker}/bin/docker network create caddy-bridge || true";
+      };
+    };
+
+
     sops.secrets."gitea/registry-password" = {};
 
     virtualisation.oci-containers.containers.caddy = {
