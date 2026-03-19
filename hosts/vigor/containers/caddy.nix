@@ -22,7 +22,7 @@
       "d ${directory}/sites 0755 ${config.nixos.system.user.defaultuser.name} users"
       "d ${directory}/templates 0755 ${config.nixos.system.user.defaultuser.name} users"
 
-      "L ${directory}/Caddyfile - - - - ${pkgs.writeText "Caddyfile" ''
+      "L ${directory}/Caddyfile 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "Caddyfile" ''
         {
           servers {
             trusted_proxies static private_ranges
@@ -71,7 +71,7 @@
         import {$SITES_DIR}/*.caddy
       ''}"
 
-      "L ${directory}/sites/vigor.caddy - - - - ${pkgs.writeText "vigor.caddy" ''
+      "L ${directory}/sites/vigor.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "vigor.caddy" ''
         4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
           ${lib.optionalString config.host.containers.arr.enable ''
             redir /prowlarr /prowlarr/
@@ -126,7 +126,7 @@
       ];
       volumes = [
         "${directory}/caddy-data:/data/caddy"
-        "${directory}/Caddyfile:/etc/caddy/Caddyfile"
+        "${directory}/Caddyfile:/etc/caddy/Caddyfile:ro"
         "${directory}/sites:/etc/caddy/sites"
         "${directory}/templates:/etc/caddy/templates"
       ];

@@ -16,7 +16,6 @@
     user = config.nixos.system.user.defaultuser.name;
     home = config.users.users."${user}".home;
     directory = "${home}/docker-containers/arr-stack";
-    caddySiteDirectory = "${home}/docker-containers/caddy/sites";
 
     moviesDirectory = "/mnt/data/movies";
     showsDirectory = "/mnt/data/shows";

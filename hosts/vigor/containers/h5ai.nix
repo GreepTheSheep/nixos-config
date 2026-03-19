@@ -26,7 +26,7 @@
         "d ${directory}/config 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
-        "L ${caddySiteDirectory}/h5ai.caddy - - - - ${pkgs.writeText "h5ai.caddy" ''
+        "L ${caddySiteDirectory}/h5ai.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "h5ai.caddy" ''
           cdn.greep.fr {
             reverse_proxy h5ai:80
           }
