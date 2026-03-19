@@ -50,6 +50,7 @@
         PHP_UPLOAD_LIMIT=90M
       '';
       "nextcloud-mariadb.env".content = ''
+        MYSQL_ROOT_PASSWORD=${config.sops.placeholder."docker/nextcloud/nextcloud-database-password"}
         MYSQL_PASSWORD=${config.sops.placeholder."docker/nextcloud/nextcloud-database-password"}
         MYSQL_DATABASE=${config.sops.placeholder."docker/nextcloud/nextcloud-database-database"}
         MYSQL_USER=${config.sops.placeholder."docker/nextcloud/nextcloud-database-user"}
