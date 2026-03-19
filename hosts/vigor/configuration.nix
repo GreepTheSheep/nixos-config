@@ -24,16 +24,16 @@
   config = {
     nixos.system.nixos.garbageCollect = true;
 
-    nixos.base.tools = {
-      backrest = {
-        enable = true;
-        openFirewall = true;
-      };
-      scrutiny = {
-        enable = true;
-        openFirewall = true;
-      };
-    };
+    #nixos.base.tools = {
+    #  backrest = {
+    #    enable = true;
+    #    openFirewall = true;
+    #  };
+    #  scrutiny = {
+    #    enable = true;
+    #    openFirewall = true;
+    #  };
+    #};
 
     nixos.desktop.enable = false;
 
