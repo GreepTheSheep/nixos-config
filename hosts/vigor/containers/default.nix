@@ -4,6 +4,7 @@
   imports = [
     ./arr.nix
     ./caddy.nix
+    ./cf-ddns.nix
     ./h5ai.nix
     ./jellyfin.nix
     ./nextcloud.nix
@@ -33,6 +34,7 @@
     host.containers = {
       arr.enable = true;
       caddy.enable = true;
+      cfddns.enable = true;
       h5ai.enable = true;
       jellyfin.enable = true;
       nextcloud.enable = true;
