@@ -5,7 +5,9 @@
     ./arr.nix
     ./caddy.nix
     ./h5ai.nix
+    ./jellyfin.nix
     ./nextcloud.nix
+    ./seerr.nix
     ./watchtower.nix
   ];
 
@@ -32,7 +34,9 @@
       arr.enable = true;
       caddy.enable = true;
       h5ai.enable = true;
+      jellyfin.enable = true;
       nextcloud.enable = true;
+      seerr.enable = true;
       watchtower.enable = true;
     };
   };
