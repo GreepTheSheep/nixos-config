@@ -20,9 +20,18 @@
 
     dataDirectory = "/mnt/data/nextcloud";
   in lib.mkIf config.host.containers.nextcloud.enable {
-    systemd.tmpfiles.rules = [
-      "d ${directory} 0755 ${user} users"
-      "d ${directory}/config 0755 ${user} users"
+    systemd.tmpfiles.rules = lib.mkMerge [
+      ([
+        "d ${directory} 0755 ${user} users"
+        "d ${directory}/config 0755 ${user} users"
+      ])
+      (lib.mkIf config.host.containers.caddy.enable [
+        "L ${caddySiteDirectory}/nextcloud.caddy - - - - ${pkgs.writeText "nextcloud.caddy" ''
+          cloud.greep.fr {
+            reverse_proxy nextcloud:80
+          }
+        ''}"
+      ])
     ];
 
     sops.secrets."docker/nextcloud/nextcloud-database-password" = {};
@@ -88,13 +97,5 @@
         ];
       };
     };
-
-    systemd.tmpfiles.rules = lib.mkIf config.host.containers.caddy.enable [
-      "L ${caddySiteDirectory}/nextcloud.caddy - - - - ${pkgs.writeText "nextcloud.caddy" ''
-        cloud.greep.fr {
-          reverse_proxy nextcloud:80
-        }
-      ''}"
-    ];
   };
 }

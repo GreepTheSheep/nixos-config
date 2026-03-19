@@ -20,10 +20,20 @@
 
     dataDirectory = "/mnt/data/cdn";
   in lib.mkIf config.host.containers.h5ai.enable {
-    systemd.tmpfiles.rules = [
-      "d ${directory} 0755 ${user} users"
-      "d ${directory}/config 0755 ${user} users"
+    systemd.tmpfiles.rules = lib.mkMerge [
+      ([
+        "d ${directory} 0755 ${user} users"
+        "d ${directory}/config 0755 ${user} users"
+      ])
+      (lib.mkIf config.host.containers.caddy.enable [
+        "L ${caddySiteDirectory}/h5ai.caddy - - - - ${pkgs.writeText "h5ai.caddy" ''
+          cdn.greep.fr {
+            reverse_proxy h5ai:80
+          }
+        ''}"
+      ])
     ];
+
     virtualisation.oci-containers.containers.h5ai = {
       image = "awesometic/h5ai";
       serviceName = "h5ai-cdn.greep.fr";
@@ -36,13 +46,5 @@
       };
       networks = [ "caddy-bridge" ];
     };
-
-    systemd.tmpfiles.rules = lib.mkIf config.host.containers.caddy.enable [
-      "L ${caddySiteDirectory}/h5ai.caddy - - - - ${pkgs.writeText "h5ai.caddy" ''
-        cdn.greep.fr {
-          reverse_proxy h5ai:80
-        }
-      ''}"
-    ];
   };
 }

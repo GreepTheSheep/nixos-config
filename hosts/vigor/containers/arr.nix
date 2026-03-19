@@ -22,13 +22,38 @@
     showsDirectory = "/mnt/data/shows";
     downloadsDirectory = "/mnt/localdata/downloads";
   in lib.mkIf config.host.containers.arr.enable {
-    systemd.tmpfiles.rules = [
-      "d ${directory} 0755 ${user} users"
-      "d ${directory}/prowlarr-config 0755 ${user} users"
-      "d ${directory}/radarr-config 0755 ${user} users"
-      "d ${directory}/sonarr-config 0755 ${user} users"
-      "d ${directory}/wireguard-config 0755 ${user} users"
-      "d ${directory}/qbittorrent-config 0755 ${user} users"
+    systemd.tmpfiles.rules = lib.mkMerge [
+      ([
+        "d ${directory} 0755 ${user} users"
+        "d ${directory}/prowlarr-config 0755 ${user} users"
+        "d ${directory}/radarr-config 0755 ${user} users"
+        "d ${directory}/sonarr-config 0755 ${user} users"
+        "d ${directory}/wireguard-config 0755 ${user} users"
+        "d ${directory}/qbittorrent-config 0755 ${user} users"
+      ])
+      (lib.mkIf config.host.containers.caddy.enable [
+        "L ${caddySiteDirectory}/arr.caddy - - - - ${pkgs.writeText "arr.caddy" ''
+          ${config.networking.hostName} {
+            redir /prowlarr /prowlarr/
+            redir /radarr /radarr/
+            redir /sonarr /sonarr/
+            redir /qbit /qbit/
+
+            reverse_proxy /prowlarr/* prowlarr:9696
+            reverse_proxy /radarr/* radarr:7878
+            reverse_proxy /sonarr/* sonarr:8989
+
+            handle_path /qbit/* {
+              reverse_proxy wireguard:8686 {
+                header_up Host wireguard:8686
+                header_up X-Forwarded-Host {host}:{hostport}
+                header_up -Origin
+                header_up -Referer
+              }
+            }
+          }
+        ''}"
+      ])
     ];
 
     virtualisation.oci-containers.containers = {
