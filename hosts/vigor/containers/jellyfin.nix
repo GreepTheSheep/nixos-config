@@ -67,7 +67,7 @@
         "1900:1900/udp" # DLNA Discovery port
       ];
       networks = [ "caddy-bridge" ];
-      extraOptions = [ "--gpus all" ];
+      extraOptions = [ "--gpus=all" ];
     };
   };
 }
