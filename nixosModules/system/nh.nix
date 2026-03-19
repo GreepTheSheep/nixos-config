@@ -15,9 +15,8 @@
   config = lib.mkIf config.nixos.system.nh.enable {
     programs.nh = {
       enable = true;
-      # TODO: /home/greep/nixos-config (maybe rename to nixos later ?)
-      #flake = "${config.home-manager.users.${config.nixos.system.user.defaultuser.name}.xdg.userDirs.documents}/nixos";
-      clean = {
+      flake = "${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/nixos-config";
+      clean = lib.mkIf (!config.nixos.system.nixos.garbageCollect) {
         enable = true;
         dates = "weekly";
       };
