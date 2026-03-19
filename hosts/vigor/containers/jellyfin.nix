@@ -29,7 +29,7 @@
         "d ${directory}/config 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
-        "L ${caddySiteDirectory}/jellyfin.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "jellyfin.caddy" ''
+        "C+ ${caddySiteDirectory}/jellyfin.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "jellyfin.caddy" ''
           jellyfin.greep.fr {
             reverse_proxy jellyfin:8096
           }

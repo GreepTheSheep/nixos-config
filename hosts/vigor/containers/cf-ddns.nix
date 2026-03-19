@@ -29,7 +29,7 @@
 
     systemd.tmpfiles.rules = [
       "d ${directory} 0755 ${user} users"
-      "L ${directory}/config.json - - - - ${pkgs.writeText "cf-ddns-config.json" cfddnsConfig}"
+      "C+ ${directory}/config.json - - - - ${pkgs.writeText "cf-ddns-config.json" cfddnsConfig}"
     ];
 
     virtualisation.oci-containers.containers."cloudflare-ddns" = {

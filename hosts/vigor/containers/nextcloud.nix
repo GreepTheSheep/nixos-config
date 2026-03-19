@@ -26,7 +26,7 @@
         "d ${directory}/database 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
-        "L ${caddySiteDirectory}/nextcloud.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "nextcloud.caddy" ''
+        "C+ ${caddySiteDirectory}/nextcloud.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "nextcloud.caddy" ''
           cloud.greep.fr {
             reverse_proxy nextcloud:80
           }
