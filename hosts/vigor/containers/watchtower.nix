@@ -16,7 +16,7 @@
     sops.secrets."docker/watchtower/vigor-notification-url" = {};
 
     sops.templates."watchtower.env".content = ''
-      WATCHTOWER_SCHEDULE=0 0 6 * * *;
+      WATCHTOWER_SCHEDULE=0 0 6 * * *
       WATCHTOWER_CLEANUP=true
       WATCHTOWER_NOTIFICATION_URL=${config.sops.placeholder."docker/watchtower/vigor-notification-url"}
     '';
