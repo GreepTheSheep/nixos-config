@@ -43,6 +43,9 @@
         LOG_LEVEL = "debug";
       };
       networks = [ "caddy-bridge" ];
+      dependsOn = [
+        "caddy"
+      ];
       extraOptions = [
         "--health-cmd=\"wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1\""
         "--health-start-period=20s"

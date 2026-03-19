@@ -83,6 +83,7 @@
         ];
         dependsOn = [
           "flaresolverr"
+          "caddy"
         ];
       };
 
@@ -103,6 +104,7 @@
         ];
         dependsOn = [
           "prowlarr"
+          "caddy"
         ];
       };
 
@@ -123,6 +125,7 @@
         ];
         dependsOn = [
           "prowlarr"
+          "caddy"
         ];
       };
 
@@ -149,6 +152,9 @@
         ];
         extraOptions = [
           "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
+        ];
+        dependsOn = [
+          "caddy"
         ];
       };
 

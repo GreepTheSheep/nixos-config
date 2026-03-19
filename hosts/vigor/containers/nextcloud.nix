@@ -98,6 +98,7 @@
         ];
         dependsOn = [
           "nextcloud-mariadb"
+          "caddy"
         ];
       };
     };

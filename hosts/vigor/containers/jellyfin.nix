@@ -68,6 +68,9 @@
       ];
       networks = [ "caddy-bridge" ];
       extraOptions = [ "--gpus=all" ];
+      dependsOn = [
+        "caddy"
+      ];
     };
   };
 }

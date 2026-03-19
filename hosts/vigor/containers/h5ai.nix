@@ -45,6 +45,9 @@
         TZ = "Europe/Paris";
       };
       networks = [ "caddy-bridge" ];
+      dependsOn = [
+        "caddy"
+      ];
     };
   };
 }
