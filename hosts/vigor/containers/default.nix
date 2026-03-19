@@ -36,7 +36,10 @@
       caddy.enable = true;
       cfddns.enable = false;
       h5ai.enable = true;
-      jellyfin.enable = true;
+      jellyfin = {
+        enable = true;
+        enableGPU = false;
+      };
       nextcloud.enable = true;
       seerr.enable = true;
       watchtower.enable = true;
