@@ -158,7 +158,7 @@
           "wireguard"
         ];
         extraOptions = [
-          "--network container:wireguard"
+          "--network=container:wireguard"
         ];
       };
     };
