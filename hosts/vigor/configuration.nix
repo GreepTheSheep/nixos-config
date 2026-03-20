@@ -23,6 +23,7 @@
 
   config = {
     nixos.system.nixos.garbageCollect = true;
+    host.containers.enable = false;
 
     #nixos.base.tools = {
     #  backrest = {
@@ -56,10 +57,6 @@
     nixos.system.motd = {
       enable = true;
       content = builtins.readFile ./motd;
-    };
-
-    host.containers = {
-      enable = true;
     };
   };
 }
