@@ -1,5 +1,5 @@
 _:
 
 {
-  nixos.system.bootloader.timeout = 0;
+  nixos.system.bootloader.timeout = 1;
 }
