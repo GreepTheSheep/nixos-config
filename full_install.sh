@@ -15,7 +15,7 @@ GIT_REPO_URL="git.greep.fr/greep/nixos-config"
 FLAKE_CONFIG=""
 DISK=""
 IS_NEW_HOST=false
-ALONGSIDE_ESP=""            # Chemin de l'ESP à utiliser (/dev/sdaX ou /dev/nvme...)
+ALONGSIDE_ESP=""            # Chemin de l'ESP à utiliser (/dev/sdaX, /dev/nvme..., /dev/mmcblk...)
 ALONGSIDE_BTRFS=""          # Chemin de la nouvelle partition btrfs (ou /dev/mapper/cryptroot si LUKS)
 GIT_CRED_FILE=""            # Fichier de credentials git temporaire
 USE_LUKS=false
@@ -257,11 +257,14 @@ select_disk() {
         local model=$(lsblk -dn -o MODEL "/dev/${disk}" 2>/dev/null | xargs || echo "Unknown")
         local rota=$(lsblk -dn -o ROTA "/dev/${disk}")
         local nvme=$(lsblk -dn -o NAME "/dev/${disk}" | grep -q "nvme" && echo true || echo false)
+        local emmc=$(echo "${disk}" | grep -q "mmcblk" && echo true || echo false)
 
         echo -e "  [${num}] ${disk}"
         echo -e "      Size: ${size}"
         echo -e "      Model: ${model}"
-        if [ "$rota" -eq 0 ]; then
+        if [ "$emmc" = true ]; then
+            echo "      Interface: eMMC"
+        elif [ "$rota" -eq 0 ]; then
             if [ "$nvme" = true ]; then
                 echo "      Interface: NVMe SSD"
             else
