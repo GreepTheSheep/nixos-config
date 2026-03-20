@@ -13,8 +13,6 @@
     ./watchtower.nix
   ];
 
-  # TODO: Immich
-
   options.host = {
     containers = {
       enable = lib.mkOption {
