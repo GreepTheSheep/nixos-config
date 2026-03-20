@@ -5,9 +5,8 @@
 { lib, ... }:
 
 {
-  # Modules supplémentaires pour NVMe et USB storage
+  # Modules supplémentaires pour USB storage
   boot.initrd.availableKernelModules = [
-    "nvme"
     "usbhid"
     "usb_storage"
   ];

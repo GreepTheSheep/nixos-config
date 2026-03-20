@@ -27,13 +27,8 @@
     nixos.desktop.enable = false;
     nixos.userEnvironment.enable = false;
 
-    nixos.hardware = {
-      amdcpu.enable = false;
-      nvidiagpu.enable = false;
-    };
-
     nixos.system.user.defaultuser = {
-      pass = ""; # TODO: remplir avec mkpasswd
+      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
     };
 
     nixos.virtualisation = {
@@ -44,14 +39,6 @@
     nixos.system.motd = {
       enable = true;
       content = builtins.readFile ./motd;
-    };
-
-    # Swap via zram uniquement (pas de swapfile sur microSD pour réduire l'usure)
-    zramSwap = {
-      enable = true;
-      algorithm = "zstd";
-      memoryPercent = 50;
-      priority = 100;
     };
   };
 }
