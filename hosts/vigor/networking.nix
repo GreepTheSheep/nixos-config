@@ -2,7 +2,7 @@ _:
 
 {
   networking = {
-    hostName = "vigor.greep.fr";
+    hostName = "vigor";
   };
 
   nixos.system.networking = {
