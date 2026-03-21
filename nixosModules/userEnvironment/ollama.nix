@@ -1,4 +1,4 @@
-{ config, lib, types, ... }:
+{ config, lib, ... }:
 
 {
   options.nixos = {
@@ -25,8 +25,8 @@
       };
 
       accel = lib.mkOption {
-        type = types.nullOr (
-          types.enum [
+        type = lib.types.nullOr (
+          lib.types.enum [
             false
             "rocm"
             "cuda"
@@ -39,7 +39,7 @@
       };
 
       downloadModels = lib.mkOption {
-        type = types.listOf types.str;
+        type = lib.types.listOf types.str;
         default = [ ];
         example = [ "quen3.5" ];
         description = "Download models";
