@@ -63,6 +63,7 @@ config = {
         streamdeck.enable = true;
         bluetooth.enable = true;
       };
+      ollama.enable = true;
     };
 
     nixos.virtualisation = {

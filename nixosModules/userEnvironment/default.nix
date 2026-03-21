@@ -13,6 +13,7 @@
     ./flatpak.nix
     ./fonts.nix
     ./kdeconnect.nix
+    ./ollama.nix
     ./samba-client.nix
     ./spotify.nix
   ];
@@ -41,6 +42,7 @@
       flatpak.enable = lib.mkDefault false;
       fonts.enable = true;
       kdeconnect.enable = true;
+      ollama.enable = lib.mkDefault false;
       samba-client.enable = true;
       spotify.enable = true;
     };
