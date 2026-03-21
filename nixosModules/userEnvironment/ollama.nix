@@ -39,7 +39,7 @@
       };
 
       downloadModels = lib.mkOption {
-        type = lib.types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "quen3.5" ];
         description = "Download models";
