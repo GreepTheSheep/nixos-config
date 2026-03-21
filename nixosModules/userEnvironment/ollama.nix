@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, types, ... }:
 
 {
   options.nixos = {
@@ -53,6 +53,7 @@
       enable = true;
       openFirewall = config.nixos.userEnvironment.ollama.openFirewall;
       loadModels = config.nixos.userEnvironment.ollama.downloadModels;
+      host = lib.mkIf config.nixos.userEnvironment.ollama.openFirewall "0.0.0.0";
     };
 
     services.nextjs-ollama-llm-ui.enable = config.nixos.userEnvironment.ollama.enableUI;
