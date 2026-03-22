@@ -34,10 +34,12 @@
   nixos.system.firewall = {
     extraAllowedTCPPorts = [
       24800
+      3389
     ];
 
     extraAllowedUDPPorts = [
       24800
+      3389
     ];
   };
 }
