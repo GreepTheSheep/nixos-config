@@ -27,7 +27,7 @@
       displayManager.enable = true;
       windowManager.enable = true;
       xdg.enable = true;
-      xrdp.enable = true;
+      xrdp.enable = lib.mkDefault false;
       xserver.enable = true;
     };
   };
