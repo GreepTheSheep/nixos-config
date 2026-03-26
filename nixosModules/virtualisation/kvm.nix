@@ -44,7 +44,6 @@
       ebtables
       iptables
       libvirt
-      nftables
       OVMF
       qemu
       qemu_kvm
