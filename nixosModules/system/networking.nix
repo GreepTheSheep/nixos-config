@@ -68,6 +68,8 @@ in
 
   config = lib.mkIf config.nixos.system.networking.enable {
     networking = {
+      nftables.enable = true;
+
       networkmanager = {
         enable = true;
         dns = "default";
