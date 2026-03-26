@@ -24,6 +24,7 @@
 config = {
     nixos.desktop = {
       enable = true;
+      xrdp.enable = true;
       desktopEnvironment = {
         plasma6.enable = true;
       };
