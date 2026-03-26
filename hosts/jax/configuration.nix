@@ -74,9 +74,11 @@ config = {
 
     nixos.virtualisation = {
       enable = true;
+      android.enable = true;
       docker.enable = true;
       vmware.enable = true;
       kvm.enable = true;
+      waydroid.enable = true;
     };
 
     nixos.pkgs.wallpaper-engine-kde-plugin.enable = true;
