@@ -14,5 +14,12 @@
 
   config = lib.mkIf config.nixos.virtualisation.waydroid.enable {
     virtualisation.waydroid.enable = true;
+
+    users.users."${config.nixos.system.user.defaultuser.name}" = {
+      extraGroups = [
+        "render"
+        "video"
+      ];
+    };
   };
 }
