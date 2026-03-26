@@ -22,7 +22,13 @@
       "quiet"
       "splash"
     ];
-    boot.kernelModules = [ "fuse" ];
+    boot.kernelModules = [
+      "fuse"
+      "ip_tables"
+      "iptable_nat"
+      "iptable_filter"
+      "iptable_mangle"
+    ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
     boot.kernelPackages = pkgs.linuxPackages_latest;
     boot.supportedFilesystems = [
