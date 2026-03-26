@@ -25,8 +25,13 @@
       hardware.nvidia.modesetting.enable = lib.mkForce false;
     };
 
-    # Make sure opengl is enabled
-    hardware.graphics.enable = true;
+    hardware.graphics = {
+      # Make sure opengl is enabled
+      enable = true;
+
+      # Include vaapi driver
+      extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+    };
 
     # Tell Xorg to use the nvidia driver
     services.xserver = {
