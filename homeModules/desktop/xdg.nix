@@ -34,6 +34,7 @@
       userDirs = {
         enable = true;
         createDirectories = true;
+        setSessionVariables = true;
         extraConfig = {
           SCREENSHOTS = "${config.xdg.userDirs.desktop}";
           GAMES = "${config.home.homeDirectory}/Games";
