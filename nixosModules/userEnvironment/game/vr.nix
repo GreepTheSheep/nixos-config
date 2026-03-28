@@ -38,7 +38,7 @@
       WMR_HANDTRACKING = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableMonardoHandTracking) "0";
     };
 
-    xdg.configFile."openxr/1/active_runtime.json".source = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableWiVRn) "${pkgs.monado}/share/openxr/1/openxr_monado.json";
+    #xdg.configFile."openxr/1/active_runtime.json".source = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableWiVRn) "${pkgs.monado}/share/openxr/1/openxr_monado.json";
 
     services.wivrn = lib.mkIf config.nixos.userEnvironment.game.vr.enableWiVRn {
       enable = true;
