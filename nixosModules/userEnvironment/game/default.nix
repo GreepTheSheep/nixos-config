@@ -5,6 +5,7 @@
     ./gamemode.nix
     ./gamescope.nix
     ./steam.nix
+    ./vr.nix
   ];
 
   options.nixos = {
@@ -23,6 +24,7 @@
       gamemode.enable = true;
       gamescope.enable = true;
       steam.enable = true;
+      vr.enable = lib.mkDefault false;
     };
   };
 }

@@ -16,7 +16,17 @@
     nixpkgs.overlays = [ inputs.millennium.overlays.default ];
     programs.steam = {
       enable = true;
-      package = pkgs.millennium-steam;
+      package = lib.mkMerge [
+        (lib.mkIf config.nixos.userEnvironment.game.vr.enable pkgs.millennium-steam.override {
+          extraProfile = ''
+            # Fixes timezones on VRChat
+            unset TZ
+            # Allows Monado/WiVRn to be used
+            export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
+          '';
+        })
+        (lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.millennium-steam)
+      ];
       extraCompatPackages = with pkgs; [
         steam-play-none
         proton-ge-bin

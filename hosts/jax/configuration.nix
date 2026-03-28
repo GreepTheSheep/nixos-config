@@ -59,7 +59,13 @@ config = {
     nixos.userEnvironment = {
       enable = true;
       flatpak.enable = true;
-      game.enable = true;
+      game = {
+        enable = true;
+        vr = {
+          enable = true;
+          enableWiVRn = true;
+        };
+      };
       io = {
         streamdeck.enable = true;
         bluetooth.enable = true;
