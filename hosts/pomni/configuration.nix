@@ -53,6 +53,14 @@
       io.bluetooth.enable = true;
     };
 
+    nixos.virtualisation = {
+      enable = true;
+      android.enable = true;
+      docker.enable = true;
+      vmware.enable = true;
+      waydroid.enable = true;
+    };
+
     nixos.system.cloudmount.enable = true;
     sops.age.keyFile = "/root/.secrets/keys.txt";
   };
