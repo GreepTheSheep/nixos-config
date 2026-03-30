@@ -22,7 +22,6 @@
   };
 
   config = {
-    nixos.system.nixos.garbageCollect = true;
     host.containers.enable = false;
 
     #nixos.base.tools = {
@@ -43,8 +42,17 @@
       nvidiagpu.enable = true;
     };
 
-    nixos.system.user.defaultuser = {
-      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+    nixos.system = {
+      user.defaultuser = {
+        pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+      };
+
+      motd = {
+        enable = true;
+        content = builtins.readFile ./motd;
+      };
+
+      nixos.garbageCollect = true;
     };
 
     nixos.userEnvironment.enable = false;
@@ -52,11 +60,6 @@
     nixos.virtualisation = {
       enable = true;
       docker.enable = true;
-    };
-
-    nixos.system.motd = {
-      enable = true;
-      content = builtins.readFile ./motd;
     };
   };
 }
