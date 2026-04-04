@@ -37,6 +37,18 @@ _:
       options = [ "subvol=@log" ];
     };
 
+  fileSystems."/mnt/data" =
+    { device = "/dev/disk/by-uuid/5d3130b2-c128-4124-a0aa-2757637454ec";
+      fsType = "ext4";
+      options = [ "defaults" "noatime" ];
+    };
+
+  fileSystems."/mnt/localdata" =
+    { device = "/dev/disk/by-uuid/2835dc6b-11c8-4cdf-870a-f456eeaedc9d";
+      fsType = "ext4";
+      options = [ "defaults" "nofail" "noatime" ];
+    };
+
   swapDevices = [
     {
       device = "/swapfile";
