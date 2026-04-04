@@ -68,7 +68,9 @@
       nixdoc
       direnv
 
-      exfatprogs # exFAT file system driver
+      exfatprogs # exFAT file system utilities
+      e2fsprogs # ext file system utilities
+      btrfs-progs # btrfs file system utilities
     ];
   };
 }
