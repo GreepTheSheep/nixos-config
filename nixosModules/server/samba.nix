@@ -47,18 +47,13 @@
           "server string" = config.networking.hostName;
           "netbios name" = config.networking.hostName;
           "security" = "user";
-          "encrypt passwords" = "yes";
-          "smb encrypt" = "required";
           #"use sendfile" = "yes";
           #"max protocol" = "smb2";
           # note: localhost is the ipv6 localhost ::1
-          "hosts allow" = "192.168.0. 127.0.0.1 localhost";
+          "hosts allow" = "192.168.1. 127.0.0.1 localhost";
           "hosts deny" = "0.0.0.0/0";
           "guest account" = "nobody";
           "map to guest" = "bad user";
-          "min protocol" = "SMB3";
-          "max protocol" = "SMB3";
-          "server signing" = "mandatory";
 
           "vfs objects" = "recycle";
           "recycle:repository" = ".recycle/%U";
