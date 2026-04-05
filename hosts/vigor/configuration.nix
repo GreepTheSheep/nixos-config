@@ -89,7 +89,7 @@
             browsable = false;
             readonly = false;
             guest = false;
-            users = "@greep";
+            users = "greep";
           }
           {
             name = "cdn";
@@ -97,7 +97,7 @@
             browsable = false;
             readonly = false;
             guest = false;
-            users = "@greep";
+            users = "greep";
           }
         ];
       };
