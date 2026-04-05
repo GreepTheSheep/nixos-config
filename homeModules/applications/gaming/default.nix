@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./bs-manager.nix
     ./lutris.nix
     ./parsec.nix
     ./prismlauncher.nix
@@ -21,6 +22,7 @@
 
   config = lib.mkIf config.homeManager.applications.gaming.enable {
     homeManager.applications.gaming = {
+      bs-manager.enable = true;
       lutris.enable = true;
       parsec.enable = true;
       prismlauncher.enable = true;
