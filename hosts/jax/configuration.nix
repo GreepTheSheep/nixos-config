@@ -45,6 +45,7 @@ config = {
     nixos.hardware = {
       amdcpu.enable = true;
       nvidiagpu.enable = true;
+      sc0710.enable = true; # Elgato 4K60 Pro MK.2
     };
 
     nixos.system = {

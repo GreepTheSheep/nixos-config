@@ -7,6 +7,7 @@
     ./intelcpu.nix
     ./intelgpu.nix
     ./nvidiagpu.nix
+    ./sc0710.nix
   ];
 
   options.nixos = {
@@ -27,6 +28,7 @@
       intelcpu.enable = lib.mkDefault false;
       intelgpu.enable = lib.mkDefault false;
       nvidiagpu.enable = lib.mkDefault false;
+      sc0710.enable = lib.mkDefault false;
     };
   };
 }
