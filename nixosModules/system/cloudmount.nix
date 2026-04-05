@@ -16,6 +16,8 @@
     services.davfs2.enable = true;
     environment.systemPackages = [ pkgs.davfs2 ];
 
+    sops.secrets."nextcloud/password" = {};
+
     environment.etc."davfs2/secrets".source = config.sops.templates."davfs2-secrets".path;
 
     sops.templates."davfs2-secrets" = {

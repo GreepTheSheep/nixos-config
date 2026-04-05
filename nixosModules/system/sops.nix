@@ -23,10 +23,6 @@
   };
 
   config = lib.mkIf config.nixos.system.sops.enable {
-    #systemd.services.webdav.serviceConfig.EnvironmentFile = [
-    #  config.sops.secrets.changeme_env.path
-    #];
-
     environment.systemPackages = with pkgs; [
       sops
     ];
@@ -36,10 +32,6 @@
       defaultSopsFormat = "yaml";
       age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
       age.keyFile = lib.mkDefault "/root/.secrets/keys.txt";
-
-      secrets = {
-        "nextcloud/password" = {};
-      };
     };
   };
 }
