@@ -8,7 +8,7 @@ _:
 
     development = {
       antigravity.enable = true;
-      claudecode.enable = true;
+      #claudecode.enable = true;
       diff.enable = true;
     };
 
