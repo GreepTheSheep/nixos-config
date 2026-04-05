@@ -2,7 +2,7 @@
 
 {
   options.nixos = {
-    userEnvironment.ollama = {
+    server.ollama = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -40,13 +40,13 @@
     };
   };
 
-  config = lib.mkIf config.nixos.userEnvironment.ollama.enable {
+  config = lib.mkIf config.nixos.server.ollama.enable {
     services.ollama = {
-      # Port 11434
       enable = true;
-      openFirewall = config.nixos.userEnvironment.ollama.openFirewall;
-      loadModels = config.nixos.userEnvironment.ollama.downloadModels;
-      host = lib.mkIf config.nixos.userEnvironment.ollama.openFirewall "0.0.0.0";
+      openFirewall = config.nixos.server.ollama.openFirewall;
+      loadModels = config.nixos.server.ollama.downloadModels;
+      host = lib.mkIf config.nixos.server.ollama.openFirewall "0.0.0.0";
+      port = 11434;
     };
   };
 }

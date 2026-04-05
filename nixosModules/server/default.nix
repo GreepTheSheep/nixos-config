@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./ollama.nix
     ./samba.nix
   ];
 
@@ -18,7 +19,8 @@
 
   config = lib.mkIf config.nixos.server.enable {
     nixos.server = {
-      samba.enable = true;
+      ollama.enable = lib.mkDefault false;
+      samba.enable = lib.mkDefault false;
     };
   };
 }

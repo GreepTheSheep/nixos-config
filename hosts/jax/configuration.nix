@@ -74,12 +74,15 @@ config = {
         streamdeck.enable = true;
         bluetooth.enable = true;
       };
+    };
+
+    nixos.server = {
       ollama = {
         enable = true;
         openFirewall = true;
         accel = "cuda";
       };
-    };
+    }
 
     nixos.virtualisation = {
       enable = true;
