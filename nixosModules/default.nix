@@ -6,7 +6,7 @@
     ./desktop
     ./hardware
     ./pkgs
-    #./server
+    ./server
     ./system
     #./theme # TODO later: cappuccin
     ./userEnvironment
@@ -30,7 +30,7 @@
       desktop.enable = lib.mkDefault false;
       hardware.enable = true;
       pkgs.enable = true;
-      #server.enable = false;
+      server.enable = lib.mkDefault false;
       system.enable = true;
       #theme.enable = true;
       userEnvironment.enable = lib.mkDefault false;

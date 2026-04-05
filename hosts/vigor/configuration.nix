@@ -62,5 +62,45 @@
       enable = true;
       docker.enable = true;
     };
+
+    nixos.server = {
+      samba = {
+        enable = true;
+        shares = [
+          {
+            name = "movies";
+            path = "/mnt/data/movies";
+          }
+          {
+            name = "shows";
+            path = "/mnt/data/shows";
+          }
+          {
+            name = "music";
+            path = "/mnt/data/music";
+          }
+          {
+            name = "tvreplays";
+            path = "/mnt/data/tvreplays";
+          }
+          {
+            name = "localdata";
+            path = "/mnt/localdata";
+            browsable = false;
+            readonly = false;
+            guest = false;
+            users = "@greep";
+          }
+          {
+            name = "cdn";
+            path = "/mnt/data/cdn";
+            browsable = false;
+            readonly = false;
+            guest = false;
+            users = "@greep";
+          }
+        ];
+      };
+    };
   };
 }
