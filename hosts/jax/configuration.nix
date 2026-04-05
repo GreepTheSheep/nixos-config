@@ -82,7 +82,7 @@ config = {
         openFirewall = true;
         accel = "cuda";
       };
-    }
+    };
 
     nixos.virtualisation = {
       enable = true;
