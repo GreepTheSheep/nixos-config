@@ -1,3 +1,5 @@
+# https://github.com/Nakildias/sc0710/issues/31
+
 { config, lib, pkgs, ... }:
 
 let
