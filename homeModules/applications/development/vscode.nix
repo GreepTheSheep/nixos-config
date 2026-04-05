@@ -32,7 +32,7 @@ let
     "window.confirmBeforeClose" = "never";
     "notebook.lineNumbers" = "on";
     "window.zoomLevel" = 0;
-    "claudeCode.useCtrlEnterToSend" = true;
+    #"claudeCode.useCtrlEnterToSend" = true;
 
     "diffEditor.ignoreTrimWhitespace" = false;
     "files.trimTrailingWhitespace" = true;
@@ -127,7 +127,7 @@ in
           ms-azuretools.vscode-docker
           ritwickdey.liveserver
           ms-vscode-remote.remote-containers
-          anthropic.claude-code
+          #anthropic.claude-code
         ];
 
         keybindings = [
