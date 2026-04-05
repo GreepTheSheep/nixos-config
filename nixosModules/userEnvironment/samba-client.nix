@@ -15,7 +15,6 @@
   config = lib.mkIf config.nixos.userEnvironment.samba-client.enable {
     services.gvfs.enable = true;
     environment.defaultPackages = with pkgs; [
-      samba4Full
       samba
     ];
   };
