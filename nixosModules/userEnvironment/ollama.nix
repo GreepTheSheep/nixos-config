@@ -10,13 +10,6 @@
         description = "Enable ollama.";
       };
 
-      enableUI = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        example = true;
-        description = "Enable frontend UI.";
-      };
-
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -41,7 +34,7 @@
       downloadModels = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "quen3.5" ];
+        example = [ "gemma4:latest" ];
         description = "Download models";
       };
     };
@@ -55,7 +48,5 @@
       loadModels = config.nixos.userEnvironment.ollama.downloadModels;
       host = lib.mkIf config.nixos.userEnvironment.ollama.openFirewall "0.0.0.0";
     };
-
-    services.nextjs-ollama-llm-ui.enable = config.nixos.userEnvironment.ollama.enableUI;
   };
 }

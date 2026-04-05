@@ -76,7 +76,6 @@ config = {
       };
       ollama = {
         enable = true;
-        enableUI = true;
         openFirewall = true;
         accel = "cuda";
       };
