@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./samba.nix
-  ];
-
   options.nixos = {
     server.samba = {
       enable = lib.mkOption {
