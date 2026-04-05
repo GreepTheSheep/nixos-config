@@ -37,9 +37,12 @@ config = {
       };
     };
 
-    nixos.base.tools = {
-      backrest.enable = true;
-      scrutiny.enable = true;
+    nixos.base = {
+      caddy.enable = true;
+      tools = {
+        backrest.enable = true;
+        scrutiny.enable = true;
+      };
     };
 
     nixos.hardware = {

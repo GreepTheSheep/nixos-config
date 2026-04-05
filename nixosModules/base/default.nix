@@ -25,7 +25,7 @@
       shell.enable = true;
       texteditor.enable = true;
       tools.enable = true;
-      caddy.enable = true;
+      caddy.enable = lib.mkDefault false;
     };
   };
 }
