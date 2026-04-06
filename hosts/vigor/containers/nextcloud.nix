@@ -70,6 +70,16 @@
       };
     };
 
+    # Nextcloud Cron services
+    nixos.system.cron.jobs = lib.mkAfter [
+      "*/5 * * * * docker exec -u www-data nextcloud php /var/www/html/cron.php"
+      "0 */4 * * * docker exec -u www-data nextcloud php /var/www/html/occ preview:pre-generate"
+      "0 */2 * * * docker exec -u www-data nextcloud php /var/www/html/occ files:cleanup"
+      "0 2 * * * docker exec -u www-data nextcloud php /var/www/html/occ files:scan --all"
+      "0 3 * * 0 docker exec -u www-data nextcloud php /var/www/html/occ preview:generate-all"
+      "@monthly docker exec -u www-data nextcloud php /var/www/html/occ trashbin:cleanup"
+    ];
+
     virtualisation.oci-containers.containers = {
       "nextcloud-mariadb" = {
         image = "mariadb:lts";
