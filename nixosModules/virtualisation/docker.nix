@@ -19,8 +19,6 @@
       extraPackages = with pkgs; [
         lazydocker
         oxker
-      ] ++ lib.optionals config.nixos.hardware.nvidiagpu.enable [
-        nvidia-container-toolkit
       ];
       daemon.settings = {
         registry-mirrors = [ "https://mirror.gcr.io" ];
@@ -45,8 +43,6 @@
     environment.systemPackages = with pkgs; [
       lazydocker
       oxker
-    ] ++ lib.optionals config.nixos.hardware.nvidiagpu.enable [
-      nvidia-container-toolkit
     ];
   };
 }
