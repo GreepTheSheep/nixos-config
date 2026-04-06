@@ -11,6 +11,8 @@
     ./nextcloud.nix
     ./prometheus.nix
     ./seerr.nix
+    ./tangled-discord-bot-rust.nix
+    ./tangled-discord-bot.nix
     ./watchtower.nix
   ];
 
@@ -47,6 +49,8 @@
         enableDgcmExporter = true;
       };
       seerr.enable = true;
+      tangled-discord-bot-rust.enable = true;
+      tangled-discord-bot.enable = true;
       watchtower.enable = true;
     };
   };
