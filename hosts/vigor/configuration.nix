@@ -22,7 +22,7 @@
   };
 
   config = {
-    host.containers.enable = false;
+    host.containers.enable = true;
 
     nixos.base.tools = {
       scrutiny = {
