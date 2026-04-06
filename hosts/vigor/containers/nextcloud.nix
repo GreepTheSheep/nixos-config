@@ -97,7 +97,7 @@
 
       nextcloud = {
         image = "nextcloud";
-        entrypoint = "/bin/bash -c \"apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground\"";
+        #entrypoint = "/bin/bash -c \"apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground\"";
         volumes = [
           "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
