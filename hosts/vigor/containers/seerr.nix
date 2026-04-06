@@ -47,7 +47,7 @@
         "caddy"
       ];
       extraOptions = [
-        "--health-cmd='wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status'"
+        "--health-cmd=wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status"
         "--health-start-period=20s"
         "--health-timeout=3s"
         "--health-interval=15s"

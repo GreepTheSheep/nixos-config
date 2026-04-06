@@ -149,7 +149,7 @@
           "immich-network"
         ];
         extraOptions = [
-          "--health-cmd='redis-cli ping'"
+          "--health-cmd=redis-cli ping"
         ];
       };
 
