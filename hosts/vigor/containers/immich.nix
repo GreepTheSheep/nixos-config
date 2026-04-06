@@ -84,6 +84,7 @@
       immich = {
         # Port 2283
         image = "ghcr.io/immich-app/immich-server:release";
+        hostname = "immich_server";
         volumes = [
           "${dataDirectory}:/usr/src/app/upload"
         ] ++ lib.optionals config.host.containers.immich.enableGPU [
@@ -102,8 +103,8 @@
         ];
         environment = {
           TZ = "Europe/Paris";
-          DB_HOSTNAME = "immich-pgvector";
-          REDIS_HOSTNAME = "immich-redis";
+          DB_HOSTNAME = "immich_pgvector";
+          REDIS_HOSTNAME = "immich_redis";
           NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
           NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
         };
@@ -122,6 +123,7 @@
 
       "immich-machine-learning" = {
         image = "ghcr.io/immich-app/immich-machine-learning:release";
+        hostname = "immich_machine_learning";
         volumes = [
           "${directory}/ml-model-cache:/cache"
         ] ++ lib.optionals config.host.containers.immich.enableGPU [
@@ -145,6 +147,7 @@
 
       "immich-redis" = {
         image = "redis:6.2-alpine";
+        hostname = "immich_redis";
         environment = {
           TZ = "Europe/Paris";
         };
@@ -158,6 +161,7 @@
 
       "immich-pgvector" = {
         image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
+        hostname = "immich_pgvector";
         environmentFiles = [
           config.sops.templates."immich-postgres.env".path
         ];
