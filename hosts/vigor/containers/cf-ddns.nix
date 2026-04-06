@@ -14,6 +14,8 @@
   config = lib.mkIf config.host.containers.cfddns.enable {
     sops.secrets = {
       "docker/cfddns/api-token" = {};
+      "docker/cfddns/auth-key" = {};
+      "docker/cfddns/account-email" = {};
       "docker/cfddns/zone-id" = {};
     };
 
@@ -22,10 +24,10 @@
         accounts = [{
           authentication = {
             api_token = "${config.sops.placeholder."docker/cfddns/api-token"}";
-            #api_key = {
-            #  auth_key = "sdfgsdfgdfgsdfdfsdsf";
-            #  account_email = "email@example.com";
-            #};
+            api_key = {
+              auth_key = "${config.sops.placeholder."docker/cfddns/auth-key"}";
+              account_email = "${config.sops.placeholder."docker/cfddns/account-email"}";
+            };
           };
           zones = [{
             id = "${config.sops.placeholder."docker/cfddns/zone-id"}";
