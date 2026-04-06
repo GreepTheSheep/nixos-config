@@ -4,6 +4,7 @@
   imports = [
     ./bash.nix
     ./console.nix
+    ./sudo.nix
     ./tmux.nix
     ./zsh.nix
   ];
@@ -23,6 +24,7 @@
     nixos.base.shell = {
       bash.enable = true;
       console.enable = true;
+      sudo.enable = true;
       tmux.enable = true;
       zsh.enable = true;
     };
