@@ -75,13 +75,19 @@
         4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
           ${lib.optionalString config.host.containers.arr.enable ''
             redir /prowlarr /prowlarr/
-            reverse_proxy /prowlarr/* prowlarr:9696
+            handle /prowlarr/* {
+              reverse_proxy prowlarr:9696
+            }
 
             redir /radarr /radarr/
-            reverse_proxy /radarr/* radarr:7878
+            handle /radarr/* {
+              reverse_proxy radarr:7878
+            }
 
             redir /sonarr /sonarr/
-            reverse_proxy /sonarr/* sonarr:8989
+            handle /sonarr/* {
+              reverse_proxy sonarr:8989
+            }
 
             redir /qbit /qbit/
             handle_path /qbit/* {
@@ -120,7 +126,7 @@
             }
           ''}
 
-          handle {
+          handle / {
             root * {$TEMPLATES_DIR}/server-motd
             file_server
             rewrite * {labels.2}.html
