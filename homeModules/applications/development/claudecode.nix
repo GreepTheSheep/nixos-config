@@ -1,5 +1,11 @@
-{ config, lib, ... }:
+{ config, lib, inputs, ... }:
 
+let
+  unstablePkgs = import inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
+in
 {
   options.homeManager = {
     applications.development.claudecode = {
@@ -15,6 +21,7 @@
   config = lib.mkIf config.homeManager.applications.development.claudecode.enable {
     programs.claude-code = {
       enable = true;
+      package = unstablePkgs.claude-code;
     };
   };
 }
