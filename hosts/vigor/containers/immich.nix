@@ -52,8 +52,6 @@
         DB_PASSWORD=${config.sops.placeholder."docker/immich/postgres-password"}
         DB_DATABASE_NAME=${config.sops.placeholder."docker/immich/postgres-database"}
         DB_USERNAME=${config.sops.placeholder."docker/immich/postgres-user"}
-        DB_HOSTNAME=immich-pgvector
-        REDIS_HOSTNAME=immich-redis
       '';
       "immich-postgres.env".content = ''
         POSTGRES_PASSWORD=${config.sops.placeholder."docker/immich/postgres-password"}
@@ -104,6 +102,8 @@
         ];
         environment = {
           TZ = "Europe/Paris";
+          DB_HOSTNAME = "immich-pgvector";
+          REDIS_HOSTNAME = "immich-redis"
           NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
           NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
         };
