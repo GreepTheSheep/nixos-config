@@ -103,7 +103,7 @@
         environment = {
           TZ = "Europe/Paris";
           DB_HOSTNAME = "immich-pgvector";
-          REDIS_HOSTNAME = "immich-redis"
+          REDIS_HOSTNAME = "immich-redis";
           NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
           NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
         };
