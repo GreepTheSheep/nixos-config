@@ -7,7 +7,6 @@
     ./caddy.nix
     ./cf-ddns.nix
     ./h5ai.nix
-    ./immich.nix
     ./jellyfin.nix
     ./nextcloud.nix
     ./prometheus.nix
@@ -38,10 +37,6 @@
       caddy.enable = true;
       cfddns.enable = true;
       h5ai.enable = true;
-      immich = {
-        enable = false;
-        enableGPU = false;
-      };
       jellyfin = {
         enable = true;
         enableGPU = true;
