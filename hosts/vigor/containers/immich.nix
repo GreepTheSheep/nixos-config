@@ -154,7 +154,7 @@
       };
 
       "immich-pgvector" = {
-        image = "ghcr.io/immich-app/postgres:14-vectorchord0.5.3";
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.5.3-pgvector0.8.1";
         environmentFiles = [
           config.sops.templates."immich-postgres.env".path
         ];
