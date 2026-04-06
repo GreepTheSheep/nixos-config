@@ -59,7 +59,6 @@
         POSTGRES_PASSWORD=${config.sops.placeholder."docker/immich/postgres-password"}
         POSTGRES_DB=${config.sops.placeholder."docker/immich/postgres-database"}
         POSTGRES_USER=${config.sops.placeholder."docker/immich/postgres-user"}
-        POSTGRES_INITDB_ARGS: '--data-checksums'
       '';
     };
 
@@ -161,6 +160,7 @@
         ];
         environment = {
           TZ = "Europe/Paris";
+          POSTGRES_INITDB_ARGS = "\"--data-checksums\"";
         };
         volumes = [
           "${directory}/pgdata:/var/lib/postgresql/data"
