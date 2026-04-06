@@ -36,7 +36,7 @@
       # Port 5055
       image = "ghcr.io/seerr-team/seerr";
       volumes = [
-        "${directory}/seerr-config:/config"
+        "${directory}/seerr-config:/app/config"
       ];
       environment = {
         TZ = "Europe/Paris";
@@ -47,7 +47,7 @@
         "caddy"
       ];
       extraOptions = [
-        "--health-cmd=wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status"
+        "--health-cmd=wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1"
         "--health-start-period=20s"
         "--health-timeout=3s"
         "--health-interval=15s"
