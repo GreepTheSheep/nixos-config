@@ -36,7 +36,7 @@
       # Port 5055
       image = "ghcr.io/seerr-team/seerr";
       volumes = [
-        "${directory}/config:/config"
+        "${directory}/seerr-config:/config"
       ];
       environment = {
         TZ = "Europe/Paris";
