@@ -36,7 +36,7 @@
       arr.enable = true;
       backrest.enable = true;
       caddy.enable = true;
-      cfddns.enable = false;
+      cfddns.enable = true;
       h5ai.enable = true;
       immich = {
         enable = true;
