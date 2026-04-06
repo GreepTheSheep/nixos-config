@@ -129,7 +129,7 @@
         TZ = "Europe/Paris";
       };
       cmd = [
-        "--interval 300"
+        "--interval=300"
       ];
       extraOptions = [
         "--security-opt=no-new-privileges:true"
