@@ -38,7 +38,7 @@
         "${directory}/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
         "${dataDirectory}/immich-lib:/userdata/immich:ro"
         "${dataDirectory}/nextcloud:/userdata/nextcloud:ro"
-        "${repoDirectory}:/repo"
+        "${repoDirectory}:/repos"
       ];
       environment = {
         BACKREST_DATA = "/data";
