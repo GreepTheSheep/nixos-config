@@ -19,13 +19,15 @@
       extraPackages = with pkgs; [
         lazydocker
         oxker
+      ] ++ lib.optionals config.nixos.hardware.nvidiagpu.enable [
+        nvidia-container-toolkit
       ];
       daemon.settings = {
         registry-mirrors = [ "https://mirror.gcr.io" ];
       };
     };
 
-    hardware.nvidia-container-toolkit.enable = lib.mkIf config.nixos.hardware.nvidiagpu.enable true;
+    hardware.nvidia-container-toolkit.enable = config.nixos.hardware.nvidiagpu.enable;
 
     # Suppress the nvidia-container-toolkit driver assertion in VM builds,
     # since the nvidia driver is not available in the VM variant.
@@ -39,9 +41,11 @@
       ];
     };
 
-    environment.systemPackages = with pkgs; lib.mkAfter [
+    environment.systemPackages = with pkgs; [
       lazydocker
       oxker
+    ] ++ lib.optionals config.nixos.hardware.nvidiagpu.enable [
+      nvidia-container-toolkit
     ];
   };
 }
