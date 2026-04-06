@@ -112,6 +112,9 @@
         environment = {
           TZ = "Europe/Paris";
         };
+        ports = [
+          "8001:80"
+        ];
         extraOptions = [
           "--health-cmd=curl --silent --fail http://localhost:80"
           "--health-start-period=20s"
