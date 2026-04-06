@@ -97,7 +97,7 @@
 
       nextcloud = {
         image = "nextcloud";
-        #entrypoint = "/bin/bash -c \"apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground\"";
+        #entrypoint = "/bin/bash -c 'apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground'";
         volumes = [
           "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
@@ -109,7 +109,7 @@
           TZ = "Europe/Paris";
         };
         extraOptions = [
-          "--health-cmd=\"curl --silent --fail http://localhost:80\""
+          "--health-cmd='curl --silent --fail http://localhost:80'"
           "--health-start-period=20s"
           "--health-timeout=3s"
           "--health-interval=15s"

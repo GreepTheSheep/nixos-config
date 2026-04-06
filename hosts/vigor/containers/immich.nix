@@ -149,7 +149,7 @@
           "immich-network"
         ];
         extraOptions = [
-          "--health-cmd=\"redis-cli ping\""
+          "--health-cmd='redis-cli ping'"
         ];
       };
 
@@ -160,7 +160,7 @@
         ];
         environment = {
           TZ = "Europe/Paris";
-          POSTGRES_INITDB_ARGS = "\"--data-checksums\"";
+          POSTGRES_INITDB_ARGS = "'--data-checksums'";
         };
         volumes = [
           "${directory}/pgdata:/var/lib/postgresql/data"
