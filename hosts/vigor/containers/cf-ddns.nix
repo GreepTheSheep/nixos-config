@@ -49,6 +49,7 @@
 
     virtualisation.oci-containers.containers."cloudflare-ddns" = {
       image = "ghcr.io/dimpen/cloudflare-ddns-next";
+      user = "0:0";
       volumes = [
         "${config.sops.templates."cfddns-config.json".path}:/config.json:ro"
       ];
