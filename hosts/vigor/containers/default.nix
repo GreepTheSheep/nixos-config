@@ -10,6 +10,7 @@
     ./immich.nix
     ./jellyfin.nix
     ./nextcloud.nix
+    ./prometheus.nix
     ./seerr.nix
     ./watchtower.nix
   ];
@@ -46,6 +47,10 @@
         enableGPU = true;
       };
       nextcloud.enable = true;
+      prometheus = {
+        enable = true;
+        enableDgcmExporter = true;
+      };
       seerr.enable = true;
       watchtower.enable = true;
     };

@@ -107,6 +107,25 @@
             }
           ''}
 
+          ${lib.optionalString config.host.containers.prometheus.enable ''
+            redir /node-metrics /node-metrics/
+            handle_path /node-metrics/* {
+              reverse_proxy node-exporter:9100
+              basicauth /* {
+                vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+              }
+            }
+          ''}
+          ${lib.optionalString config.host.containers.prometheus.enableDgcmExporter ''
+            redir /dgcm-metrics /dgcm-metrics/
+            handle_path /dgcm-metrics/* {
+              reverse_proxy dgcm-exporter:9400
+              basicauth /* {
+                vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+              }
+            }
+          ''}
+
           handle {
             root * {$TEMPLATES_DIR}/server-motd
             file_server
