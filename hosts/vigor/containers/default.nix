@@ -3,6 +3,7 @@
 {
   imports = [
     ./arr.nix
+    ./backrest.nix
     ./caddy.nix
     ./cf-ddns.nix
     ./h5ai.nix
@@ -32,16 +33,17 @@
 
     host.containers = {
       arr.enable = true;
+      backrest.enable = true;
       caddy.enable = true;
       cfddns.enable = false;
       h5ai.enable = true;
       immich = {
         enable = true;
-        enableGPU = false;
+        enableGPU = true;
       };
       jellyfin = {
         enable = true;
-        enableGPU = false;
+        enableGPU = true;
       };
       nextcloud.enable = true;
       seerr.enable = true;

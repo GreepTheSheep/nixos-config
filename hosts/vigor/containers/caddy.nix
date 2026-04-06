@@ -100,6 +100,13 @@
             }
           ''}
 
+          ${lib.optionalString config.host.containers.backrest.enable ''
+            redir /backrest /backrest/
+            handle_path /backrest/* {
+              reverse_proxy backrest:9898
+            }
+          ''}
+
           handle {
             root * {$TEMPLATES_DIR}/server-motd
             file_server
