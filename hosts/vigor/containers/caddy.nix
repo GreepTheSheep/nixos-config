@@ -75,19 +75,13 @@
         4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
           ${lib.optionalString config.host.containers.arr.enable ''
             redir /prowlarr /prowlarr/
-            handle_path /prowlarr/* {
-              reverse_proxy prowlarr:9696
-            }
+            reverse_proxy /prowlarr/* prowlarr:9696
 
             redir /radarr /radarr/
-            handle_path /radarr/* {
-              reverse_proxy radarr:7878
-            }
+            reverse_proxy /radarr/* radarr:7878
 
             redir /sonarr /sonarr/
-            handle_path /sonarr/* {
-              reverse_proxy sonarr:8989
-            }
+            reverse_proxy /sonarr/* sonarr:8989
 
             redir /qbit /qbit/
             handle_path /qbit/* {
@@ -174,6 +168,9 @@
         SITES_DIR = "/etc/caddy/sites";
         TEMPLATES_DIR = "/etc/caddy/templates";
       };
+      extraOptions = [
+        "--security-opt=no-new-privileges:true"
+      ];
     };
 
     nixos.system.firewall = {
