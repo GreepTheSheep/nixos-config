@@ -81,46 +81,6 @@
     };
 
     virtualisation.oci-containers.containers = {
-      immich = {
-        # Port 2283
-        image = "ghcr.io/immich-app/immich-server:release";
-        hostname = "immich_server";
-        volumes = [
-          "${dataDirectory}:/usr/src/app/upload"
-        ] ++ lib.optionals config.host.containers.immich.enableGPU [
-          "/dev/nvidia-caps:/dev/nvidia-caps"
-          "/dev/nvidia0:/dev/nvidia0"
-          "/dev/nvidiactl:/dev/nvidiactl"
-          "/dev/nvidia-modeset:/dev/nvidia-modeset"
-          "/dev/nvidia-uvm:/dev/nvidia-uvm"
-          "/dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools"
-        ];
-        environmentFiles = [
-          config.sops.templates."immich.env".path
-        ];
-        ports = [
-          "8005:2283"
-        ];
-        environment = {
-          TZ = "Europe/Paris";
-          DB_HOSTNAME = "immich_pgvector";
-          REDIS_HOSTNAME = "immich_redis";
-          NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
-          NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
-        };
-        networks = [
-          "caddy-bridge"
-          "immich-network"
-        ];
-        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--device=nvidia.com/gpu=all" ];
-        dependsOn = [
-          "caddy"
-          "immich-machine-learning"
-          "immich-redis"
-          "immich-pgvector"
-        ];
-      };
-
       "immich-machine-learning" = {
         image = "ghcr.io/immich-app/immich-machine-learning:release";
         hostname = "immich_machine_learning";
@@ -173,6 +133,46 @@
         ];
         networks = [
           "immich-network"
+        ];
+      };
+
+      immich = {
+        # Port 2283
+        image = "ghcr.io/immich-app/immich-server:release";
+        hostname = "immich_server";
+        volumes = [
+          "${dataDirectory}:/usr/src/app/upload"
+        ] ++ lib.optionals config.host.containers.immich.enableGPU [
+          "/dev/nvidia-caps:/dev/nvidia-caps"
+          "/dev/nvidia0:/dev/nvidia0"
+          "/dev/nvidiactl:/dev/nvidiactl"
+          "/dev/nvidia-modeset:/dev/nvidia-modeset"
+          "/dev/nvidia-uvm:/dev/nvidia-uvm"
+          "/dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools"
+        ];
+        environmentFiles = [
+          config.sops.templates."immich.env".path
+        ];
+        ports = [
+          "8005:2283"
+        ];
+        environment = {
+          TZ = "Europe/Paris";
+          DB_HOSTNAME = "immich_pgvector";
+          REDIS_HOSTNAME = "immich_redis";
+          NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
+          NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
+        };
+        networks = [
+          "caddy-bridge"
+          "immich-network"
+        ];
+        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--device=nvidia.com/gpu=all" ];
+        dependsOn = [
+          "immich-machine-learning"
+          "immich-redis"
+          "immich-pgvector"
+          "caddy"
         ];
       };
     };
