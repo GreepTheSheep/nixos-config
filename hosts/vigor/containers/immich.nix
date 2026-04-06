@@ -154,15 +154,19 @@
       };
 
       "immich-pgvector" = {
-        image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.5.3-pgvector0.8.1";
         environmentFiles = [
           config.sops.templates."immich-postgres.env".path
         ];
         environment = {
           TZ = "Europe/Paris";
+          POSTGRES_INITDB_ARGS = "'--data-checksums'";
         };
         volumes = [
           "${directory}/pgdata:/var/lib/postgresql/data"
+        ];
+        extraOptions = [
+          "--shm-size=128m"
         ];
         networks = [
           "immich-network"
