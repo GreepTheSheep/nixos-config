@@ -11,52 +11,46 @@
     };
   };
 
-  config =
-  let
-    user = config.nixos.system.user.defaultuser.name;
-    home = config.users.users."${user}".home;
-    directory = "${home}/docker-containers/cloudflare-ddns";
-
-    cfddnsConfig = builtins.toJSON {
-      accounts = [{
-        zones = [{
-          name = "greep.fr";
-          subdomains = [
-            {
-              name = "vigor";
-              proxied = false;
-              type = "A";
-            }
-            {
-              name = "vigor";
-              proxied = false;
-              type = "AAAA";
-            }
-          ];
-        }];
-      }];
+  config = lib.mkIf config.host.containers.cfddns.enable {
+    sops.secrets = {
+      "docker/cfddns/api-token" = {};
+      "docker/cfddns/zone-id" = {};
     };
-  in lib.mkIf config.host.containers.cfddns.enable {
-    sops.secrets."docker/cfddns/api-token" = {};
-    sops.secrets."docker/cfddns/zone-id" = {};
 
-    sops.templates."cfddns.env".content = ''
-      CF_DDNS_API_TOKEN_1=${config.sops.placeholder."docker/cfddns/api-token"}
-      CF_DDNS_ZONE_ID_1=${config.sops.placeholder."docker/cfddns/zone-id"}
-    '';
-
-    systemd.tmpfiles.rules = [
-      "d ${directory} 0755 ${user} users"
-      "C+ ${directory}/config.json - - - - ${pkgs.writeText "cf-ddns-config.json" cfddnsConfig}"
-    ];
+    sops.templates = {
+      "cfddns-config.json".content = builtins.toJSON {
+        accounts = [{
+          authentication = {
+            api_token = "${config.sops.placeholder."docker/cfddns/api-token"}";
+            #api_key = {
+            #  auth_key = "sdfgsdfgdfgsdfdfsdsf";
+            #  account_email = "email@example.com";
+            #};
+          };
+          zones = [{
+            id = "${config.sops.placeholder."docker/cfddns/zone-id"}";
+            name = "greep.fr";
+            subdomains = [
+              {
+                name = "vigor";
+                proxied = false;
+                type = "A";
+              }
+              {
+                name = "vigor";
+                proxied = false;
+                type = "AAAA";
+              }
+            ];
+          }];
+        }];
+      };
+    };
 
     virtualisation.oci-containers.containers."cloudflare-ddns" = {
       image = "ghcr.io/dimpen/cloudflare-ddns-next";
       volumes = [
-        "${directory}/config.json:/config.json:ro"
-      ];
-      environmentFiles = [
-        config.sops.templates."cfddns.env".path
+        "${config.sops.templates."cfddns-config.json".path}:/config.json:ro"
       ];
       environment = {
         TZ = "Europe/Paris";
