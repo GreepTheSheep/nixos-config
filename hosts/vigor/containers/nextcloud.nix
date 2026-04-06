@@ -109,7 +109,7 @@
           TZ = "Europe/Paris";
         };
         extraOptions = [
-          "--health-cmd=\"curl --silent --fail http://localhost:80 || exit 1\""
+          "--health-cmd=\"curl --silent --fail http://localhost:80\""
           "--health-start-period=20s"
           "--health-timeout=3s"
           "--health-interval=15s"
