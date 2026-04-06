@@ -99,6 +99,9 @@
         environmentFiles = [
           config.sops.templates."immich.env".path
         ];
+        ports = [
+          "8005:2283"
+        ];
         environment = {
           TZ = "Europe/Paris";
           NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
@@ -141,7 +144,7 @@
       };
 
       "immich-redis" = {
-        image = "valkey/valkey:9";
+        image = "redis:6.2-alpine";
         environment = {
           TZ = "Europe/Paris";
         };
@@ -154,19 +157,15 @@
       };
 
       "immich-pgvector" = {
-        image = "ghcr.io/immich-app/postgres:14-vectorchord0.5.3-pgvector0.8.1";
+        image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
         environmentFiles = [
           config.sops.templates."immich-postgres.env".path
         ];
         environment = {
           TZ = "Europe/Paris";
-          POSTGRES_INITDB_ARGS = "'--data-checksums'";
         };
         volumes = [
           "${directory}/pgdata:/var/lib/postgresql/data"
-        ];
-        extraOptions = [
-          "--shm-size=128m"
         ];
         networks = [
           "immich-network"
