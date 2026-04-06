@@ -74,7 +74,7 @@
         "1900:1900/udp" # DLNA Discovery port
       ];
       networks = [ "caddy-bridge" ];
-      extraOptions = lib.mkIf config.host.containers.jellyfin.enableGPU [ "--gpus=all" ];
+      extraOptions = lib.mkIf config.host.containers.jellyfin.enableGPU [ "--device=nvidia.com/gpu=all" ];
       dependsOn = [
         "caddy"
       ];

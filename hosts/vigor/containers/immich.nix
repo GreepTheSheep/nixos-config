@@ -108,7 +108,7 @@
           "caddy-bridge"
           "immich-network"
         ];
-        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--gpus=all" ];
+        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--device=nvidia.com/gpu=all" ];
         dependsOn = [
           "caddy"
           "immich-machine-learning"
@@ -137,7 +137,7 @@
         networks = [
           "immich-network"
         ];
-        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--gpus=all" ];
+        extraOptions = lib.mkIf config.host.containers.immich.enableGPU [ "--device=nvidia.com/gpu=all" ];
       };
 
       "immich-redis" = {

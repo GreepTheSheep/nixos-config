@@ -57,7 +57,7 @@
           NVIDIA_DRIVER_CAPABILITIES = "all";
           NVIDIA_VISIBLE_DEVICES = "all";
         };
-        extraOptions = [ "--gpus=all" ];
+        extraOptions = [ "--device=nvidia.com/gpu=all" ];
         dependsOn = [
           "caddy"
         ];
