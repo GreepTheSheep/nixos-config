@@ -39,8 +39,8 @@
       cfddns.enable = true;
       h5ai.enable = true;
       immich = {
-        enable = true;
-        enableGPU = true;
+        enable = false;
+        enableGPU = false;
       };
       jellyfin = {
         enable = true;
