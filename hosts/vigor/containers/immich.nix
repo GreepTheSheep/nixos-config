@@ -25,7 +25,7 @@
     caddySiteDirectory = "${home}/docker-containers/caddy/sites";
 
     dataDirectory = "/mnt/data/immich-lib";
-  in lib.mkIf config.host.containers.jellyfin.enable {
+  in lib.mkIf config.host.containers.immich.enable {
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
         "d ${directory} 0755 ${user} users"
@@ -67,10 +67,12 @@
         "docker-immich-redis.service"
         "docker-immich-machine-learning.service"
         "docker-immich-pgvector.service"
+        "docker-immich.service"
       ];
       wantedBy = [
         "docker-immich-redis.service"
         "docker-immich-machine-learning.service"
+        "docker-immich.service"
         "docker-immich-pgvector.service"
       ];
       serviceConfig = {
