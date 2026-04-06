@@ -22,18 +22,18 @@
   in lib.mkIf config.host.containers.backrest.enable {
     systemd.tmpfiles.rules = [
       "d ${directory} 0755 ${user} users"
-      "d ${directory}/config 0755 ${user} users"
+      "d ${directory}/backrest-data 0755 ${user} users"
     ];
 
     virtualisation.oci-containers.containers.backrest = {
       image = "garethgeorge/backrest";
       hostname = "backrest";
       volumes = [
-        "${directory}/config/data:/data"
-        "${directory}/config/config:/config"
-        "${directory}/config/cache:/cache"
-        "${directory}/config/tmp:/tmp"
-        "${directory}/config/rclone:/root/.config/rclone"
+        "${directory}/backrest-data/data:/data"
+        "${directory}/backrest-data/config:/config"
+        "${directory}/backrest-data/cache:/cache"
+        "${directory}/backrest-data/tmp:/tmp"
+        "${directory}/backrest-data/rclone:/root/.config/rclone"
         "${directory}/ssh_config:/etc/ssh/ssh_config:ro"
         "${directory}/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
         "${dataDirectory}/immich-lib:/userdata/immich:ro"

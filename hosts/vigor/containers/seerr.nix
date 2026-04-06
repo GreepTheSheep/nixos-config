@@ -21,7 +21,7 @@
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
         "d ${directory} 0755 ${user} users"
-        "d ${directory}/config 0755 ${user} users"
+        "d ${directory}/seerr-config 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/seerr.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "seerr.caddy" ''

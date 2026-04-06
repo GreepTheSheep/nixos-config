@@ -19,7 +19,7 @@
 
     moviesDirectory = "/mnt/data/movies";
     showsDirectory = "/mnt/data/shows";
-    downloadsDirectory = "/mnt/localdata/downloads";
+    downloadsDirectory = "/mnt/localdata/arr-downloads";
   in lib.mkIf config.host.containers.arr.enable {
     systemd.tmpfiles.rules = [
       "d ${directory} 0755 ${user} users"

@@ -23,6 +23,7 @@
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
         "d ${directory} 0755 ${user} users"
+        "d ${directory}/app 0755 ${user} users"
         "d ${directory}/database 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
@@ -96,7 +97,9 @@
 
       nextcloud = {
         image = "nextcloud";
+        entrypoint = "/bin/bash -c 'apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground'";
         volumes = [
+          "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
         ];
         environmentFiles = [
@@ -105,6 +108,13 @@
         environment = {
           TZ = "Europe/Paris";
         };
+        extraOptions = [
+          "--health-cmd=\"curl --silent --fail http://localhost:80 || exit 1\""
+          "--health-start-period=20s"
+          "--health-timeout=3s"
+          "--health-interval=15s"
+          "--health-retries=3"
+        ];
         networks = [
           "caddy-bridge"
           "nextcloud-network"
