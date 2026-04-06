@@ -23,6 +23,7 @@
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
         "d ${directory} 0755 ${user} users"
+        "d ${directory}/app 0755 ${user} users"
         "d ${directory}/database 0755 ${user} users"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
@@ -98,6 +99,7 @@
         image = "nextcloud";
         #entrypoint = "/bin/bash -c \"apt-get update && apt-get install ffmpeg curl -y && /entrypoint.sh apache2-foreground\"";
         volumes = [
+          "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
         ];
         environmentFiles = [
