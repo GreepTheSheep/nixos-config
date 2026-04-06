@@ -25,10 +25,6 @@
     host.containers.enable = false;
 
     nixos.base.tools = {
-    #  backrest = {
-    #    enable = true;
-    #    openFirewall = true;
-    #  };
       scrutiny = {
         enable = true;
         openFirewall = true;
