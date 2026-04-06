@@ -25,6 +25,7 @@
         volumes = [
           "/:/host:ro,rslave"
         ];
+        networks = [ "caddy-bridge" ];
         capabilities = {
           SYS_ADMIN = true;
         };
@@ -49,6 +50,7 @@
           "/dev/nvidia-uvm:/dev/nvidia-uvm"
           "/dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools"
         ];
+        networks = [ "caddy-bridge" ];
         capabilities = {
           SYS_ADMIN = true;
         };
