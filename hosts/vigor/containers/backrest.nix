@@ -36,6 +36,7 @@
         "${directory}/backrest-data/rclone:/root/.config/rclone"
         "${directory}/ssh_config:/etc/ssh/ssh_config:ro"
         "${directory}/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
+        "${home}/docker-containers:/userdata/docker-containers:ro"
         "${dataDirectory}/immich-lib:/userdata/immich:ro"
         "${dataDirectory}/nextcloud:/userdata/nextcloud:ro"
         "${repoDirectory}:/repos"
