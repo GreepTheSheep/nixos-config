@@ -24,6 +24,7 @@
       ];
       daemon.settings = {
         registry-mirrors = [ "https://mirror.gcr.io" ];
+        features.cdi = true;
       };
     };
 
