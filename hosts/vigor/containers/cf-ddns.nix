@@ -43,6 +43,66 @@
                 proxied = false;
                 type = "AAAA";
               }
+              {
+                name = "4.vigor";
+                proxied = false;
+                type = "A";
+              }
+              {
+                name = "6.vigor";
+                proxied = false;
+                type = "AAAA";
+              }
+              {
+                name = "jellyfin";
+                proxied = true;
+                type = "A";
+              }
+              {
+                name = "jellyfin";
+                proxied = true;
+                type = "AAAA";
+              }
+              {
+                name = "jellyfin-requests";
+                proxied = true;
+                type = "A";
+              }
+              {
+                name = "jellyfin-requests";
+                proxied = true;
+                type = "AAAA";
+              }
+              {
+                name = "cloud";
+                proxied = true;
+                type = "A";
+              }
+              {
+                name = "cloud";
+                proxied = true;
+                type = "AAAA";
+              }
+              {
+                name = "immich";
+                proxied = true;
+                type = "A";
+              }
+              {
+                name = "immich";
+                proxied = true;
+                type = "AAAA";
+              }
+              {
+                name = "cdn";
+                proxied = true;
+                type = "A";
+              }
+              {
+                name = "cdn";
+                proxied = true;
+                type = "AAAA";
+              }
             ];
           }];
         }];
@@ -58,6 +118,10 @@
       environment = {
         TZ = "Europe/Paris";
       };
+      extraOptions = [
+        "--security-opt=no-new-privileges:true"
+        "--network=host"
+      ];
     };
   };
 }
