@@ -11,7 +11,20 @@
     };
   };
 
-  config = lib.mkIf config.host.containers.cfddns.enable {
+  config = let
+    subDomains = [
+      "vigor"
+      "jellyfin"
+      "jellyfin-requests"
+      "immich"
+      "cloud"
+      "cdn"
+    ];
+    ipv4subDomains = [ "4.vigor" ];
+    ipv6subDomains = [ "6.vigor" ];
+
+    domain = "greep.fr";
+  in lib.mkIf config.host.containers.cfddns.enable {
     sops.secrets = {
       "docker/cfddns/api-token" = {};
     };
@@ -29,10 +42,10 @@
       ];
       environment = {
         TZ = "Europe/Paris";
-        DOMAINS = "vigor.greep.fr,cdn.greep.fr,cloud.greep.fr,immich.greep.fr,jellyfin.greep.fr,jellyfin-requests.greep.fr";
-        IP4_DOMAINS = "4.vigor.greep.fr";
-        IP6_DOMAINS = "6.vigor.greep.fr";
-        PROXIED = "!is(sub(vigor.greep.fr)";
+        DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") subDomains;
+        IP4_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv4subDomains;
+        IP6_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv6subDomains;
+        PROXIED = "!is(sub(vigor.greep.fr))";
         IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
         IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
       };
