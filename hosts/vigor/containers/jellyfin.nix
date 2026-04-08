@@ -38,7 +38,29 @@
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/jellyfin.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "jellyfin.caddy" ''
           jellyfin.greep.fr {
-            reverse_proxy jellyfin:8096
+            import error-handler
+
+            vars {
+              websiteName "Jellyfin"
+            }
+
+            import hsts
+
+            #error 503 # Maintenance
+
+            reverse_proxy jellyfin:8096 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
+
+            @primaryImages {
+              path_regexp primaryImages ^/Items/[0-9a-zA-Z-]+/Images/Primary$
+            }
+            header @primaryImages -Content-Disposition
+
+            basicauth /metrics* {
+              jellyfin $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+            }
           }
         ''}"
       ])

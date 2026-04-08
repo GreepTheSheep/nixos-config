@@ -26,7 +26,20 @@
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/seerr.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "seerr.caddy" ''
           jellyfin-requests.greep.fr {
-            reverse_proxy seerr:5055
+            import error-handler
+
+            vars {
+              websiteName "Demandes Jellyfin"
+            }
+
+            import hsts
+
+            #error 503 # Maintenance
+
+            reverse_proxy seerr:5055 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
           }
         ''}"
       ])

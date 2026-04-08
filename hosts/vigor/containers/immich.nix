@@ -35,7 +35,20 @@
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/immich.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "immich.caddy" ''
           immich.greep.fr {
-            reverse_proxy immich:2283
+            import error-handler
+
+            vars {
+              websiteName "Immich"
+            }
+
+            import hsts
+
+            #error 503 # Maintenance
+
+            reverse_proxy immich:2283 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
           }
         ''}"
       ])

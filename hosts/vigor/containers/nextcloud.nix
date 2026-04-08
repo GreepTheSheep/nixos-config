@@ -29,7 +29,18 @@
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/nextcloud.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "nextcloud.caddy" ''
           cloud.greep.fr {
-            reverse_proxy nextcloud:80
+            import error-handler
+
+            vars {
+              websiteName "Cloud Greep"
+            }
+
+            #error 503 # Maintenance
+
+            reverse_proxy nextcloud:80 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
           }
         ''}"
       ])

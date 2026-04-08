@@ -28,7 +28,20 @@
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/h5ai.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "h5ai.caddy" ''
           cdn.greep.fr {
-            reverse_proxy h5ai:80
+            import error-handler
+
+            vars {
+              websiteName "CDN Greep"
+            }
+
+            import hsts
+
+            #error 503 # Maintenance
+
+            reverse_proxy h5ai:80 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
           }
         ''}"
       ])

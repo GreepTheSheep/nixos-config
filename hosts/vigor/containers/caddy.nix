@@ -76,22 +76,65 @@
           ${lib.optionalString config.host.containers.arr.enable ''
             redir /prowlarr /prowlarr/
             handle /prowlarr/* {
-              reverse_proxy prowlarr:9696
+              import error-handler
+
+              vars {
+                websiteName "Prowlarr"
+              }
+
+              #error 503 # Maintenance
+
+              reverse_proxy prowlarr:9696 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
             }
 
             redir /radarr /radarr/
             handle /radarr/* {
-              reverse_proxy radarr:7878
+              import error-handler
+
+              vars {
+                websiteName "Radarr"
+              }
+
+              #error 503 # Maintenance
+
+              reverse_proxy radarr:7878 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
             }
 
             redir /sonarr /sonarr/
             handle /sonarr/* {
-              reverse_proxy sonarr:8989
+              import error-handler
+
+              vars {
+                websiteName "Sonarr"
+              }
+
+              #error 503 # Maintenance
+
+              reverse_proxy sonarr:8989 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
             }
 
             redir /qbit /qbit/
             handle_path /qbit/* {
+              import error-handler
+
+              vars {
+                websiteName "qBittorrent"
+              }
+
+              #error 503 # Maintenance
+
               reverse_proxy wireguard:8686 {
+                fail_duration 30s
+                unhealthy_status 503
                 header_up Host wireguard:8686
                 header_up X-Forwarded-Host {host}:{hostport}
                 header_up -Origin
@@ -103,25 +146,66 @@
           ${lib.optionalString config.host.containers.backrest.enable ''
             redir /backrest /backrest/
             handle_path /backrest/* {
-              reverse_proxy backrest:9898
+              import error-handler
+
+              vars {
+                websiteName "Backrest"
+              }
+
+              import hsts
+
+              #error 503 # Maintenance
+
+              reverse_proxy backrest:9898 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
             }
           ''}
 
           ${lib.optionalString config.host.containers.prometheus.enable ''
             redir /node-metrics /node-metrics/
             handle_path /node-metrics/* {
-              reverse_proxy node-exporter:9100
               basicauth /* {
                 vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+              }
+
+              import error-handler
+
+              vars {
+                websiteName "Node Metrics"
+              }
+
+              import hsts
+
+              #error 503 # Maintenance
+
+              reverse_proxy node-exporter:9100 {
+                fail_duration 30s
+                unhealthy_status 503
               }
             }
           ''}
           ${lib.optionalString config.host.containers.prometheus.enableDgcmExporter ''
             redir /dgcm-metrics /dgcm-metrics/
             handle_path /dgcm-metrics/* {
-              reverse_proxy dgcm-exporter:9400
               basicauth /* {
                 vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+              }
+
+              import error-handler
+
+              vars {
+                websiteName "DGCM Metrics"
+              }
+
+              import hsts
+
+              #error 503 # Maintenance
+
+              reverse_proxy dgcm-exporter:9400  {
+                fail_duration 30s
+                unhealthy_status 503
               }
             }
           ''}
