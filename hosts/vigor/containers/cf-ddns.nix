@@ -14,116 +14,28 @@
   config = lib.mkIf config.host.containers.cfddns.enable {
     sops.secrets = {
       "docker/cfddns/api-token" = {};
-      "docker/cfddns/auth-key" = {};
-      "docker/cfddns/account-email" = {};
-      "docker/cfddns/zone-id" = {};
     };
 
     sops.templates = {
-      "cfddns-config.json".content = builtins.toJSON {
-        accounts = [{
-          authentication = {
-            api_token = "${config.sops.placeholder."docker/cfddns/api-token"}";
-            api_key = {
-              auth_key = "${config.sops.placeholder."docker/cfddns/auth-key"}";
-              account_email = "${config.sops.placeholder."docker/cfddns/account-email"}";
-            };
-          };
-          zones = [{
-            id = "${config.sops.placeholder."docker/cfddns/zone-id"}";
-            name = "greep.fr";
-            subdomains = [
-              {
-                name = "vigor";
-                proxied = false;
-                type = "A";
-              }
-              {
-                name = "vigor";
-                proxied = false;
-                type = "AAAA";
-              }
-              {
-                name = "4.vigor";
-                proxied = false;
-                type = "A";
-              }
-              {
-                name = "6.vigor";
-                proxied = false;
-                type = "AAAA";
-              }
-              {
-                name = "jellyfin";
-                proxied = true;
-                type = "A";
-              }
-              {
-                name = "jellyfin";
-                proxied = true;
-                type = "AAAA";
-              }
-              {
-                name = "jellyfin-requests";
-                proxied = true;
-                type = "A";
-              }
-              {
-                name = "jellyfin-requests";
-                proxied = true;
-                type = "AAAA";
-              }
-              {
-                name = "cloud";
-                proxied = true;
-                type = "A";
-              }
-              {
-                name = "cloud";
-                proxied = true;
-                type = "AAAA";
-              }
-              {
-                name = "immich";
-                proxied = true;
-                type = "A";
-              }
-              {
-                name = "immich";
-                proxied = true;
-                type = "AAAA";
-              }
-              {
-                name = "cdn";
-                proxied = true;
-                type = "A";
-              }
-              {
-                name = "cdn";
-                proxied = true;
-                type = "AAAA";
-              }
-            ];
-          }];
-          updater = {
-            onlyOnChange = true;
-          };
-        }];
-      };
+      "cfddns-token.env".content = ''
+        CLOUDFLARE_API_TOKEN=${config.sops.placeholder."docker/cfddns/api-token"}
+      '';
     };
 
     virtualisation.oci-containers.containers."cloudflare-ddns" = {
-      image = "ghcr.io/dimpen/cloudflare-ddns-next";
-      user = "0:0";
-      volumes = [
-        "${config.sops.templates."cfddns-config.json".path}:/config.json:ro"
+      image = "timothyjmiller/cloudflare-ddns";
+      environmentFiles = [
+        config.sops.templates."cfddns-token.env".path
       ];
       environment = {
         TZ = "Europe/Paris";
+        DOMAINS = "vigor.greep.fr,cdn.greep.fr,cloud.greep.fr,immich.greep.fr,jellyfin.greep.fr,jellyfin-requests.greep.fr";
+        IP4_DOMAINS = "4.vigor.greep.fr";
+        IP6_DOMAINS = "6.vigor.greep.fr";
+        PROXIED = "!is(sub(vigor.greep.fr)";
+        IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
+        IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
       };
-      cmd = [
-        "--interval=300"
-      ];
       extraOptions = [
         "--security-opt=no-new-privileges:true"
         "--network=host"
