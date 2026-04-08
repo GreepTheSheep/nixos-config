@@ -53,9 +53,10 @@
       capabilities = {
         SYS_ADMIN = true;
       };
+      entrypoint = "/bin/bash";
       cmd = [
-        "apk add sshfs"
-        "&&" "/backrest"
+        "-c"
+        "apk add sshfs && /sbin/tini -- /docker-entrypoint && /backrest"
       ];
       dependsOn = [
         "caddy"
