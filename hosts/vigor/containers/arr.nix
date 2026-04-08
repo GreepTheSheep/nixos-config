@@ -61,6 +61,8 @@
           "${directory}/prowlarr-config:/config"
         ];
         environment = {
+          PUID = "1000";
+          GUID = "1000";
           TZ = "Europe/Paris";
         };
         networks = [
@@ -82,6 +84,8 @@
           "${downloadsDirectory}:/downloads"
         ];
         environment = {
+          PUID = "1000";
+          GUID = "1000";
           TZ = "Europe/Paris";
         };
         networks = [
@@ -103,6 +107,8 @@
           "${downloadsDirectory}:/downloads"
         ];
         environment = {
+          PUID = "1000";
+          GUID = "1000";
           TZ = "Europe/Paris";
         };
         networks = [
@@ -149,6 +155,8 @@
         environment = {
           TZ = "Europe/Paris";
           WEBUI_PORT = "8686";
+          PUID = "1000";
+          GUID = "1000";
         };
         volumes = [
           "${directory}/qbittorrent-config:/config"
