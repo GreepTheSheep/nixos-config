@@ -54,7 +54,7 @@
         SYS_ADMIN = true;
       };
       cmd = [
-        "apk" "add" "sshfs"
+        "apk add sshfs"
         "&&" "/backrest"
       ];
       dependsOn = [
