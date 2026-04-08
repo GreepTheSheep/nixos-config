@@ -58,6 +58,9 @@
         "-c"
         "apk add sshfs && /backrest"
       ];
+      extraOptions = [
+        "--privileged"
+      ];
       dependsOn = [
         "caddy"
       ];
