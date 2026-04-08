@@ -56,7 +56,7 @@
       entrypoint = "/bin/bash";
       cmd = [
         "-c"
-        "apk add sshfs && /sbin/tini -- /docker-entrypoint && /backrest"
+        "apk add sshfs && /backrest"
       ];
       dependsOn = [
         "caddy"
