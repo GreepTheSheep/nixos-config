@@ -53,8 +53,8 @@
       capabilities = {
         SYS_ADMIN = true;
       };
-      entrypoint = "/bin/bash";
       cmd = [
+        "/bin/bash"
         "-c"
         "apk add sshfs && /backrest"
       ];
