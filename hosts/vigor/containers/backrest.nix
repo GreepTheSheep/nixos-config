@@ -26,9 +26,10 @@
     ];
 
     virtualisation.oci-containers.containers.backrest = {
-      image = "garethgeorge/backrest";
+      image = "ghcr.io/garethgeorge/backrest";
       hostname = "backrest";
       volumes = [
+        "/dev/fuse:/dev/fuse"
         "${directory}/backrest-data/data:/data"
         "${directory}/backrest-data/config:/config"
         "${directory}/backrest-data/cache:/cache"
@@ -49,6 +50,13 @@
         TZ = "Europe/Paris";
       };
       networks = [ "caddy-bridge" ];
+      capabilities = {
+        SYS_ADMIN = true;
+      };
+      cmd = [
+        "apk" "add" "sshfs"
+        "&&" "/backrest"
+      ];
       dependsOn = [
         "caddy"
       ];
