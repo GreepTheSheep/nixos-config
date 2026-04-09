@@ -8,7 +8,9 @@ sudo nix build .#nixosConfigurations.greep-nixos-live.config.system.build.isoIma
 
 This will build a full live ISO suitable for most configurations and virtual machines.
 
-**Only supported arch is x86_64 at the moment.** This ISO image will be ~6GB of size.
+**Only supported arch is x86_64 at the moment.**
+
+Building the ISO image will take a lot of disk space, I suggest having more than 64GB of space left
 
 After completing the build, you can mount it on a VM or copy it to a USB stick using `dd`
 
