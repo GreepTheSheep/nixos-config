@@ -45,14 +45,6 @@
       templates = lib.mkForce {};
     };
 
-    virtualisation = {
-      vmware.guest.enable = true;
-      virtualbox.guest.enable = true;
-      hypervGuest.enable = true;
-    };
-
-    services.qemuGuest.enable = true;
-
     hardware = {
       enableAllFirmware = true;
       enableAllHardware = true;
