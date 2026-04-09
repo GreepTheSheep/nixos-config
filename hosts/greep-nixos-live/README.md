@@ -18,6 +18,6 @@ After completing the build, you can mount it on a VM or copy it to a USB stick u
 # Get the sdX value of the USB stick
 lsblk
 
-# Copy the ISO image
-sudo dd if=./result/iso.iso of=/dev/sdX bs=4M status=progress && sync
+# Copy the ISO image to the USB stick
+sudo dd if=./result/iso/nixos*.iso of=/dev/sdX bs=4M status=progress && sync
 ```
