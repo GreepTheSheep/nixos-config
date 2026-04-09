@@ -69,10 +69,11 @@
 
     nixos.userEnvironment = {
       enable = true;
-      flatpak.enable = true;
-      io = {
-        bluetooth.enable = true;
-      };
+      config.enable = lib.mkForce false;
+      non-nix-apps.enable = lib.mkForce false;
+      io.bluetooth.enable = true;
+      kdeconnect.enable = lib.mkForce false;
+      spotify.enable = lib.mkForce false;
     };
 
     services.spice-autorandr.enable = true;
