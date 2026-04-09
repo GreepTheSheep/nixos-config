@@ -110,12 +110,12 @@
       };
 
     hosts = {
-      "jax"           = "x86_64-linux";
-      "pomni"         = "x86_64-linux";
-      "jax-server-vm" = "x86_64-linux";
-      "vigor"         = "x86_64-linux";
-      "varian"        = "aarch64-linux";
-      "greep-nixos-live"       = "x86_64-linux";
+      "jax"                   = "x86_64-linux";
+      "pomni"                 = "x86_64-linux";
+      "jax-server-vm"         = "x86_64-linux";
+      "vigor"                 = "x86_64-linux";
+      "varian"                = "aarch64-linux";
+      "greep-nixos-live"      = "x86_64-linux";
     };
   in
   {
