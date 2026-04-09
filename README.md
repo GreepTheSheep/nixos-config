@@ -8,9 +8,9 @@
 
 Use the `full_install.sh` script using `bash`
 
-## Build the Live ISO
+## Live ISO
 
-`sudo nix build .#nixosConfigurations.liveIso.config.system.build.isoImage`
+See [this page](hosts/greep-nixos-live/README.md) for more informations about live environment.
 
 ## Sops Secrets (age)
 

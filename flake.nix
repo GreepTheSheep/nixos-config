@@ -88,7 +88,7 @@
         inherit system;
         specialArgs = inputs // { inherit inputs; };
         modules = (
-          if hostname == "liveIso" then
+          if hostname == "greep-nixos-live" then
             [
               ({ pkgs, modulesPath, ... }: {
                 imports = [
@@ -96,7 +96,7 @@
                 ];
               })
               ./nixosModules/default.nix
-              ./hosts/live-iso.nix
+              ./hosts/${hostname}/default.nix
               ./homeModules/homemanager.nix
             ]
           else
@@ -115,7 +115,7 @@
       "jax-server-vm" = "x86_64-linux";
       "vigor"         = "x86_64-linux";
       "varian"        = "aarch64-linux";
-      "liveIso"       = "x86_64-linux";
+      "greep-nixos-live"       = "x86_64-linux";
     };
   in
   {

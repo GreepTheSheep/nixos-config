@@ -152,8 +152,8 @@ get_hosts_from_flake() {
 
     rm -f "$tmpfile"
 
-    # Remove liveIso from hosts as it is not a real host
-    hosts=$(echo "$hosts" | grep -v "liveIso" || true)
+    # Remove greep-nixos-live from hosts as it is not a real host
+    hosts=$(echo "$hosts" | grep -v "greep-nixos-live" || true)
 
     echo "$hosts"
 }
@@ -1183,11 +1183,11 @@ create_host_files() {
     fi
 
     echo "Ajout de '${FLAKE_CONFIG}' dans flake.nix..."
-    # Insère le nouvel hôte avant "liveIso" (plus robuste que sed avec \n)
+    # Insère le nouvel hôte avant "greep-nixos-live" (plus robuste que sed avec \n)
     awk -v host="$FLAKE_CONFIG" '
-        !done && /^\s*"liveIso"\s*$/ {
+        !done && /^\s*"greep-nixos-live"\s*$/ {
             line = $0
-            sub(/"liveIso"/, "\"" host "\"", line)
+            sub(/"greep-nixos-live"/, "\"" host "\"", line)
             print line
             done = 1
         }
