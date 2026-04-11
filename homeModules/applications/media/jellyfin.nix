@@ -24,5 +24,23 @@
     ] ++ lib.optionals (config.homeManager.applications.media.jellyfin.enableRPC && config.homeManager.applications.communication.discord.enable) [
       jellyfin-rpc
     ];
+
+    systemd.user.services.jellyfin-rpc = lib.mkIf (config.homeManager.applications.media.jellyfin.enableRPC && config.homeManager.applications.communication.discord.enable) {
+      Unit = {
+        Description = "Jellyfin RPC";
+        After = [ "network-online.target" ];
+        Wants = [ "network-online.target" ];
+      };
+
+      Service = {
+        ExecStart = "${pkgs.jellyfin-rpc}/bin/jellyfin-rpc";
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
   };
 }
