@@ -9,6 +9,18 @@
         example = true;
         description = "Enable nixos vm.";
       };
+
+      memorySize = lib.mkOption {
+        type = lib.types.int;
+        default = 8192;
+        description = "RAM size of the VM in MiB";
+      };
+
+      cores = lib.mkOption {
+        type = lib.types.int;
+        default = 8;
+        description = "Number of cores enabled in this VM";
+      };
     };
   };
 
@@ -19,12 +31,10 @@
 
     virtualisation.vmVariant = {
       virtualisation = {
-        #diskSize = 32768;
-        #diskImage = "";
-        cores = 8;
+        cores = config.nixos.system.nixosvm.cores;
         graphics = true;
         useEFIBoot = true;
-        memorySize = 4096;
+        memorySize = config.nixos.system.nixosvm.memorySize;
         useSecureBoot = false;
       };
     };

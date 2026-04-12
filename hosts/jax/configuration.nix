@@ -53,7 +53,10 @@ config = {
 
     nixos.system = {
       secureboot.enable = true;
-      nixosvm.enable = true;
+      nixosvm = {
+        enable = true;
+        memorySize = 24576;
+      };
 
       user.defaultuser = {
         pass = "$y$j9T$Gmd5se3DKJe4508IpvpNK.$Yq2XI4JqqbBrBIOSfjlWHYcKx.Po.ZEkqcKYm7LEtx/";
