@@ -10,6 +10,7 @@ _:
       antigravity.enable = true;
       claudecode.enable = true;
       diff.enable = true;
+      opencode.enable = true;
     };
 
     editing.video.enableDavinciResolve = true;
