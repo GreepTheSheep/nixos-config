@@ -29,6 +29,9 @@
   # In VM builds, enp12s0 is not available
   virtualisation.vmVariant = {
     networking.interfaces.enp12s0 = lib.mkForce { };
+    networking.defaultGateway = lib.mkForce null;
+    networking.defaultGateway6 = lib.mkForce null;
+    nixos.system.networking.enable = lib.mkForce false;
   };
 
   nixos.system.firewall = {
