@@ -21,6 +21,11 @@
             command = "/run/current-system/sw/bin/nixos-rebuild";
             options = [ "NOPASSWD" ];
           }
+        ] ++ lib.optionals (config.nixos.system.nixosvm.enable) [
+          {
+            command = "/opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
+            options = [ "NOPASSWD" ];
+          }
         ];
       }
     ];
