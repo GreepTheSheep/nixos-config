@@ -24,5 +24,10 @@
       helium.enable = true;
       feishin.enable = true;
     };
+
+    # Force disable apps on vmVariant because apps will not be installed there
+    virtualisation.vmVariant = {
+      nixos.userEnvironment.non-nix-apps.enable = lib.mkForce false;
+    };
   };
 }
