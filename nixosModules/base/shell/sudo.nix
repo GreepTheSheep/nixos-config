@@ -23,7 +23,7 @@
           }
         ] ++ lib.optionals (config.nixos.system.nixosvm.enable) [
           {
-            command = "/opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
+            command = "/opt/nixos-sandbox/result/bin/run-${config.networking.hostName}-vm";
             options = [ "NOPASSWD" ];
           }
         ];
