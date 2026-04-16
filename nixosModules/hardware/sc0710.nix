@@ -5,6 +5,12 @@
 let
   cfg = config.nixos.hardware.sc0710;
 
+  # Compatible kernel versions (major.minor) — driver is broken on 7+
+  # https://github.com/Nakildias/sc0710/blob/main/README.md
+  compatibleKernels = [ "6.12" "6.13" "6.14" "6.15" "6.16" "6.17" "6.18" "6.19" ];
+
+  currentKernelMajorMinor = lib.versions.majorMinor config.boot.kernelPackages.kernel.version;
+
   # Source from GitHub
   sc0710-src = pkgs.fetchFromGitHub {
     owner = "Nakildias";
@@ -66,6 +72,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.elem currentKernelMajorMinor compatibleKernels;
+        message = "sc0710 driver is not compatible with kernel ${currentKernelMajorMinor}. Compatible versions: ${lib.concatStringsSep ", " compatibleKernels}";
+      }
+    ];
+
     boot.extraModulePackages = [ sc0710 ];
     boot.kernelModules = [ "sc0710" ];
 
