@@ -11,7 +11,7 @@
       };
 
       kernel = lib.mkOption {
-        type = lib.types.package;
+        type = lib.types.raw;
         default = pkgs.linuxPackages_latest;
         example = pkgs.linuxPackages_zen;
         description = "Set the default kernel package.";
