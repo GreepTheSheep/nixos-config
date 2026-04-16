@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   options.host = {
@@ -52,6 +52,7 @@ config = {
     };
 
     nixos.system = {
+      boot.kernel = pkgs.linuxPackages_zen;
       secureboot.enable = true;
       nixosvm = {
         enable = true;
