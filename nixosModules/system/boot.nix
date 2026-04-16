@@ -9,6 +9,13 @@
         example = true;
         description = "Set boot options.";
       };
+
+      kernel = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.linuxPackages_latest;
+        example = pkgs.linuxPackages_zen;
+        description = "Set the default kernel package.";
+      };
     };
   };
 
@@ -26,7 +33,7 @@
       "fuse"
     ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.kernelPackages = config.nixos.system.boot.kernel;
     boot.supportedFilesystems = [
       "ntfs"
     ];
