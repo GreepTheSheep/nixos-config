@@ -44,6 +44,7 @@ config = {
       };
     };
 
+    virtualisation.vmware.guest.enable = true;
     nixos.hardware = {
       amdcpu.enable = true;
       #sc0710.enable = true; # Elgato 4K60 Pro MK.2
