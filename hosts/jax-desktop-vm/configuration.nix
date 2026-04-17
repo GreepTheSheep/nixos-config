@@ -42,6 +42,13 @@ config = {
       #sc0710.enable = true; # Elgato 4K60 Pro MK.2
     };
 
+    nixos.server = {
+      ollama = {
+        enable = true;
+        openFirewall = true;
+      };
+    };
+
     nixos.system = {
       user.defaultuser = {
         pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
