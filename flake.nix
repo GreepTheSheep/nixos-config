@@ -112,6 +112,7 @@
     hosts = {
       "jax"                   = "x86_64-linux";
       "pomni"                 = "x86_64-linux";
+      "jax-desktop-vm"        = "x86_64-linux";
       "jax-server-vm"         = "x86_64-linux";
       "vigor"                 = "x86_64-linux";
       "varian"                = "aarch64-linux";
