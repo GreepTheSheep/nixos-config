@@ -36,14 +36,6 @@ config = {
       };
     };
 
-    nixos.base = {
-      caddy.enable = true;
-      tools = {
-        backrest.enable = true;
-        scrutiny.enable = true;
-      };
-    };
-
     virtualisation.vmware.guest.enable = true;
     nixos.hardware = {
       amdcpu.enable = true;
