@@ -21,5 +21,9 @@
     environment.systemPackages = with pkgs; [
       at
     ];
+
+    users.users."${config.nixos.system.user.defaultuser.name}" = {
+      extraGroups = [ "at" ];
+    };
   };
 }
