@@ -46,6 +46,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sc0710.url = "github:Nakildias/sc0710";
+
     # Blocklists
     ads = {
       url = "https://blocklistproject.github.io/Lists/ads.txt";
