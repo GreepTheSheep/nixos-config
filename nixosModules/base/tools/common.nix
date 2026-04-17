@@ -45,6 +45,7 @@
       flac
       aha
       kbd
+      at
       jp2a
       nss
       nss.tools
