@@ -2,12 +2,12 @@ _:
 
 {
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/c77642a3-22d0-4f61-8afc-fe0bf506b035";
+    { device = "/dev/disk/by-uuid/4bae51e2-a37a-4c2f-8e34-8bb62706b22d";
       fsType = "btrfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F17A-374A";
+    { device = "/dev/disk/by-uuid/DF6D-8B80";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
