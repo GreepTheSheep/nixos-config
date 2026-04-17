@@ -26,7 +26,7 @@
 
     hardware.sc0710 = {
       enable = true;
-      enableFirmware = nixos.hardware.sc0710.enableFirmware;
+      enableFirmware = config.nixos.hardware.sc0710.enableFirmware;
     };
   };
 }
