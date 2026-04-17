@@ -50,7 +50,6 @@ config = {
     };
 
     nixos.system = {
-      secureboot.enable = true;
       user.defaultuser = {
         pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
       };
