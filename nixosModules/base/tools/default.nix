@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./at.nix
     ./backrest.nix
     ./common.nix
     ./git.nix
@@ -24,6 +25,7 @@
 
   config = lib.mkIf config.nixos.base.tools.enable {
     nixos.base.tools = {
+      at.enable = true;
       backrest.enable = lib.mkDefault false;
       common.enable = true;
       git.enable = true;
