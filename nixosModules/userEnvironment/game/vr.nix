@@ -21,24 +21,24 @@
         type = lib.types.bool;
         default = false;
         example = true;
-        description = "Enable the WiVRn runtime. This will disable the default runtime Monardo.";
+        description = "Enable the WiVRn runtime.";
       };
     };
   };
 
   config = lib.mkIf config.nixos.userEnvironment.game.vr.enable {
-    services.monado = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableWiVRn) {
+    services.monado = {
       enable = true;
       defaultRuntime = true; # Register as default OpenXR runtime
     };
 
-    systemd.user.services.monado.environment = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableWiVRn) {
+    systemd.user.services.monado.environment = {
       STEAMVR_LH_ENABLE = "1";
       XRT_COMPOSITOR_COMPUTE = "1";
       WMR_HANDTRACKING = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableMonardoHandTracking) "0";
     };
 
-    #xdg.configFile."openxr/1/active_runtime.json".source = lib.mkIf (!config.nixos.userEnvironment.game.vr.enableWiVRn) "${pkgs.monado}/share/openxr/1/openxr_monado.json";
+    #xdg.configFile."openxr/1/active_runtime.json".source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";
 
     services.wivrn = lib.mkIf config.nixos.userEnvironment.game.vr.enableWiVRn {
       enable = true;

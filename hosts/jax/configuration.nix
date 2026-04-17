@@ -71,7 +71,7 @@ config = {
         enable = true;
         vr = {
           enable = true;
-          #enableWiVRn = true;
+          enableWiVRn = true;
         };
       };
       io = {
