@@ -3,6 +3,10 @@
 { config, lib, pkgs, sc0710, ... }:
 
 {
+  imports = [
+    sc0710.nixosModules.default
+  ];
+
   options.nixos.hardware.sc0710 = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -20,10 +24,6 @@
   };
 
   config = lib.mkIf config.nixos.hardware.sc0710.enable {
-    imports = [
-      sc0710.nixosModules.default
-    ];
-
     hardware.sc0710 = {
       enable = true;
       enableFirmware = config.nixos.hardware.sc0710.enableFirmware;
