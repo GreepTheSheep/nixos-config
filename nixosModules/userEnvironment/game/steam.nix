@@ -27,15 +27,15 @@
         }))
         (lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.millennium-steam)
       ];
-      extraCompatPackages = with pkgs; [
-        steam-play-none
-        proton-ge-bin
-      ];
+      #extraCompatPackages = with pkgs; [
+        #steam-play-none
+        #proton-ge-bin
+      #];
       protontricks.enable = true;
       gamescopeSession.enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-      extest.enable = true;
+      #extest.enable = true;
       localNetworkGameTransfers.openFirewall = true;
     };
 
