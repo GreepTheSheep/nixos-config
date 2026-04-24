@@ -137,6 +137,8 @@ in
           kate
           colord-kde
           spectacle
+          libkdepim
+          kdepim-runtime
           kdepim-addons
           kcalc
           korganizer
