@@ -15,6 +15,7 @@
   config = lib.mkIf config.homeManager.applications.browser.firefox.enable {
     programs.firefox = {
       enable = true;
+      configPath = "${config.xdg.configHome}/mozilla/firefox";
       package = (
         pkgs.wrapFirefox (pkgs.firefox-unwrapped.override {
           pipewireSupport = true;
