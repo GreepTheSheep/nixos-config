@@ -7,7 +7,14 @@
         type = lib.types.bool;
         default = false;
         example = true;
-        description = "Enable OpenCode.";
+        description = "Enable OpenCode Terminal.";
+      };
+
+      enableDesktop = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        example = false;
+        description = "Enable OpenCode Desktop. OpenCode Terminal must be enabled to enable the Desktop App.";
       };
     };
   };
@@ -16,5 +23,9 @@
     programs.opencode = {
       enable = true;
     };
+
+    home.packages = with pkgs; lib.mkIf config.homeManager.applications.development.opencode.enableDesktop [
+      opencode-desktop
+    ];
   };
 }
