@@ -5,14 +5,14 @@ let
 
   autoRebuildRebootScript = pkgs.writeShellScript "auto-rebuild-reboot" ''
     ${pkgs.su}/bin/su ${user} -c '${pkgs.git}/bin/git -C /home/${user}/nixos-config pull'
-    ${config.system.build.nixos-rebuild}/bin/nixos-rebuild boot || true
+    ${pkgs.su}/bin/su ${user} -c '${pkgs.sudo}/bin/sudo ${config.system.build.nixos-rebuild}/bin/nixos-rebuild boot || true'
     ${pkgs.systemd}/bin/systemctl reboot
   '';
 in
 {
   systemd.services.auto-rebuild-reboot = {
     description = "Git pull, nixos-rebuild boot and reboot";
-    path = with pkgs; [ su git ];
+    path = with pkgs; [ su sudo git ];
     serviceConfig = {
       Type = "oneshot";
       ExecStart = autoRebuildRebootScript;
