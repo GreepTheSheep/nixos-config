@@ -5,6 +5,12 @@ _:
     enable = true;
 
     sync.deskflow.enable = true;
-    #development.claudecode.enable = true;
+
+    development = {
+      antigravity.enable = true;
+      claudecode.enable = true;
+      diff.enable = true;
+      opencode.enable = true;
+    };
   };
 }
