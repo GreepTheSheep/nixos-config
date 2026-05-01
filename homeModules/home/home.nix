@@ -20,7 +20,7 @@
     home = {
       username = "${osConfig.nixos.system.user.defaultuser.name}";
       homeDirectory = "/home/${osConfig.nixos.system.user.defaultuser.name}";
-      stateVersion = "25.11";
+      stateVersion = "26.05";
     };
 
     programs.home-manager.enable = true;
