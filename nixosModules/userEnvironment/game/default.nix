@@ -4,6 +4,7 @@
   imports = [
     ./gamemode.nix
     ./gamescope.nix
+    ./osu.nix
     ./steam.nix
     ./vr.nix
   ];
@@ -23,6 +24,7 @@
     nixos.userEnvironment.game = {
       gamemode.enable = true;
       gamescope.enable = true;
+      osu.enable = lib.mkDefault false;
       steam.enable = true;
       vr.enable = lib.mkDefault false;
     };

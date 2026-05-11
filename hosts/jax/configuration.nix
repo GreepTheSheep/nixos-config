@@ -68,6 +68,7 @@ config = {
       flatpak.enable = true;
       game = {
         enable = true;
+        osu.enable = true;
         steam.enableMillennium = false;
         vr = {
           enable = true;
