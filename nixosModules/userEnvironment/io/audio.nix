@@ -34,6 +34,20 @@
           {
             matches = [
               {
+                "application.process.binary" = "osu!";
+              }
+            ];
+
+            actions = {
+              update-props = {
+                pulse.min.quantum = "128/48000";
+                pulse.max.quantum = "128/48000";
+              };
+            };
+          }
+          {
+            matches = [
+              {
                 "application.process.binary" = "wine64-preloader";
               }
             ];
@@ -54,7 +68,7 @@
             # Augmente la taille du buffer pour éviter les coupures lors de pics CPU
             "default.clock.rate" = 48000;
             "default.clock.quantum" = 2048;  # Buffer plus grand = moins de glitches
-            "default.clock.min-quantum" = 1024;
+            "default.clock.min-quantum" = 128;
             "default.clock.max-quantum" = 8192;
 
             # Priorité temps réel pour l'audio
