@@ -9,34 +9,46 @@
         example = true;
         description = "Enable steam.";
       };
+
+      enableMillennium = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Enable Millennium (steambrew).";
+      };
     };
   };
 
   config = lib.mkIf config.nixos.userEnvironment.game.steam.enable {
-    #nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+    nixpkgs.overlays = lib.mkIf config.nixos.userEnvironment.game.steam.enableMillennium [ inputs.millennium.overlays.default ];
     programs.steam = {
       enable = true;
-      #package = lib.mkMerge [
-        #(lib.mkIf config.nixos.userEnvironment.game.vr.enable (pkgs.millennium-steam.override {
-          #extraProfile = ''
-            # Fixes timezones on VRChat
-            #unset TZ
-            # Allows Monado/WiVRn to be used
-            #export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
-          #'';
-        #}))
-        #(lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.millennium-steam)
-      #];
       package = lib.mkMerge [
-        (lib.mkIf config.nixos.userEnvironment.game.vr.enable (pkgs.steam.override {
-          extraProfile = ''
-            # Fixes timezones on VRChat
-            unset TZ
-            # Allows Monado/WiVRn to be used
-            export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
-          '';
-        }))
-        (lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.steam)
+
+        (lib.mkIf config.nixos.userEnvironment.game.steam.enableMillennium (lib.mkMerge [
+          (lib.mkIf config.nixos.userEnvironment.game.vr.enable (pkgs.millennium-steam.override {
+            extraProfile = ''
+              # Fixes timezones on VRChat
+              unset TZ
+              # Allows Monado/WiVRn to be used
+              export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
+            '';
+          }))
+          (lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.millennium-steam)
+        ]))
+
+        (lib.mkIf (!config.nixos.userEnvironment.game.steam.enableMillennium) (lib.mkMerge [
+          (lib.mkIf config.nixos.userEnvironment.game.vr.enable (pkgs.steam.override {
+            extraProfile = ''
+              # Fixes timezones on VRChat
+              unset TZ
+              # Allows Monado/WiVRn to be used
+              export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
+            '';
+          }))
+          (lib.mkIf (!config.nixos.userEnvironment.game.vr.enable) pkgs.steam)
+        ]))
+
       ];
       #extraCompatPackages = with pkgs; [
         #steam-play-none
