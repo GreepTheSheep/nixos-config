@@ -15,6 +15,7 @@
   config = lib.mkIf config.nixos.virtualisation.android.enable {
     environment.systemPackages = with pkgs; [
       android-tools
+      scrcpy
     ];
   };
 }
