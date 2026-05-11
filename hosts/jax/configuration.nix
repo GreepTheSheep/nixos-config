@@ -42,6 +42,7 @@ config = {
       tools = {
         backrest.enable = true;
         scrutiny.enable = true;
+        scrcpy.enable = true;
       };
     };
 

@@ -8,6 +8,7 @@
     ./git.nix
     ./htop.nix
     ./java.nix
+    ./scrcpy.nix
     ./scrutiny.nix
     ./usbtop.nix
   ];
@@ -31,6 +32,7 @@
       git.enable = true;
       htop.enable = true;
       java.enable = lib.mkDefault false;
+      scrcpy.enable = lib.mkDefault false;
       scrutiny.enable = lib.mkDefault false;
       usbtop.enable = true;
     };
