@@ -78,6 +78,7 @@ config = {
       io = {
         streamdeck.enable = true;
         bluetooth.enable = true;
+        graphtablet.enable = true;
       };
     };
 

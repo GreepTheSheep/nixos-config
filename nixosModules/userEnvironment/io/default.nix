@@ -4,6 +4,7 @@
   imports = [
     ./audio.nix
     ./bluetooth.nix
+    ./graphtablet.nix
     ./input.nix
     ./printing.nix
     ./streamdeck.nix
@@ -24,6 +25,7 @@
     nixos.userEnvironment.io = {
       audio.enable = true;
       bluetooth.enable = lib.mkDefault false;
+      graphtablet.enable = lib.mkDefault false;
       input.enable = true;
       printing.enable = true;
       streamdeck.enable = lib.mkDefault false;
