@@ -41,7 +41,11 @@
       spacenavd.enable = true;
       i2c.enable = true;
       sensor.iio.enable = true;
+      opentabletdriver.enable = true;
+      uinput.enable = true; # Required by OpenTabletDriver
     };
+
+    boot.kernelModules = [ "uinput" ]; # Required by OpenTabletDriver
 
     services.hardware.bolt.enable = true;
 
