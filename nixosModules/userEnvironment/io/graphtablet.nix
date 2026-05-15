@@ -28,7 +28,5 @@
     };
 
     boot.kernelModules = [ "uinput" ]; # Required by OpenTabletDriver
-
-    programs.xppen.enable = true;
   };
 }
