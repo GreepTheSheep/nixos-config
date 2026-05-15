@@ -13,7 +13,10 @@
   };
 
   config = lib.mkIf config.nixos.userEnvironment.io.graphtablet.enable {
-    services.xserver.digimend.enable = true;
+    services.xserver = {
+      digimend.enable = true;
+      wacom.enable = true;
+    };
 
     environment.systemPackages = [
       config.boot.kernelPackages.digimend
@@ -25,5 +28,7 @@
     };
 
     boot.kernelModules = [ "uinput" ]; # Required by OpenTabletDriver
+
+    programs.xppen.enable = true;
   };
 }
