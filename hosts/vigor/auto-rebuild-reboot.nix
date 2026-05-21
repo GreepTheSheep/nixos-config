@@ -5,7 +5,7 @@ let
 
   autoRebuildRebootScript = pkgs.writeShellScript "auto-rebuild-reboot" ''
     ${pkgs.su}/bin/su ${user} -c '${pkgs.git}/bin/git -C /home/${user}/nixos-config pull'
-    ${pkgs.su}/bin/su ${user} -c '${pkgs.sudo}/bin/sudo ${config.system.build.nixos-rebuild}/bin/nixos-rebuild boot || true'
+    ${config.system.build.nixos-rebuild}/bin/nixos-rebuild boot || true
     ${pkgs.systemd}/bin/systemctl reboot
   '';
 in
