@@ -99,8 +99,6 @@ config = {
       waydroid.enable = true;
     };
 
-    nixos.pkgs.wallpaper-engine-kde-plugin.enable = true;
-
     nixos.system.cloudmount.enable = true;
     sops.age.keyFile = "/root/.secrets/keys.txt";
 

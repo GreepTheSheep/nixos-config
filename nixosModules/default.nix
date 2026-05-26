@@ -5,7 +5,6 @@
     ./base
     ./desktop
     ./hardware
-    ./pkgs
     ./server
     ./system
     #./theme # TODO later: cappuccin
@@ -29,7 +28,6 @@
       base.enable = true;
       desktop.enable = lib.mkDefault false;
       hardware.enable = true;
-      pkgs.enable = true;
       server.enable = lib.mkDefault false;
       system.enable = true;
       #theme.enable = true;
