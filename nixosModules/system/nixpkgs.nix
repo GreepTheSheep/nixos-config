@@ -13,13 +13,20 @@
   };
 
   config = lib.mkIf config.nixos.system.nixpkgs.enable {
-    # Skips checks on openldap on i686 (does build failure recently, so we add this to skip)
-    nixpkgs.overlays = [
-      (_: prev: {
-        openldap = prev.openldap.overrideAttrs {
-          doCheck = !prev.stdenv.hostPlatform.isi686;
-        };
-      })
-    ];
+    nixpkgs = {
+      # Skips checks on openldap on i686 (does build failure recently, so we add this to skip)
+      overlays = [
+        (_: prev: {
+          openldap = prev.openldap.overrideAttrs {
+            doCheck = !prev.stdenv.hostPlatform.isi686;
+          };
+        })
+      ];
+
+      # Allow Electron 39.8.10 to build. Required for Bitwarden Desktop on NixOS 26.05
+      config.permittedInsecurePackages = [
+        "electron-39.8.10"
+      ];
+    };
   };
 }
