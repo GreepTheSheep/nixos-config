@@ -5,7 +5,6 @@ result-*
 nix-shell/
 nix-profile/
 nix-path
-flake.lock
 
 # Editor/OS specific
 *~
