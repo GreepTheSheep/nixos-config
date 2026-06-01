@@ -37,7 +37,7 @@
     };
 
     virtualisation.oci-containers.containers.tangled-discordbot-rust = {
-      image = "ghcr.io/greepthesheep/rust-tangled-discord-bot/rust-tangled-discordbot";
+      image = "git.greep.fr/greep/rust-tangled-discord-bot";
       environment = {
         TZ = "Europe/Paris";
         BOT_DISABLE_MUSIC_PLAYER = "1";
