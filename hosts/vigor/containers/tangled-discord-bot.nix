@@ -37,7 +37,7 @@
     };
 
     virtualisation.oci-containers.containers.tangled-discordbot = {
-      image = "ghcr.io/greepthesheep/tangled-discord-bot/tangled-discordbot";
+      image = "git.greep.fr/greep/tangled-discord-bot";
       volumes = [
         "${directory}/data:/home/node/app/data"
       ];
