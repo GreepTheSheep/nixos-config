@@ -38,6 +38,11 @@
 
     virtualisation.oci-containers.containers.tangled-discordbot-rust = {
       image = "git.greep.fr/greep/rust-tangled-discord-bot";
+      login = {
+        registry = "git.greep.fr";
+        username = "greep";
+        passwordFile = config.sops.secrets."gitea/registry-password".path;
+      };
       environment = {
         TZ = "Europe/Paris";
         BOT_DISABLE_MUSIC_PLAYER = "1";

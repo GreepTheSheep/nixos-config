@@ -38,6 +38,11 @@
 
     virtualisation.oci-containers.containers.tangled-discordbot = {
       image = "git.greep.fr/greep/tangled-discord-bot";
+      login = {
+        registry = "git.greep.fr";
+        username = "greep";
+        passwordFile = config.sops.secrets."gitea/registry-password".path;
+      };
       volumes = [
         "${directory}/data:/home/node/app/data"
       ];
