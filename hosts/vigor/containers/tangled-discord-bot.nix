@@ -26,6 +26,7 @@
       "docker/tangled-discordbot/discord-token" = {};
       "docker/tangled-discordbot/owner-id"  = {};
       "docker/tangled-discordbot/openai-key"  = {};
+      "gitea/registry-password" = {};
     };
 
     sops.templates = {

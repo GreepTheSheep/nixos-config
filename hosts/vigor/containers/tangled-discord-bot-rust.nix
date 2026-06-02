@@ -24,8 +24,9 @@
 
     sops.secrets = {
       "docker/tangled-discordbot-rust/discord-token" = {};
-      "docker/tangled-discordbot-rust/owner-id"  = {};
+      "docker/tangled-discordbot-rust/owner-id" = {};
       "docker/tangled-discordbot-rust/openai-key"  = {};
+      "gitea/registry-password" = {};
     };
 
     sops.templates = {
