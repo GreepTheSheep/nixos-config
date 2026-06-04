@@ -20,7 +20,6 @@
       "d ${directory} 0755 ${config.nixos.system.user.defaultuser.name} users"
       "d ${directory}/caddy-data 0755 ${config.nixos.system.user.defaultuser.name} users"
       "d ${directory}/sites 0755 ${config.nixos.system.user.defaultuser.name} users"
-      "d ${directory}/templates 0755 ${config.nixos.system.user.defaultuser.name} users"
 
       "C+ ${directory}/Caddyfile 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "Caddyfile" ''
         {
@@ -251,13 +250,8 @@
         "${directory}/caddy-data:/data/caddy"
         "${directory}/Caddyfile:/etc/caddy/Caddyfile:ro"
         "${directory}/sites:/etc/caddy/sites"
-        "${directory}/templates:/etc/caddy/templates"
       ];
       networks = [ "caddy-bridge" ];
-      environment = {
-        SITES_DIR = "/etc/caddy/sites";
-        TEMPLATES_DIR = "/etc/caddy/templates";
-      };
       extraOptions = [
         "--security-opt=no-new-privileges:true"
       ];
