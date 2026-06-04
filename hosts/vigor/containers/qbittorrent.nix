@@ -102,6 +102,9 @@
         extraOptions = [
           "--network=container:wireguard"
         ];
+        cmd = [
+          "daemon"
+        ];
       };
     };
   };
