@@ -26,8 +26,6 @@
       "d ${directory}/prowlarr-config 0755 ${user} users"
       "d ${directory}/radarr-config 0755 ${user} users"
       "d ${directory}/sonarr-config 0755 ${user} users"
-      "d ${directory}/wireguard-config 0755 ${user} users"
-      "d ${directory}/qbittorrent-config 0755 ${user} users"
     ];
 
     systemd.services.create-arr-stack-network = {
@@ -120,60 +118,6 @@
           "caddy"
         ];
       };
-
-      wireguard = {
-        image = "lscr.io/linuxserver/wireguard";
-        environment = {
-          PUID = "1000";
-          GUID = "1000";
-          TZ = "Europe/Paris";
-        };
-        volumes = [
-          "${directory}/wireguard-config:/config"
-        ];
-        capabilities = {
-          NET_ADMIN = true;
-        };
-        networks = [
-          "caddy-bridge"
-          "arr-stack"
-        ];
-        ports = [
-          "6881:6881"
-          "6881:6881/udp"
-        ];
-        extraOptions = [
-          "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
-        ];
-        dependsOn = [
-          "caddy"
-        ];
-      };
-
-      qbittorrent = {
-        image = "lscr.io/linuxserver/qbittorrent";
-        environment = {
-          TZ = "Europe/Paris";
-          WEBUI_PORT = "8686";
-          PUID = "1000";
-          GUID = "1000";
-        };
-        volumes = [
-          "${directory}/qbittorrent-config:/config"
-          "${downloadsDirectory}:/downloads"
-        ];
-        dependsOn = [
-          "wireguard"
-        ];
-        extraOptions = [
-          "--network=container:wireguard"
-        ];
-      };
-    };
-
-    nixos.system.firewall = {
-      extraAllowedTCPPorts = [ 6881 ];
-      extraAllowedUDPPorts = [ 6881 ];
     };
   };
 }

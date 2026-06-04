@@ -11,6 +11,7 @@
     ./jellyfin.nix
     ./nextcloud.nix
     ./prometheus.nix
+    ./qbittorrent.nix
     ./seerr.nix
     ./tangled-discord-bot-rust.nix
     ./tangled-discord-bot.nix
@@ -52,6 +53,10 @@
       prometheus = {
         enable = true;
         enableDgcmExporter = true;
+      };
+      qbittorrent = {
+        enable = true;
+        enableXseed = true;
       };
       seerr.enable = true;
       tangled-discord-bot-rust.enable = true;
