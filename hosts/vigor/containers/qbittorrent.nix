@@ -40,7 +40,6 @@
           GUID = "1000";
           TZ = "Europe/Paris";
         };
-        user = "1000:1000";
         volumes = [
           "${directory}/wireguard-config:/config"
         ];
