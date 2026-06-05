@@ -63,7 +63,6 @@
           GUID = "1000";
           TZ = "Europe/Paris";
         };
-        user = "${user}:users";
         networks = [
           "caddy-bridge"
           "arr-stack"
@@ -87,7 +86,6 @@
           GUID = "1000";
           TZ = "Europe/Paris";
         };
-        user = "${user}:users";
         networks = [
           "caddy-bridge"
           "arr-stack"
@@ -111,7 +109,6 @@
           GUID = "1000";
           TZ = "Europe/Paris";
         };
-        user = "${user}:users";
         networks = [
           "caddy-bridge"
           "arr-stack"

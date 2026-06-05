@@ -40,7 +40,6 @@
           GUID = "1000";
           TZ = "Europe/Paris";
         };
-        user = "${user}:users";
         volumes = [
           "${directory}/wireguard-config:/config"
         ];
@@ -71,7 +70,6 @@
           PUID = "1000";
           GUID = "1000";
         };
-        user = "${user}:users";
         volumes = [
           "${directory}/qbittorrent-config:/config"
           "${downloadsDirectory}:/downloads"
@@ -91,7 +89,6 @@
           PUID = "1000";
           GUID = "1000";
         };
-        user = "${user}:users";
         volumes = [
           "${directory}/xseed-config:/config"
           "${downloadsDirectory}:/downloads"
