@@ -33,8 +33,6 @@
       "d ${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers 0755 ${config.nixos.system.user.defaultuser.name} users"
     ];
 
-    virtualisation.oci-containers.backend = "docker";
-
     host.containers = {
       arr.enable = true;
       backrest.enable = true;

@@ -44,5 +44,7 @@
       lazydocker
       oxker
     ];
+
+    virtualisation.oci-containers.backend = "docker";
   };
 }
