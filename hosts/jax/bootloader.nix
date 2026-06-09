@@ -3,9 +3,12 @@ _:
 {
   boot.loader.limine.style.interface.resolution = "3840x1080";
 
-  nixos.system.bootloader.extraBootEntries = ''
+  nixos.system.bootloader = {
+    timeout = 10;
+    extraBootEntries = ''
     /Windows
       protocol: efi
       path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
-  '';
+    '';
+  };
 }
