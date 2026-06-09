@@ -51,9 +51,8 @@
       environmentFiles = [
         config.sops.templates."wud.env".path
       ];
-      networks = [ "caddy-bridge" ];
-      dependsOn = [
-        "caddy"
+      ports = [
+        "3000:3000"
       ];
     };
   };

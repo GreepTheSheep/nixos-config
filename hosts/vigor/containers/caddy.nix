@@ -199,24 +199,6 @@
             }
           ''}
 
-          ${lib.optionalString config.host.containers.wud.enable ''
-            redir /wud /wud/
-            handle_path /wud/* {
-              vars {
-                websiteName "WUD"
-              }
-
-              import hsts
-
-              #error 503 # Maintenance
-
-              reverse_proxy wud:3000 {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-          ''}
-
           handle / {
             root * {$TEMPLATES_DIR}/server-motd
             file_server
