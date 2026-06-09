@@ -187,6 +187,7 @@
               }
             }
           ''}
+
           ${lib.optionalString config.host.containers.prometheus.enableDgcmExporter ''
             redir /dgcm-metrics /dgcm-metrics/
             handle_path /dgcm-metrics/* {
@@ -205,6 +206,26 @@
               #error 503 # Maintenance
 
               reverse_proxy dgcm-exporter:9400  {
+                fail_duration 30s
+                unhealthy_status 503
+              }
+            }
+          ''}
+
+          ${lib.optionalString config.host.containers.wud.enable ''
+            redir /wud /wud/
+            handle_path /wud/* {
+              import error-handler
+
+              vars {
+                websiteName "WUD"
+              }
+
+              import hsts
+
+              #error 503 # Maintenance
+
+              reverse_proxy wud:3000 {
                 fail_duration 30s
                 unhealthy_status 503
               }
