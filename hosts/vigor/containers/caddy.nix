@@ -142,28 +142,6 @@
                 header_up -Referer
               }
             }
-
-            ${lib.optionalString config.host.containers.qbittorrent.enableXseed ''
-              redir /xseed /xseed/
-              handle_path /xseed/* {
-                import error-handler
-
-                vars {
-                  websiteName "cross-seed"
-                }
-
-                #error 503 # Maintenance
-
-                reverse_proxy wireguard:2468 {
-                  fail_duration 30s
-                  unhealthy_status 503
-                  header_up Host wireguard:2468
-                  header_up X-Forwarded-Host {host}:{hostport}
-                  header_up -Origin
-                  header_up -Referer
-                }
-              }
-            ''}
           ''}
 
           ${lib.optionalString config.host.containers.backrest.enable ''
