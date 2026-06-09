@@ -72,11 +72,10 @@
 
       "C+ ${directory}/sites/vigor.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "vigor.caddy" ''
         4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
+          import error-handler
           ${lib.optionalString config.host.containers.arr.enable ''
             redir /prowlarr /prowlarr/
             handle /prowlarr/* {
-              import error-handler
-
               vars {
                 websiteName "Prowlarr"
               }
@@ -91,8 +90,6 @@
 
             redir /radarr /radarr/
             handle /radarr/* {
-              import error-handler
-
               vars {
                 websiteName "Radarr"
               }
@@ -107,8 +104,6 @@
 
             redir /sonarr /sonarr/
             handle /sonarr/* {
-              import error-handler
-
               vars {
                 websiteName "Sonarr"
               }
@@ -125,8 +120,6 @@
           ${lib.optionalString config.host.containers.qbittorrent.enable ''
             redir /qbit /qbit/
             handle_path /qbit/* {
-              import error-handler
-
               vars {
                 websiteName "qBittorrent"
               }
@@ -147,8 +140,6 @@
           ${lib.optionalString config.host.containers.backrest.enable ''
             redir /backrest /backrest/
             handle_path /backrest/* {
-              import error-handler
-
               vars {
                 websiteName "Backrest"
               }
@@ -170,8 +161,6 @@
               basicauth /* {
                 vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
               }
-
-              import error-handler
 
               vars {
                 websiteName "Node Metrics"
@@ -195,8 +184,6 @@
                 vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
               }
 
-              import error-handler
-
               vars {
                 websiteName "DGCM Metrics"
               }
@@ -215,8 +202,6 @@
           ${lib.optionalString config.host.containers.wud.enable ''
             redir /wud /wud/
             handle_path /wud/* {
-              import error-handler
-
               vars {
                 websiteName "WUD"
               }
