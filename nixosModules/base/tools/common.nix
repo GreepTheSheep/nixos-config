@@ -61,12 +61,13 @@
       ltrace # library call monitoring
       strace # system call monitoring
 
-      # nix parsers and docs
+      # nix parsers, utilities and docs
       nixfmt
       nil
       nixd
       nixdoc
       direnv
+      niv
 
       exfatprogs # exFAT file system utilities
       e2fsprogs # ext file system utilities
