@@ -43,6 +43,7 @@ config = {
         backrest.enable = true;
         scrutiny.enable = true;
       };
+      shell.sudo.useSudo-rs = true;
     };
 
     nixos.hardware = {

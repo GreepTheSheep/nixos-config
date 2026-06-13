@@ -9,6 +9,13 @@
         example = true;
         description = "Enable sudo parameters.";
       };
+
+      useSudo-rs = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Replace the usual sudo to sudo-rs.";
+      };
     };
   };
 
@@ -29,5 +36,10 @@
         ];
       }
     ];
+
+    security.sudo-rs = lib.mkIf config.nixos.base.shell.sudo.useSudo-rs {
+      enable = true;
+      extraRules = config.security.sudo.extraRules;
+    };
   };
 }
