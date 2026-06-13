@@ -40,6 +40,9 @@
     security.sudo-rs = lib.mkIf config.nixos.base.shell.sudo.useSudo-rs {
       enable = true;
       extraRules = config.security.sudo.extraRules;
+      wheelNeedsPassword = true;
     };
+
+    environment.variables.SUDO_PROMPT = lib.mkIf config.nixos.base.shell.sudo.useSudo-rs "%u@%h -> %U@%h";
   };
 }
