@@ -130,10 +130,10 @@
         volumes = [
           "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
-          "${moviesDirectory}:/external/movies"
-          "${showsDirectory}:/external/shows"
-          "${musicDirectory}:/external/music"
-          "${tvReplaysDirectory}:/external/tvReplays"
+          "${moviesDirectory}:/external/movies:ro"
+          "${showsDirectory}:/external/shows:ro"
+          "${musicDirectory}:/external/music:ro"
+          "${tvReplaysDirectory}:/external/tvReplays:ro"
         ];
         environmentFiles = [
           config.sops.templates."nextcloud.env".path
