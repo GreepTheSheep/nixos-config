@@ -19,6 +19,10 @@
     caddySiteDirectory = "${home}/docker-containers/caddy/sites";
 
     dataDirectory = "/mnt/data/nextcloud";
+    moviesDirectory = "/mnt/data/movies";
+    showsDirectory = "/mnt/data/shows";
+    musicDirectory = "/mnt/data/music";
+    tvReplaysDirectory = "/mnt/data/tvreplays";
   in lib.mkIf config.host.containers.nextcloud.enable {
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
@@ -126,6 +130,10 @@
         volumes = [
           "${directory}/app:/var/www/html"
           "${dataDirectory}:/var/www/html/data"
+          "${moviesDirectory}:/external/movies"
+          "${showsDirectory}:/external/shows"
+          "${musicDirectory}:/external/music"
+          "${tvReplaysDirectory}:/external/tvReplays"
         ];
         environmentFiles = [
           config.sops.templates."nextcloud.env".path
