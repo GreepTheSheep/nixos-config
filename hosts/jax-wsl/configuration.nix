@@ -1,4 +1,4 @@
-{ lib, pkgs, nixos-wsl, ... }:
+{ config, lib, pkgs, nixos-wsl, ... }:
 
 {
   options.host = {
