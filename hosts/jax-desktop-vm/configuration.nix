@@ -21,7 +21,7 @@
     };
   };
 
-config = {
+  config = {
     nixos.desktop = {
       enable = true;
       desktopEnvironment = {
