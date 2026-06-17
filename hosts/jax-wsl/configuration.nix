@@ -34,6 +34,7 @@
 
     nixos.desktop.enable = false;
     nixos.base.shell.console.enable = lib.mkForce false;
+    nixos.system.powermanagement.enable = lib.mkForce false;
 
     nixos.system = {
       user.defaultuser = {
