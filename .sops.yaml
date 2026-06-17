@@ -4,6 +4,7 @@ keys:
   - &jax age1vdqxenxk3ntcf25furcfadpnzhwzh7pvxjfrskwfa9mfezej0e7sge2kxz
   - &jax_server_vm age1f05qsemeeqvzvhj9kmy2vfgs3dyhqndv4j9myha6gpjzsleyp5uss23s0n
   - &jax_desktop_vm age134ux5err4dd4eexcnqa7xpj8hdw2upkp4f2rrwvtd36rp7nykg9ssaplzp
+  - &jax_wsl age1qc06qreq22r7fevvav0psf9nalwya96yd09j8wxu47nc34lt449sd0whek
   - &vigor age1dhwdkmljpexa6xs9tk6clzyr77gqar60z0mlv93su63nenlqmymsfajer5
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
@@ -13,4 +14,5 @@ creation_rules:
       - *jax
       - *jax_server_vm
       - *jax_desktop_vm
+      - *jax_wsl
       - *vigor
