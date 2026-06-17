@@ -32,9 +32,16 @@
       defaultUser = config.nixos.system.user.defaultuser.name;
     };
 
+    # Disable rules that are not necessary on WSL
+    nixos = {
+      base.shell.console.enable = lib.mkForce false;
+      system = {
+        powermanagement.enable = lib.mkForce false;
+        bootloader.enable = lib.mkForce false;
+      };
+    };
+
     nixos.desktop.enable = false;
-    nixos.base.shell.console.enable = lib.mkForce false;
-    nixos.system.powermanagement.enable = lib.mkForce false;
 
     nixos.system = {
       user.defaultuser = {
