@@ -33,6 +33,7 @@
     };
 
     nixos.desktop.enable = false;
+    nixos.base.shell.console.enable = false;
 
     nixos.system = {
       user.defaultuser = {
