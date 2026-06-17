@@ -1,6 +1,12 @@
 { config, lib, pkgs, nixos-wsl, ... }:
 
 {
+  imports = [
+    # include NixOS-WSL modules
+    nixos-wsl.nixosModules.wsl
+    <nixos-wsl/modules>
+  ];
+
   options.host = {
     isLaptop = lib.mkOption {
       type = lib.types.bool;
@@ -22,12 +28,6 @@
   };
 
   config = {
-    imports = [
-      # include NixOS-WSL modules
-      nixos-wsl.nixosModules.wsl
-      <nixos-wsl/modules>
-    ];
-
     wsl = {
       enable = true;
       defaultUser = config.nixos.system.user.defaultuser.name;
