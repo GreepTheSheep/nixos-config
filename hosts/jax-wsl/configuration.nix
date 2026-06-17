@@ -38,6 +38,7 @@
       system = {
         powermanagement.enable = lib.mkForce false;
         bootloader.enable = lib.mkForce false;
+        networking.enable = lib.mkForce false;
       };
     };
 
