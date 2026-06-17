@@ -1,7 +1,5 @@
 { lib, ... }:
 
 {
-  networking = {
-    hostName = "jax-wsl";
-  };
+  networking.hostName = "jax-wsl";
 }
