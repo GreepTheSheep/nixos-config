@@ -50,7 +50,13 @@
       };
     };
 
-    nixos.userEnvironment.enable = true;
+    nixos.userEnvironment = {
+      enable = true;
+      non-nix-apps = {
+        affine.enable = lib.mkForce false;
+        feishin.enable = lib.mkForce false;
+      };
+    };
 
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   };
