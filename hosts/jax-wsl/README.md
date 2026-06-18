@@ -12,10 +12,10 @@ wsl --update
 1. Download and install the [nixos.wsl image](https://github.com/nix-community/NixOS-WSL/releases/latest/download/nixos.wsl)
 
 2. Temporarily edit the default configuration located at `/etc/nixos`:
-- Change the user name to your default user `wsl.defaultUser = "greep";`
-- Update the hostname of this WSL host `networking.hostName = "jax-wsl";`
-- Include the `git` package `programs.git.enable = true;`
-- After that, run `sudo nixos-rebuild switch`, then exit and relaunch WSL
+    - Change the user name to your default user `wsl.defaultUser = "greep";`
+    - Update the hostname of this WSL host `networking.hostName = "jax-wsl";`
+    - Include the `git` package `programs.git.enable = true;`
+    - After that, run `sudo nixos-rebuild switch`, then exit and relaunch WSL
 
 3. Clone this repo to your new home diretory that was created
 
