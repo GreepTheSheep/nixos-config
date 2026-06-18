@@ -1,5 +1,8 @@
 { lib, ... }:
 
 {
-  homeManager.applications.enable = false;
+  homeManager = {
+    applications.enable = false;
+    base.tools.btop.enableGPUSupport = true;
+  };
 }
