@@ -40,6 +40,10 @@
         bootloader.enable = lib.mkForce false;
         networking.enable = lib.mkForce false;
       };
+      motd = {
+        enable = true;
+        content = builtins.readFile ./motd;
+      };
     };
 
     nixos.desktop.enable = false;
