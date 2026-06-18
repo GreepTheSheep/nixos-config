@@ -6,11 +6,15 @@
 
 ## Installation
 
-Use the `full_install.sh` script using `bash`
+Use the `full_install.sh` script using `bash` in root or sudo
 
 ## Live ISO
 
 See [this page](hosts/greep-nixos-live/README.md) for more informations about live environment.
+
+## Running on Windows Subsystem for Linux (WSL)
+
+See [this page](hosts/jax-wsl/README.md) for more informations about WSL environment.
 
 ## Sops Secrets (age)
 
