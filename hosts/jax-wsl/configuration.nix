@@ -34,31 +34,26 @@
 
     # Disable rules that are not necessary on WSL
     nixos = {
+      desktop.enable = false;
       base.shell.console.enable = lib.mkForce false;
       system = {
         powermanagement.enable = lib.mkForce false;
         bootloader.enable = lib.mkForce false;
         networking.enable = lib.mkForce false;
+        motd = {
+          enable = true;
+          content = builtins.readFile ./motd;
+        };
+        user.defaultuser = {
+          pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+        };
       };
-      motd = {
+      userEnvironment = {
         enable = true;
-        content = builtins.readFile ./motd;
-      };
-    };
-
-    nixos.desktop.enable = false;
-
-    nixos.system = {
-      user.defaultuser = {
-        pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
-      };
-    };
-
-    nixos.userEnvironment = {
-      enable = true;
-      non-nix-apps = {
-        affine.enable = lib.mkForce false;
-        feishin.enable = lib.mkForce false;
+        non-nix-apps = {
+          affine.enable = lib.mkForce false;
+          feishin.enable = lib.mkForce false;
+        };
       };
     };
 
