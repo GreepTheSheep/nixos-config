@@ -14,14 +14,16 @@
   config = let
     subDomains = [
       "vigor"
+      "varian"
       "jellyfin"
       "jellyfin-requests"
       "immich"
       "cloud"
       "cdn"
+      "openclaw"
     ];
-    ipv4subDomains = [ "4.vigor" ];
-    ipv6subDomains = [ "6.vigor" ];
+    ipv4subDomains = [ "4.vigor" "4.varian" ];
+    ipv6subDomains = [ "6.vigor" "6.varian" ];
 
     domain = "greep.fr";
   in lib.mkIf config.host.containers.cfddns.enable {
@@ -45,7 +47,7 @@
         DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") subDomains;
         IP4_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv4subDomains;
         IP6_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv6subDomains;
-        PROXIED = "!is(vigor.greep.fr) && !is(4.vigor.greep.fr) && !is(6.vigor.greep.fr)";
+        PROXIED = "!is(vigor.greep.fr) && !is(4.vigor.greep.fr) && !is(6.vigor.greep.fr) && !is(varian.greep.fr) && !is(4.varian.greep.fr) && !is(6.varian.greep.fr)";
         IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
         IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
       };
