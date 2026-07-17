@@ -28,8 +28,9 @@
     in
     {
       device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
-      fsType = "ntfs3";
-      options = [ "uid=${uid}" "gid=${gid}" ];
+      fsType = "lowntfs-3g";
+      options = [ "uid=${uid}" "gid=${gid}" "rw" "user" "exec" "umask=000" ];
+      noCheck = true;
     };
 
   sops.secrets."bitlocker/windows-drive-password" = {};
