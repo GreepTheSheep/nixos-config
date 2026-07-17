@@ -54,7 +54,7 @@
           cryptwindows \
           --key-file ${config.sops.secrets."bitlocker/windows-drive-password".path}
         mkdir -p /mnt/Windows
-        ${pkgs.ntfs3g}/bin/ntfs-3g /dev/mapper/cryptwindows /mnt/Windows \
+        ${pkgs.ntfs3g}/bin/lowntfs-3g /dev/mapper/cryptwindows /mnt/Windows \
           -o uid=${uid},gid=${gid}
       '';
       ExecStop = pkgs.writeShellScript "umount-windows" ''
