@@ -18,6 +18,7 @@
       hardinfo2
       imagemagick
       junction
+      croc
     ];
   };
 }
