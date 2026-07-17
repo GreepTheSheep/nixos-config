@@ -28,6 +28,9 @@
       ];
 
       extraPackages32 = with pkgs.pkgsi686Linux; [ intel-vaapi-driver ];
+
+      # Enable 32-bit applications such as Wine
+      enable32Bit = true;
     };
 
     environment.systemPackages = with pkgs; [
