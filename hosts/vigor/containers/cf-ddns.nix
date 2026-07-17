@@ -48,8 +48,8 @@
         IP4_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv4subDomains;
         IP6_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv6subDomains;
         PROXIED = "!is(vigor.greep.fr) && !is(4.vigor.greep.fr) && !is(6.vigor.greep.fr) && !is(varian.greep.fr) && !is(4.varian.greep.fr) && !is(6.varian.greep.fr)";
-        IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
-        IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
+        #IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
+        #IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
       };
       extraOptions = [
         "--security-opt=no-new-privileges:true"
