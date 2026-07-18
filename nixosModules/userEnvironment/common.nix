@@ -19,7 +19,6 @@
       imagemagick
       junction
       croc
-      xbps
     ];
   };
 }
