@@ -60,8 +60,8 @@
       seerr.enable = true;
       tangled-discord-bot-rust.enable = true;
       tangled-discord-bot.enable = true;
-      watchtower.enable = false;
-      wud.enable = true;
+      watchtower.enable = true;
+      wud.enable = false;
     };
   };
 }
