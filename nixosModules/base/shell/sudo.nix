@@ -12,8 +12,8 @@
 
       useSudo-rs = lib.mkOption {
         type = lib.types.bool;
-        default = false;
-        example = true;
+        default = true;
+        example = false;
         description = "Replace the usual sudo to sudo-rs.";
       };
     };
