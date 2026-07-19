@@ -81,14 +81,14 @@
       before = [
         "docker-immich-redis.service"
         "docker-immich-machine-learning.service"
-        "docker-immich-pgvector.service"
+        "docker-immich-postgres.service"
         "docker-immich.service"
       ];
       wantedBy = [
         "docker-immich-redis.service"
         "docker-immich-machine-learning.service"
         "docker-immich.service"
-        "docker-immich-pgvector.service"
+        "docker-immich-postgres.service"
       ];
       serviceConfig = {
         Type = "oneshot";
@@ -188,7 +188,7 @@
         dependsOn = [
           "immich-machine-learning"
           "immich-redis"
-          "immich-pgvector"
+          "immich-postgres"
           "caddy"
         ];
       };
