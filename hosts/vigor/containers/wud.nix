@@ -29,8 +29,8 @@
     };
 
     sops.templates."wud.env".content = ''
-      WUD_AUTH_BASIC_GREEP_USER=greep
-      WUD_AUTH_BASIC_GREEP_HASH='${config.sops.placeholder."docker/wud/auth-hash"}'
+      #WUD_AUTH_BASIC_GREEP_USER=greep
+      #WUD_AUTH_BASIC_GREEP_HASH='${config.sops.placeholder."docker/wud/auth-hash"}'
       WUD_REGISTRY_GITEA_GREEP_URL=https://git.greep.fr
       WUD_REGISTRY_GITEA_GREEP_LOGIN=greep
       WUD_REGISTRY_GITEA_GREEP_PASSWORD=${config.sops.placeholder."gitea/registry-password"}
