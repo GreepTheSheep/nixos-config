@@ -70,6 +70,8 @@
         POSTGRES_PASSWORD=${config.sops.placeholder."docker/immich/postgres-password"}
         POSTGRES_DB=${config.sops.placeholder."docker/immich/postgres-database"}
         POSTGRES_USER=${config.sops.placeholder."docker/immich/postgres-user"}
+        POSTGRES_INITDB_ARGS=--data-checksums
+        DB_STORAGE_TYPE=HDD
       '';
     };
 
@@ -121,7 +123,7 @@
       };
 
       "immich-redis" = {
-        image = "redis:6.2-alpine";
+        image = "valkey/valkey:9-alpine";
         hostname = "immich_redis";
         environment = {
           TZ = "Europe/Paris";
@@ -134,9 +136,9 @@
         ];
       };
 
-      "immich-pgvector" = {
-        image = "tensorchord/pgvecto-rs:pg14-v0.2.0";
-        hostname = "immich_pgvector";
+      "immich-postgres" = {
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0";
+        hostname = "immich_postgres";
         environmentFiles = [
           config.sops.templates."immich-postgres.env".path
         ];
