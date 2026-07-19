@@ -70,8 +70,6 @@
         POSTGRES_PASSWORD=${config.sops.placeholder."docker/immich/postgres-password"}
         POSTGRES_DB=${config.sops.placeholder."docker/immich/postgres-database"}
         POSTGRES_USER=${config.sops.placeholder."docker/immich/postgres-user"}
-        POSTGRES_INITDB_ARGS=--data-checksums
-        DB_STORAGE_TYPE=HDD
       '';
     };
 
@@ -144,6 +142,8 @@
         ];
         environment = {
           TZ = "Europe/Paris";
+          POSTGRES_INITDB_ARGS = "--data-checksums";
+          DB_STORAGE_TYPE = "HDD";
         };
         volumes = [
           "${directory}/pgdata:/var/lib/postgresql/data"
@@ -175,7 +175,7 @@
         ];
         environment = {
           TZ = "Europe/Paris";
-          DB_HOSTNAME = "immich_pgvector";
+          DB_HOSTNAME = "immich_postgres";
           REDIS_HOSTNAME = "immich_redis";
           NVIDIA_DRIVER_CAPABILITIES = lib.mkIf config.host.containers.immich.enableGPU "all";
           NVIDIA_VISIBLE_DEVICES = lib.mkIf config.host.containers.immich.enableGPU "all";
