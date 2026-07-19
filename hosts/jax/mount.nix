@@ -28,8 +28,9 @@
     in
     {
       device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
-      fsType = "ntfs3";
-      options = [ "uid=${uid}" "gid=${gid}" ];
+      fsType = "lowntfs-3g";
+      options = [ "uid=${uid}" "gid=${gid}" "rw" "user" "exec" "umask=000" ];
+      noCheck = true;
     };
 
   sops.secrets."bitlocker/windows-drive-password" = {};
@@ -54,7 +55,7 @@
           cryptwindows \
           --key-file ${config.sops.secrets."bitlocker/windows-drive-password".path}
         mkdir -p /mnt/Windows
-        ${pkgs.ntfs3g}/bin/ntfs-3g /dev/mapper/cryptwindows /mnt/Windows \
+        ${pkgs.ntfs3g}/bin/lowntfs-3g /dev/mapper/cryptwindows /mnt/Windows \
           -o uid=${uid},gid=${gid}
       '';
       ExecStop = pkgs.writeShellScript "umount-windows" ''

@@ -31,6 +31,9 @@
 
       # Include vaapi driver
       extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+
+      # Enable 32-bit applications such as Wine
+      enable32Bit = true;
     };
 
     # Tell Xorg to use the nvidia driver

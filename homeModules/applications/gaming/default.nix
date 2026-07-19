@@ -23,7 +23,7 @@
   config = lib.mkIf config.homeManager.applications.gaming.enable {
     homeManager.applications.gaming = {
       bs-manager.enable = true;
-      lutris.enable = true;
+      lutris.enable = lib.mkDefault false;
       parsec.enable = true;
       prismlauncher.enable = true;
       sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;

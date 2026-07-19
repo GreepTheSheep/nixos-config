@@ -155,7 +155,6 @@
     };
 
     environment.systemPackages = with pkgs; [
-      pulseaudio
       alsa-plugins
       alsa-utils
       alsa-tools
