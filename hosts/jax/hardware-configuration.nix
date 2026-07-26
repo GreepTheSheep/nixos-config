@@ -13,7 +13,7 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/6fa07085-ca6f-4d6a-8d60-5dddb94d2d4e";
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/74b2dcc8-8cc5-43fc-acab-0fbdd931a089";
 
   swapDevices = [ ];
 
