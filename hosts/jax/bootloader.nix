@@ -5,10 +5,5 @@ _:
 
   nixos.system.bootloader = {
     timeout = 10;
-    extraBootEntries = ''
-    /Windows
-      protocol: efi
-      path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
-    '';
   };
 }
