@@ -15,6 +15,7 @@
   config = lib.mkIf config.homeManager.applications.communication.thunderbird.enable {
     programs.thunderbird = {
       enable = true;
+      languagePacks = ["fr" "en-US"];
       profiles = {
         "default" = {
           isDefault = true;
