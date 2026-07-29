@@ -4,6 +4,7 @@
   imports = [
     ./discord.nix
     ./element.nix
+    ./thunderbird.nix
   ];
 
   options.homeManager = {
@@ -21,6 +22,7 @@
     homeManager.applications.communication = {
       discord.enable = true;
       element.enable = true;
+      thunderbird.enable = true;
     };
   };
 }
