@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./accounts
+
     ./home.nix
   ];
 
@@ -18,6 +20,8 @@
 
   config = lib.mkIf config.homeManager.home.enable {
     homeManager.home = {
+      accounts.enable = true;
+
       home.enable = true;
     };
   };

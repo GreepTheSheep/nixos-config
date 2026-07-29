@@ -21,9 +21,6 @@
           isDefault = true;
 
           settings = {
-            # === Setup Mail Accounts ===
-            #"mail.accountmanager.accounts" = "account1,account3,account4,account2";
-
             # === General UI and behavior settings ===
             "mailnews.start_page.enabled" = false;
             "mailnews.start_page.url" = "";
@@ -42,7 +39,7 @@
             "mail.ui.tableView" = true; # table view
             "mailnews.default_view_flags" = 0;
 
-            "mail.folder.views.version" = 1; # Folder pane view
+            "mail.folder.views.version" = 0;
             "mail.ui.folderpane.expand_state" = "All"; # Expand all folders
 
             "mail.SpellCheckBeforeSend" = true; # Check before sending
