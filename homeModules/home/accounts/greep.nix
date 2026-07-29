@@ -14,6 +14,7 @@
 
   config = lib.mkIf config.homeManager.home.accounts.greep.enable {
     accounts.email.accounts.greep = {
+      primary = true;
       name = "Greep";
       realName = "Greep";
       address = "greep@greep.fr";
