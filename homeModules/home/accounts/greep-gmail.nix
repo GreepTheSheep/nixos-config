@@ -14,9 +14,9 @@
 
   config = lib.mkIf config.homeManager.home.accounts.greep-gmail.enable {
     accounts.email.accounts.greep-gmail = {
-      name = "Greep";
       realName = "Greep";
       address = "89matt89.md@gmail.com";
+      userName = "89matt89.md";
       imap = {
         host = "imap.gmail.com";
         port = 993;

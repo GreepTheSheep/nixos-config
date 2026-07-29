@@ -15,9 +15,9 @@
   config = lib.mkIf config.homeManager.home.accounts.greep.enable {
     accounts.email.accounts.greep = {
       primary = true;
-      name = "Greep";
       realName = "Greep";
       address = "greep@greep.fr";
+      userName = "greep";
       imap = {
         host = "billcipher.greep.fr";
         port = 993;
