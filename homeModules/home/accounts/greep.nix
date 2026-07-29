@@ -17,7 +17,7 @@
       primary = true;
       realName = "Greep";
       address = "greep@greep.fr";
-      userName = "greep";
+      userName = "greep@greep.fr";
       imap = {
         host = "billcipher.greep.fr";
         port = 993;
