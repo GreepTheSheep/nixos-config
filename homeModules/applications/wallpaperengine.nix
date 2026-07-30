@@ -27,7 +27,7 @@
         });
         example = [
           {
-            wallpaperId = "3031397203";
+            wallpaperId = "3295216327";
             monitor = "HDMI-A-1";
           }
         ];

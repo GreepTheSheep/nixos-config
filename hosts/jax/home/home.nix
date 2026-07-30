@@ -20,7 +20,7 @@ _:
         enable = true;
         wallpapers = [
           {
-            wallpaperId = "3031397203";
+            wallpaperId = "3295216327";
             monitor = "DP-4";
           }
         ];
