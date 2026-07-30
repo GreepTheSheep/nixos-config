@@ -12,7 +12,7 @@
 
       assetsPath = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
+        default = "~/.local/share/Steam/steamapps/common/wallpaper_engine/assets";
         description = "Wallpaper Engine assets full path.";
       };
 
