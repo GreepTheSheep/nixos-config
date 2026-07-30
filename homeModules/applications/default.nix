@@ -16,6 +16,7 @@
 
     ./common.nix
     ./flatpak.nix
+    ./wallpaperengine.nix
   ];
 
   options.homeManager = {
@@ -45,6 +46,7 @@
 
       common.enable = true;
       flatpak.enable = osConfig.nixos.userEnvironment.flatpak.enable;
+      wallpaperengine.enable = lib.mkDefault false;
     };
   };
 }
