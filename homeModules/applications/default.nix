@@ -35,7 +35,7 @@
       communication.enable = true;
       development.enable = true;
       editing.enable = true;
-      gaming.enable = lib.mkIf osConfig.nixos.userEnvironment.game.enable true;
+      gaming.enable = osConfig.nixos.userEnvironment.game.enable;
       media.enable = true;
       office.enable = true;
       screenshot.enable = true;
@@ -44,7 +44,7 @@
       #utils.enable = true;
 
       common.enable = true;
-      flatpak.enable = lib.mkIf osConfig.nixos.userEnvironment.flatpak.enable true;
+      flatpak.enable = osConfig.nixos.userEnvironment.flatpak.enable;
     };
   };
 }
