@@ -15,6 +15,16 @@ _:
       };
 
       editing.video.enableDavinciResolve = true;
+
+      wallpaperengine = {
+        enable = true;
+        wallpapers = [
+          {
+            wallpaperId = "3736914589";
+            monitor = "DP-4";
+          }
+        ];
+      };
     };
 
     base.tools.btop.enableGPUSupport = true;
