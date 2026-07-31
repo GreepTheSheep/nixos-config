@@ -132,6 +132,7 @@
                 "node.name" = "discord-share";
                 "node.description" = "Partage Discord";
                 "media.class" = "Audio/Sink";
+                "audio.position" = [ "FL" "FR" ];
                 "monitor.channel-volumes" = true;
                 "monitor.passthrough" = true;
               };
