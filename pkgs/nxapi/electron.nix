@@ -67,6 +67,11 @@ buildNpmPackage rec {
     cp -r dist $out/lib/nxapi-app/
     cp -r resources/app $out/lib/nxapi-app/resources-app
 
+    # Supprime node_modules et bin installes par npm (conflit de path avec
+    # nxapi CLI car les deux paquets exposent lib/node_modules/nxapi/ et bin/nxapi).
+    # L'app Electron utilise le bundle precompile, pas besoin de ces repertoires.
+    rm -rf $out/lib/node_modules $out/bin/nxapi
+
     # Wrapper lance electron de nixpkgs sur le bundle
     makeBinaryWrapper ${electron_39}/bin/electron $out/bin/nxapi-app \
       --add-flags $out/lib/nxapi-app/dist/bundle/app-entry.cjs
