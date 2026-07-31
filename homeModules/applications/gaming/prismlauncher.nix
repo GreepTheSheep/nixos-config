@@ -16,9 +16,5 @@
     home.packages = with pkgs; [
       prismlauncher
     ];
-
-    home.file.".local/share/PrismLauncher".source = config.lib.file.mkOutOfStoreSymlink (
-      config.xdg.userDirs.extraConfig.GAMES + "/PrismLauncher"
-    );
   };
 }
