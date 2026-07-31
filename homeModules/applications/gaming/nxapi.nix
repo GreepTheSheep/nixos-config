@@ -49,6 +49,20 @@ in
         '';
       };
 
+      enableRemoteConfig = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Fetch and use remote configuration data from the nxapi server.
+          Disabled by default because the remote server currently sets
+          `coral: null`, which breaks Coral authentication (Nintendo Switch
+          Online API). Enable only if you know the remote config is safe.
+          When disabled, nxapi uses the local `remote-config.json` bundled
+          with the package.
+        '';
+      };
+
       extraEnv = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = { };
@@ -122,6 +136,7 @@ in
 
     home.sessionVariables = {
       NXAPI_DATA_PATH = cfg.dataPath;
+      NXAPI_ENABLE_REMOTE_CONFIG = if cfg.enableRemoteConfig then "1" else "0";
     } // lib.optionalAttrs (cfg.authClientId != null) {
       NXAPI_AUTH_CLIENT_ID = cfg.authClientId;
     } // cfg.extraEnv;
@@ -145,6 +160,7 @@ in
         RestartSec = 10;
         Environment = [
           "NXAPI_DATA_PATH=${cfg.dataPath}"
+          "NXAPI_ENABLE_REMOTE_CONFIG=${if cfg.enableRemoteConfig then "1" else "0"}"
         ] ++ lib.optional (cfg.authClientId != null)
           "NXAPI_AUTH_CLIENT_ID=${cfg.authClientId}"
         ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.extraEnv;
