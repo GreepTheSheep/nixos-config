@@ -16,6 +16,11 @@ _:
 
       editing.video.enableDavinciResolve = true;
 
+      gaming.nxapi = {
+        enable = true;
+        enableElectronApp = true;
+      };
+
       wallpaperengine = {
         enable = true;
         wallpapers = [

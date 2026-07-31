@@ -131,5 +131,19 @@
     nixosConfigurations = builtins.mapAttrs (host: system:
       mkHost host system
     ) hosts;
+
+    # Overlay exposant les paquets locaux (nxapi, nxapi-electron)
+    overlays.default = import ./overlays/default.nix;
+
+    # Paquets locaux exportes pour test direct via `nix build .#<nom>`
+    # et pour nix-update. Genere automatiquement depuis l'overlay pour
+    # eviter la duplication: tout paquet de l'overlay est expose ici.
+    packages.x86_64-linux =
+      let
+        pkgs = nixpkgs.legacyPackages.x86_64-linux.extend self.overlays.default;
+      in
+      {
+        inherit (pkgs) nxapi nxapi-electron;
+      };
   };
 }
