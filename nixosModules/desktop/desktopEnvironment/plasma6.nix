@@ -148,8 +148,7 @@ in
           isoimagewriter
           kwallet-pam
           sddm-kcm
-          #wallpaper-engine-plugin
-          #linux-wallpaperengine
+          wallpaper-engine-plugin
         ]
       );
     };

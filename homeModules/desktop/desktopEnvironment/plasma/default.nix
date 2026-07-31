@@ -5,6 +5,7 @@
     ./plasma.nix
     ./panels.nix
     ./shortcuts.nix
+    ./wallpaperengine.nix
   ];
 
   options.homeManager = {
@@ -29,6 +30,7 @@
           plasma-default.enable = true;
           panels.enable = true;
           shortcuts.enable = true;
+          wallpaperengine.enable = lib.mkDefault false;
         };
       };
 }
