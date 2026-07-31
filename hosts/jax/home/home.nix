@@ -21,7 +21,7 @@ _:
         wallpapers = [
           {
             wallpaperId = "3295216327";
-            monitor = "DP-1";
+            monitor = "auto";
           }
         ];
       };
