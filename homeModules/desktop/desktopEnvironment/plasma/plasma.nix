@@ -12,6 +12,20 @@ in
         example = true;
         description = "Enable plasma default configs.";
       };
+
+      wallpaper = lib.mkOption {
+        type = lib.types.str;
+        default = "${../../../../wallpaper/stolas.png}";
+        example = "${../../../../wallpaper/nuzi.png}";
+        description = "Desktop Wallpaper file path";
+      };
+
+      lockScreenWallpaper = lib.mkOption {
+        type = lib.types.str;
+        default = "${../../../../wallpaper/nuzi.png}";
+        example = "${../../../../wallpaper/stolas.png}";
+        description = "Lock Screen Wallpaper file path";
+      };
     };
   };
 
@@ -53,7 +67,7 @@ in
         };
         iconTheme = "Papirus-Dark";
         colorScheme = "SweetAmbarBlue";
-        wallpaper = lib.mkDefault "${../../../../wallpaper/stolas.png}";
+        wallpaper = config.homeManager.desktop.desktopEnvironment.plasma.plasma-default.wallpaper;
         splashScreen.theme = lib.mkDefault "None";
       };
 
@@ -69,7 +83,7 @@ in
         appearance = {
           alwaysShowClock = true;
           showMediaControls = true;
-          wallpaper = lib.mkDefault "${../../../../wallpaper/nuzi.jpg}";
+          wallpaper = config.homeManager.desktop.desktopEnvironment.plasma.plasma-default.lockScreenWallpaper;
           wallpaperPictureOfTheDay = null;
           wallpaperSlideShow = null;
           wallpaperPlainColor = null;
