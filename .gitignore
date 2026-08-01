@@ -19,3 +19,5 @@ nix-path
 *.log
 *.tmp
 tmp/
+
+wallpaper/stolas.png
