@@ -70,34 +70,6 @@
           };
         };
 
-        antigravity = lib.mkIf (config.homeManager.applications.development.antigravity.enable) {
-          name = "Antigravity";
-          comment = "Code Editing. AI-Powered.";
-          genericName = "AI-Powered Text Editor";
-          exec = "${pkgs.writeShellScript "antigravity-wrapper" ''
-            if echo "$1" | grep -q "^antigravity:"; then
-              antigravity --open-url "$@"
-            else
-              antigravity "$@"
-            fi
-          ''} %U";
-          icon = "antigravity";
-          startupNotify = true;
-          categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-          mimeType = [ "text/plain" "inode/directory" "x-scheme-handler/antigravity" ];
-          settings = {
-            StartupWMClass = "Antigravity";
-            Keywords = "vscode";
-          };
-          actions = {
-            new-empty-window = {
-              name = "New Empty Window";
-              exec = "antigravity --new-window %F";
-              icon = "antigravity";
-            };
-          };
-        };
-
         # Firefox
         firefox = lib.mkIf (config.homeManager.applications.browser.firefox.enable) {
           name = "Firefox";
