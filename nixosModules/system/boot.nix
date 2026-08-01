@@ -36,7 +36,9 @@
     boot.kernelPackages = config.nixos.system.boot.kernel;
     boot.supportedFilesystems = [
       "ntfs"
+      "ntfs-3g"
     ];
+    environment.systemPackages = [ pkgs.ntfs3g ];
 
     boot.initrd.systemd.enable = true;
 

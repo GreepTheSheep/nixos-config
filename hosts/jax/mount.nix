@@ -29,7 +29,7 @@
     {
       device = "/dev/disk/by-uuid/A8B6592DB658FCEE";
       fsType = "lowntfs-3g";
-      options = [ "uid=${uid}" "gid=${gid}" "rw" "user" "exec" "umask=000" ];
+      options = [ "uid=${uid}" "gid=${gid}" "rw" "user" "exec" "umask=000" "nofail" "x-systemd.automount" ];
       noCheck = true;
     };
 
