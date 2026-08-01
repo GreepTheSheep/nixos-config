@@ -33,6 +33,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     nixos-wsl = {
       url = "github:nix-community/nixos-wsl";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -117,7 +122,11 @@
       in
       nixpkgsInput.lib.nixosSystem {
         inherit system;
-        specialArgs = inputs // { inherit inputs; };
+        specialArgs = inputs // { inherit inputs; } // (
+          if nixpkgsChoice == "unstable"
+          then { home-manager = inputs.home-manager-unstable; }
+          else { }
+        );
         modules = (
           if hostname == "greep-nixos-live" then
             [
