@@ -91,7 +91,31 @@
     ...
   }: let
     mkHost =
-      hostname: system: nixpkgs.lib.nixosSystem {
+      hostname: system:
+      let
+        hostModule = import ./hosts/${hostname}/configuration.nix;
+
+        # Choisir la source nixpkgs (stable/unstable) declaree par le host,
+        # en evaluant uniquement son module de configuration (lecture seule)
+        # avant l'instanciation du systeme.
+        nixpkgsChoice =
+          (nixpkgs.lib.evalModules {
+            modules = [
+              { _module.check = false; }
+              hostModule
+            ];
+            specialArgs = inputs;
+          }).config.host.nixpkgs;
+
+        nixpkgsInput =
+          if nixpkgsChoice == "unstable" then
+            inputs.nixpkgs-unstable
+          else if nixpkgsChoice == "stable" then
+            inputs.nixpkgs-stable
+          else
+            nixpkgs;
+      in
+      nixpkgsInput.lib.nixosSystem {
         inherit system;
         specialArgs = inputs // { inherit inputs; };
         modules = (

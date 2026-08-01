@@ -19,9 +19,17 @@
       default = false;
       description = "Is the host a Live ISO ?";
     };
+
+    nixpkgs = lib.mkOption {
+      type = lib.types.enum [ "stable" "unstable" ];
+      default = "stable";
+      description = "Nixpkgs channel to use for this host.";
+    };
   };
 
 config = {
+    host.nixpkgs = "unstable";
+
     nixos.desktop = {
       enable = true;
       xrdp.enable = true;
