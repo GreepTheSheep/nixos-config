@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./cloudflared.nix
     ./ollama.nix
     ./samba.nix
   ];
@@ -19,6 +20,7 @@
 
   config = lib.mkIf config.nixos.server.enable {
     nixos.server = {
+      cloudflared.enable = lib.mkDefault false;
       ollama.enable = lib.mkDefault false;
       samba.enable = lib.mkDefault false;
     };

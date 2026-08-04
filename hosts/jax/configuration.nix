@@ -92,6 +92,7 @@ config = {
     };
 
     nixos.server = {
+      cloudflared.enable = true;
       ollama = {
         enable = true;
         openFirewall = true;
