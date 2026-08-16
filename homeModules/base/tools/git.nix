@@ -23,6 +23,9 @@
     programs.git = {
       enable = true;
       settings = {
+        core = {
+          autocrlf = "input";
+        };
         user = {
           name = "Matthieu";
           email = "greep@greep.fr";
