@@ -55,6 +55,7 @@
       iftop
       nmap
       ipcalc
+      wakeonlan
 
       # system call monitoring
       lsof # list open files
