@@ -218,29 +218,6 @@
           }
         }
       ''}"
-
-      "C+ ${directory}/sites/openclaw.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "openclaw.caddy" ''
-        openclaw.greep.fr {
-          import error-handler
-
-          vars {
-            websiteName "OpenClaw"
-          }
-
-          import hsts
-
-          #error 503 # Maintenance
-
-          reverse_proxy 192.168.1.56:18789 {
-            header_up Host {host}
-            header_up X-Real-IP {remote_host}
-            header_up X-Forwarded-For {remote_host}
-            header_up X-Forwarded-Proto {scheme}
-            fail_duration 30s
-            unhealthy_status 503
-          }
-        }
-      ''}"
     ];
 
     systemd.services.create-caddy-bridge-network = {
