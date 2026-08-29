@@ -17,14 +17,6 @@
       "ssh/authorizedKeys" = {};
       "ssh/rootAuthorizedKeys" = {};
     };
-    sops.templates = {
-      "ssh-authorizedKeys".content = ''
-        ${config.sops.placeholder."ssh/authorizedKeys"}
-      '';
-      "ssh-rootAuthorizedKeys".content = ''
-        ${config.sops.placeholder."ssh/rootAuthorizedKeys"}
-      '';
-    };
 
     services.openssh = {
       enable = true;
@@ -51,8 +43,8 @@
       attack_threshold = 10;
     };
 
-    users.users.root.openssh.authorizedKeys.keyFiles = [config.sops.templates."ssh-rootAuthorizedKeys".path];
-    users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.templates."ssh-authorizedKeys".path];
+    users.users.root.openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/rootAuthorizedKeys".path];
+    users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/authorizedKeys".path];
     nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
   };
 }
