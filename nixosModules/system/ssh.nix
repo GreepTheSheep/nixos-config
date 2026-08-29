@@ -13,6 +13,19 @@
   };
 
   config = lib.mkIf config.nixos.system.ssh.enable {
+    sops.secrets = {
+      "ssh/authorizedKeys" = {};
+      "ssh/rootAuthorizedKeys" = {};
+    };
+    sops.templates = {
+      "ssh-authorizedKeys".content = ''
+        ${config.sops.placeholder."ssh/authorizedKeys"}
+      '';
+      "ssh-rootAuthorizedKeys".content = ''
+        ${config.sops.placeholder."ssh/rootAuthorizedKeys"}
+      '';
+    };
+
     services.openssh = {
       enable = true;
       startWhenNeeded = true;
@@ -38,14 +51,6 @@
       attack_threshold = 10;
     };
 
-    sops.secrets = {
-      "ssh/authorizedKeys" = {};
-      "ssh/rootAuthorizedKeys" = {};
-    };
-    sops.templates = {
-      "ssh-authorizedKeys".content = config.sops.placeholder."ssh/authorizedKeys";
-      "ssh-rootAuthorizedKeys".content = config.sops.placeholder."ssh/rootAuthorizedKeys";
-    };
     users.users.root.openssh.authorizedKeys.keyFiles = [config.sops.templates."ssh-rootAuthorizedKeys".path];
     users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.templates."ssh-authorizedKeys".path];
     nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
