@@ -13,10 +13,12 @@
   };
 
   config = lib.mkIf config.nixos.system.ssh.enable {
+    /*
     sops.secrets = {
       "ssh/authorized-keys" = {};
       "ssh/root-authorized-keys" = {};
     };
+    */
 
     services.openssh = {
       enable = true;
@@ -43,8 +45,10 @@
       attack_threshold = 10;
     };
 
+    /*
     users.users.root.openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/root-authorized-keys".path];
     users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/authorized-keys".path];
+    */
     nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
   };
 }
