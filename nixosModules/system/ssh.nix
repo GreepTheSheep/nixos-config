@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   options.nixos = {
@@ -13,12 +13,10 @@
   };
 
   config = lib.mkIf config.nixos.system.ssh.enable {
-    /*
     sops.secrets = {
-      "ssh/authorized-keys" = {};
-      "ssh/root-authorized-keys" = {};
+      "openssh/authorized-keys" = {};
+      "openssh/root-authorized-keys" = {};
     };
-    */
 
     services.openssh = {
       enable = true;
@@ -31,6 +29,15 @@
         X11Forwarding = false;
         PrintMotd = true;
       };
+      authorizedKeysCommand = "${pkgs.writeShellScript "ssh-authorized-keys-command" ''
+        case "$1" in
+          root)
+            cat ${config.sops.secrets."openssh/root-authorized-keys".path} ;;
+          ${config.nixos.system.user.defaultuser.name})
+            cat ${config.sops.secrets."openssh/authorized-keys".path} ;;
+        esac
+      ''}";
+      authorizedKeysCommandUser = "root";
     };
 
     services.sshguard = {
@@ -45,10 +52,6 @@
       attack_threshold = 10;
     };
 
-    /*
-    users.users.root.openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/root-authorized-keys".path];
-    users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.secrets."ssh/authorized-keys".path];
-    */
     nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
   };
 }
