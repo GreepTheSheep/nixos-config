@@ -38,7 +38,9 @@
       attack_threshold = 10;
     };
 
-    services.sshd.enable = true;
+    sops.secrets."ssh/authorizedKeys" = {};
+    sops.templates."ssh-authorizedKeys".content = config.sops.placeholder."ssh/authorizedKeys";
+    users.users."${config.nixos.system.user.defaultuser.name}".openssh.authorizedKeys.keyFiles = [config.sops.templates."ssh-authorizedKeys".path];
     nixos.system.firewall.extraAllowedTCPPorts = [ 22 ];
   };
 }
