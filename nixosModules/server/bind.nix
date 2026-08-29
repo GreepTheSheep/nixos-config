@@ -249,33 +249,31 @@ in
         name = zone.name;
         master = true;
         file = mkZoneFile zone;
+        allowQuery = cfg.allowQuery;
       }) cfg.zones
       ++ map (zone: {
         name = "${zone.prefix}.in-addr.arpa";
         master = true;
         file = mkReverseZone zone;
+        allowQuery = cfg.allowQuery;
       }) cfg.reverseZones;
 
-      settings = {
-        options = {
-          listen-on = [ "any" ];
-          listen-on-v6 = [ "any" ];
-          recursion = "yes";
-          allow-query = cfg.allowQuery;
-          allow-recursion = cfg.allowRecursion;
-          allow-transfer = "none";
-          dnssec-validation = "auto";
-          notify = "no";
-        };
+      extraOptions = ''
+        recursion yes;
+        allow-query { ${lib.concatMapStringsSep " " (x: "${x};") cfg.allowQuery} };
+        allow-recursion { ${lib.concatMapStringsSep " " (x: "${x};") cfg.allowRecursion} };
+        allow-transfer { none; };
+        dnssec-validation auto;
+        notify no;
+      '';
 
-        zones = builtins.listToAttrs (map (zone: {
-          name = zone.name;
-          value = {
-            forward = "only";
-            forwarders = if zone.forwarders != [] then zone.forwarders else cfg.forwarders;
-          };
-        }) cfg.forwardZones);
-      };
+      extraConfig = lib.concatMapStrings (zone: ''
+        zone "${zone.name}" {
+          type forward;
+          forward only;
+          forwarders { ${lib.concatMapStringsSep " " (f: "${f};") (if zone.forwarders != [] then zone.forwarders else cfg.forwarders)} };
+        };
+      '') cfg.forwardZones;
     };
 
     nixos.system.firewall = lib.mkIf cfg.openFirewall {
