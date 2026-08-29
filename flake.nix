@@ -157,6 +157,7 @@
       "jax-wsl"               = "x86_64-linux";
       "vigor"                 = "x86_64-linux";
       "varian"                = "aarch64-linux";
+      "billcipher"            = "x86_64-linux";
       "greep-nixos-live"      = "x86_64-linux";
     };
   in
