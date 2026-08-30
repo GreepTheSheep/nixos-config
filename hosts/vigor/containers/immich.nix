@@ -146,7 +146,7 @@
           DB_STORAGE_TYPE = "HDD";
         };
         volumes = [
-          "${directory}/pgdata:/var/lib/postgresql/data"
+          "${directory}/pgdata:/var/lib/postgresql"
         ];
         networks = [
           "immich-network"
