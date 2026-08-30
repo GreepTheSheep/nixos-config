@@ -16,59 +16,22 @@
     directory = "${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers/caddy";
   in lib.mkIf config.host.containers.caddy.enable
   {
+    sops.secrets = {
+      "docker/caddy/cloudflare-acme-dns-apikey" = {};
+      "gitea/registry-password" = {};
+    };
+
+    sops.templates."caddy-extraconf-cloudflare-acme".content = ''
+      acme_dns cloudflare ${config.sops.placeholder."docker/caddy/cloudflare-acme-dns-apikey"}
+    '';
+
     systemd.tmpfiles.rules = [
       "d ${directory} 0755 ${config.nixos.system.user.defaultuser.name} users"
       "d ${directory}/caddy-data 0755 ${config.nixos.system.user.defaultuser.name} users"
       "d ${directory}/sites 0755 ${config.nixos.system.user.defaultuser.name} users"
+      "d ${directory}/extra-config 0755 ${config.nixos.system.user.defaultuser.name} users"
 
-      "C+ ${directory}/Caddyfile 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "Caddyfile" ''
-        {
-          servers {
-            trusted_proxies static private_ranges
-            trusted_proxies cloudflare {
-              interval 12h
-              timeout 15s
-            }
-          }
-        }
-
-        (hsts) {
-          header Strict-Transport-Security "max-age=63072000; includeSubDomains"
-        }
-
-        (cloudflare-real-ip) {
-          @noIPv6 header !CF-Connecting-IPv6
-          header_up @noIPv6 X-Forwarded-For {http.request.header.CF-Connecting-IP}
-          header_up X-Forwarded-For {http.request.header.CF-Connecting-IPv6}
-          header_up @noIPv6 X-Real-IP {http.request.header.CF-Connecting-IP}
-          header_up X-Real-IP {http.request.header.CF-Connecting-IPv6}
-          header_up X-Forwarded-Proto {scheme}
-        }
-
-        (error-handler) {
-          handle_errors {
-            root * /
-            templates
-            file_server
-            @maintenance expression {http.error.status_code} == 503
-            handle @maintenance {
-              rewrite * {$TEMPLATES_DIR}/maintenance.html
-            }
-            handle {
-              rewrite * {$TEMPLATES_DIR}/error.html
-            }
-          }
-        }
-
-        (allow_insecure_ssl) {
-          transport http {
-            tls
-            tls_insecure_skip_verify
-          }
-        }
-
-        import {$SITES_DIR}/*.caddy
-      ''}"
+      "C+ ${directory}/extra-config/cloudflare-acme.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${config.sops.templates."caddy-extraconf-cloudflare-acme".path}"
 
       "C+ ${directory}/sites/vigor.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "vigor.caddy" ''
         4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
@@ -206,18 +169,6 @@
           }
         }
       ''}"
-
-      "C+ ${directory}/sites/varian.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "varian.caddy" ''
-        4.varian.greep.fr, 6.varian.greep.fr, varian.greep.fr {
-          import error-handler
-
-          handle / {
-            root * {$TEMPLATES_DIR}/server-motd
-            file_server
-            rewrite * {labels.2}.html
-          }
-        }
-      ''}"
     ];
 
     systemd.services.create-caddy-bridge-network = {
@@ -231,9 +182,6 @@
         ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.docker}/bin/docker network create caddy-bridge || true'";
       };
     };
-
-
-    sops.secrets."gitea/registry-password" = {};
 
     virtualisation.oci-containers.containers.caddy = {
       image = "git.greep.fr/greep/caddy";
@@ -250,8 +198,8 @@
       ];
       volumes = [
         "${directory}/caddy-data:/data/caddy"
-        "${directory}/Caddyfile:/etc/caddy/Caddyfile:ro"
         "${directory}/sites:/etc/caddy/sites"
+        "${directory}/extra-config:/etc/caddy/config.d"
       ];
       networks = [ "caddy-bridge" ];
       extraOptions = [
