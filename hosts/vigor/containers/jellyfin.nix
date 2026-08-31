@@ -34,6 +34,7 @@
         "d ${directory} 0755 ${user} users"
         "d ${directory}/config 0755 ${user} users"
         "d ${directory}/cache 0755 ${user} users"
+        "f+ ${directory}/media-bar-list.txt 0755 ${user} users - home\n"
       ])
       (lib.mkIf config.host.containers.caddy.enable [
         "C+ ${caddySiteDirectory}/jellyfin.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "jellyfin.caddy" ''
@@ -71,7 +72,7 @@
       volumes = [
         "${directory}/config:/config"
         "${directory}/cache:/cache"
-        #"${directory}/media-bar-list.txt:/jellyfin/jellyfin-web/avatars/list.txt:ro"
+        "${directory}/media-bar-list.txt:/jellyfin/jellyfin-web/avatars/list.txt:ro"
 
         "${moviesDirectory}:/media/films"
         "${showsDirectory}:/media/series"
