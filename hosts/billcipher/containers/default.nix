@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./crowdsec.nix
     ./watchtower.nix
   ];
 
@@ -21,6 +22,7 @@
     ];
 
     host.containers = {
+      crowdsec.enable = true;
       watchtower.enable = true;
     };
   };

@@ -6,6 +6,7 @@
     ./backrest.nix
     ./caddy.nix
     ./cf-ddns.nix
+    ./crowdsec.nix
     ./h5ai.nix
     ./immich.nix
     ./jellyfin.nix
@@ -39,6 +40,7 @@
       backrest.enable = true;
       caddy.enable = true;
       cfddns.enable = true;
+      crowdsec.enable = true;
       h5ai.enable = true;
       immich = {
         enable = true;
