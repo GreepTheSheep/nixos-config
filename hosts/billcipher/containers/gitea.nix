@@ -67,6 +67,7 @@
     sops.secrets = {
       "docker/gitea/database-password" = {};
       "docker/gitea/pages-token" = {};
+      "docker/gitea/runner-registration-token" = {};
     };
 
     sops.templates = {
@@ -79,6 +80,9 @@
       '';
       "gitea-pages.env".content = ''
         GITEA_PAGES_TOKEN=${config.sops.placeholder."docker/gitea/pages-token"}
+      '';
+      "gitea-act.env".content = ''
+        GITEA_RUNNER_REGISTRATION_TOKEN=${config.sops.placeholder."docker/gitea/runner-registration-token"}
       '';
     };
 
@@ -161,6 +165,28 @@
         };
         networks = [
           "caddy-bridge"
+          "gitea-network"
+        ];
+        dependsOn = [
+          "gitea"
+        ];
+      };
+
+      "gitea-act-runner" = {
+        image = "gitea/act_runner";
+        environmentFiles = [
+          config.sops.templates."gitea-act.env".path
+        ];
+        environment = {
+          TZ = "Europe/Paris";
+          GITEA_INSTANCE_URL = "https://git.greep.fr";
+          GITEA_RUNNER_NAME = "BillCipher";
+        };
+        volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock"
+          "${directory}/gitea_act:/data"
+        ];
+        networks = [
           "gitea-network"
         ];
         dependsOn = [
