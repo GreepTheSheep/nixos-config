@@ -3,7 +3,9 @@
 {
   imports = [
     ./backrest.nix
+    ./caddy.nix
     ./crowdsec.nix
+    ./gitea.nix
     ./watchtower.nix
   ];
 
@@ -24,7 +26,9 @@
 
     host.containers = {
       backrest.enable = true;
+      caddy.enable = true;
       crowdsec.enable = true;
+      gitea.enable = true;
       watchtower.enable = true;
     };
   };
