@@ -2,7 +2,7 @@ _:
 
 {
   imports = [
-    ./containers
+    #./containers
 
     ./configuration.nix
     ./hardware-configuration.nix
