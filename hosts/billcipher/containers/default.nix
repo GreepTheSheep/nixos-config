@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./backrest.nix
     ./crowdsec.nix
     ./watchtower.nix
   ];
@@ -22,6 +23,7 @@
     ];
 
     host.containers = {
+      backrest.enable = true;
       crowdsec.enable = true;
       watchtower.enable = true;
     };
