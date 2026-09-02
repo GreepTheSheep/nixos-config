@@ -38,10 +38,15 @@
           [expire]
           default = "1day"
           [expire_options]
-          5min = 300
           10min = 600
+          30min = 1800
           1hour = 3600
+          2hour = 7200
+          4hour = 14400
+          12hour = 43200
           1day = 86400
+          2day = 172800
+          4day = 345600
           1week = 604800
           1month = 2592000
 
