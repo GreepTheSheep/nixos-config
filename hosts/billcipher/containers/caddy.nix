@@ -43,11 +43,25 @@
                 websiteName "Backrest"
               }
 
-              import hsts
-
               #error 503 # Maintenance
 
               reverse_proxy backrest:9898 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
+            }
+          ''}
+
+          ${lib.optionalString config.host.containers.prometheus.enable ''
+            redir /prom /prom/
+            handle /prom/* {
+              vars {
+                websiteName "Prometheus"
+              }
+
+              #error 503 # Maintenance
+
+              reverse_proxy prometheus:9090 {
                 fail_duration 30s
                 unhealthy_status 503
               }

@@ -6,7 +6,9 @@
     ./caddy.nix
     ./crowdsec.nix
     ./gitea.nix
+    ./grafana.nix
     ./privatebin.nix
+    ./prometheus.nix
     ./watchtower.nix
   ];
 
@@ -30,7 +32,9 @@
       caddy.enable = true;
       crowdsec.enable = true;
       gitea.enable = true;
+      grafana.enable = true;
       privatebin.enable = true;
+      prometheus.enable = true;
       watchtower.enable = true;
     };
   };
