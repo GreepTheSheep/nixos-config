@@ -18,8 +18,6 @@
     directory = "${home}/docker-containers/privatebin";
     caddySiteDirectory = "${home}/docker-containers/caddy/sites";
   in lib.mkIf config.host.containers.privatebin.enable {
-
-
     systemd.tmpfiles.rules = lib.mkMerge [
       ([
         "d ${directory} 0755 ${user} users"
