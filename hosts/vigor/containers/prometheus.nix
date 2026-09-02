@@ -21,7 +21,7 @@
   {
     virtualisation.oci-containers.containers = {
       node-exporter = {
-        image = "quay.io/prometheus/node-exporter";
+        image = "ghcr.io/prometheus/node-exporter";
         volumes = [
           "/:/host:ro,rslave"
         ];
