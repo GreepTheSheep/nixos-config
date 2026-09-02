@@ -9,6 +9,7 @@
     ./grafana.nix
     ./privatebin.nix
     ./prometheus.nix
+    ./uptime-kuma.nix
     ./watchtower.nix
   ];
 
@@ -35,6 +36,7 @@
       grafana.enable = true;
       privatebin.enable = true;
       prometheus.enable = true;
+      uptime-kuma.enable = true;
       watchtower.enable = true;
     };
   };

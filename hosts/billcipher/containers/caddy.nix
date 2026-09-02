@@ -68,6 +68,25 @@
             }
           ''}
 
+          ${lib.optionalString config.host.containers.uptime-kuma.enable ''
+            redir /kuma /kuma/
+            handle_path /kuma/* {
+              vars {
+                websiteName "Uptime Kuma"
+              }
+
+              header -X-Frame-Options
+              header X-Frame-Options "ALLOW-FROM https://jellyfin.greep.fr"
+
+              #error 503 # Maintenance
+
+              reverse_proxy uptime-kuma:3001 {
+                fail_duration 30s
+                unhealthy_status 503
+              }
+            }
+          ''}
+
           handle /ip {
             respond <<HTML
             client_ip: {client_ip}
