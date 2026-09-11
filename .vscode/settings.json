@@ -1,4 +1,6 @@
 {
+    "files.insertFinalNewline": false,
+    "files.trimFinalNewlines": true,
     "[nix]": {
         "editor.tabSize": 2,
         "editor.defaultFormatter": "jnoortheen.nix-ide",
