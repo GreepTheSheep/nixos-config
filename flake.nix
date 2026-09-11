@@ -89,95 +89,96 @@
     };
   };
 
-  outputs = inputs@{
-    self,
-    nixpkgs,
-    catppuccin,
-    ...
-  }: let
-    mkHost =
-      hostname: system:
-      let
-        hostModule = import ./hosts/${hostname}/configuration.nix;
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      catppuccin,
+      ...
+    }:
+    let
+      mkHost =
+        hostname: system:
+        let
+          hostModule = import ./hosts/${hostname}/configuration.nix;
 
-        # Choisir la source nixpkgs (stable/unstable) declaree par le host,
-        # en evaluant uniquement son module de configuration (lecture seule)
-        # avant l'instanciation du systeme.
-        nixpkgsChoice =
-          (nixpkgs.lib.evalModules {
-            modules = [
-              { _module.check = false; }
-              hostModule
-            ];
-            specialArgs = inputs;
-          }).config.host.nixpkgs;
+          # Choisir la source nixpkgs (stable/unstable) declaree par le host,
+          # en evaluant uniquement son module de configuration (lecture seule)
+          # avant l'instanciation du systeme.
+          nixpkgsChoice =
+            (nixpkgs.lib.evalModules {
+              modules = [
+                { _module.check = false; }
+                hostModule
+              ];
+              specialArgs = inputs;
+            }).config.host.nixpkgs;
 
-        nixpkgsInput =
-          if nixpkgsChoice == "unstable" then
-            inputs.nixpkgs-unstable
-          else if nixpkgsChoice == "stable" then
-            inputs.nixpkgs-stable
-          else
-            nixpkgs;
-      in
-      nixpkgsInput.lib.nixosSystem {
-        inherit system;
-        specialArgs = inputs // { inherit inputs; } // (
-          if nixpkgsChoice == "unstable"
-          then { home-manager = inputs.home-manager-unstable; }
-          else { }
-        );
-        modules = (
-          if hostname == "greep-nixos-live" then
-            [
-              ({ pkgs, modulesPath, ... }: {
-                imports = [
-                  (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-                ];
-              })
-              ./nixosModules/default.nix
-              ./hosts/${hostname}/default.nix
-              ./homeModules/homemanager.nix
-            ]
-          else
-            [
-              #catppuccin.nixosModules.catppuccin
-              ./nixosModules/default.nix
-              ./hosts/${hostname}/default.nix
-              ./homeModules/homemanager.nix
-            ]
-        );
+          nixpkgsInput =
+            if nixpkgsChoice == "unstable" then
+              inputs.nixpkgs-unstable
+            else if nixpkgsChoice == "stable" then
+              inputs.nixpkgs-stable
+            else
+              nixpkgs;
+        in
+        nixpkgsInput.lib.nixosSystem {
+          inherit system;
+          specialArgs =
+            inputs
+            // {
+              inherit inputs;
+            }
+            // (if nixpkgsChoice == "unstable" then { home-manager = inputs.home-manager-unstable; } else { });
+          modules = (
+            if hostname == "greep-nixos-live" then
+              [
+                ({ pkgs, modulesPath, ... }: {
+                  imports = [
+                    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+                  ];
+                })
+                ./nixosModules/default.nix
+                ./hosts/${hostname}/default.nix
+                ./homeModules/homemanager.nix
+              ]
+            else
+              [
+                #catppuccin.nixosModules.catppuccin
+                ./nixosModules/default.nix
+                ./hosts/${hostname}/default.nix
+                ./homeModules/homemanager.nix
+              ]
+          );
+        };
+
+      hosts = {
+        "jax" = "x86_64-linux";
+        "pomni" = "x86_64-linux";
+        "jax-desktop-vm" = "x86_64-linux";
+        "jax-server-vm" = "x86_64-linux";
+        "jax-wsl" = "x86_64-linux";
+        "vigor" = "x86_64-linux";
+        "varian" = "aarch64-linux";
+        "billcipher" = "x86_64-linux";
+        "greep-nixos-live" = "x86_64-linux";
       };
+    in
+    {
+      nixosConfigurations = builtins.mapAttrs (host: system: mkHost host system) hosts;
 
-    hosts = {
-      "jax"                   = "x86_64-linux";
-      "pomni"                 = "x86_64-linux";
-      "jax-desktop-vm"        = "x86_64-linux";
-      "jax-server-vm"         = "x86_64-linux";
-      "jax-wsl"               = "x86_64-linux";
-      "vigor"                 = "x86_64-linux";
-      "varian"                = "aarch64-linux";
-      "billcipher"            = "x86_64-linux";
-      "greep-nixos-live"      = "x86_64-linux";
+      # Overlay exposant les paquets locaux (nxapi, nxapi-electron)
+      overlays.default = import ./overlays/default.nix;
+
+      # Paquets locaux exportes pour test direct via `nix build .#<nom>`
+      # et pour nix-update. Genere automatiquement depuis l'overlay pour
+      # eviter la duplication: tout paquet de l'overlay est expose ici.
+      packages.x86_64-linux =
+        let
+          pkgs = nixpkgs.legacyPackages.x86_64-linux.extend self.overlays.default;
+        in
+        {
+          inherit (pkgs) nxapi nxapi-electron;
+        };
     };
-  in
-  {
-    nixosConfigurations = builtins.mapAttrs (host: system:
-      mkHost host system
-    ) hosts;
-
-    # Overlay exposant les paquets locaux (nxapi, nxapi-electron)
-    overlays.default = import ./overlays/default.nix;
-
-    # Paquets locaux exportes pour test direct via `nix build .#<nom>`
-    # et pour nix-update. Genere automatiquement depuis l'overlay pour
-    # eviter la duplication: tout paquet de l'overlay est expose ici.
-    packages.x86_64-linux =
-      let
-        pkgs = nixpkgs.legacyPackages.x86_64-linux.extend self.overlays.default;
-      in
-      {
-        inherit (pkgs) nxapi nxapi-electron;
-      };
-  };
 }
