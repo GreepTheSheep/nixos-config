@@ -8,6 +8,7 @@
     ./parsec.nix
     ./prismlauncher.nix
     ./sober.nix
+    ./wheelwizard.nix
   ];
 
   options.homeManager = {
@@ -29,6 +30,7 @@
       parsec.enable = true;
       prismlauncher.enable = true;
       sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;
+      wheelwizard.enable = lib.mkDefault false;
     };
   };
 }
