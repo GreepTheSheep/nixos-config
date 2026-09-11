@@ -1,4 +1,10 @@
-{ config, lib, pkgs, nixos-wsl, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  nixos-wsl,
+  ...
+}:
 
 {
   imports = [
@@ -26,7 +32,10 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
@@ -37,6 +46,8 @@
       enable = true;
       defaultUser = config.nixos.system.user.defaultuser.name;
     };
+
+    host.nixpkgs = "unstable";
 
     # Disable rules that are not necessary on WSL
     nixos = {
