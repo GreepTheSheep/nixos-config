@@ -3,6 +3,7 @@
 {
   imports = [
     ./bs-manager.nix
+    ./dolphin-emu.nix
     ./lutris.nix
     ./nxapi.nix
     ./parsec.nix
@@ -24,7 +25,8 @@
 
   config = lib.mkIf config.homeManager.applications.gaming.enable {
     homeManager.applications.gaming = {
-      bs-manager.enable = true;
+      bs-manager.enable = lib.mkDefault false;
+      dolphin-emu.enable = lib.mkDefault false;
       lutris.enable = lib.mkDefault false;
       nxapi.enable = lib.mkDefault false;
       parsec.enable = true;

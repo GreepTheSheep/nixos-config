@@ -16,6 +16,8 @@ _:
       editing.video.enableDavinciResolve = true;
 
       gaming = {
+        bs-manager.enable = true;
+        dolphin-emu.enable = true;
         nxapi = {
           enable = true;
           enableElectronApp = true;
