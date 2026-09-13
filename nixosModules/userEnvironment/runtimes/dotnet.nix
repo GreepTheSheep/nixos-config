@@ -29,6 +29,8 @@
       dotnetPackage = pkgs."dotnet-sdk_${builtins.toString version}";
     in
     lib.mkIf config.nixos.userEnvironment.runtimes.dotnet.enable {
-      environment.systemPackages = dotnetPackage;
+      environment.systemPackages = [
+        dotnetPackage
+      ];
     };
 }
