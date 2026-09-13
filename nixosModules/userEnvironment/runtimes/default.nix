@@ -3,6 +3,7 @@
 {
   imports = [
     ./bun.nix
+    ./dotnet.nix
     ./nodejs.nix
     ./python.nix
     ./rust.nix
@@ -22,6 +23,7 @@
   config = lib.mkIf config.nixos.userEnvironment.runtimes.enable {
     nixos.userEnvironment.runtimes = {
       bun.enable = lib.mkDefault false;
+      dotnet.enable = true;
       nodejs.enable = true;
       python.enable = true;
       rust.enable = true;
