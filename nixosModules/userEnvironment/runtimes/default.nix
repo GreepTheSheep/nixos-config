@@ -21,7 +21,7 @@
 
   config = lib.mkIf config.nixos.userEnvironment.runtimes.enable {
     nixos.userEnvironment.runtimes = {
-      bun.enable = true;
+      bun.enable = lib.mkDefault false;
       nodejs.enable = true;
       python.enable = true;
       rust.enable = true;
