@@ -66,6 +66,7 @@
     };
 
     nixos.server = {
+      vscode-server.external = true;
       samba = {
         enable = true;
         shares = [

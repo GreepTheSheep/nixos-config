@@ -6,6 +6,7 @@
     ./cloudflared.nix
     ./ollama.nix
     ./samba.nix
+    ./vscode-server.nix
   ];
 
   options.nixos = {
@@ -25,6 +26,7 @@
       cloudflared.enable = lib.mkDefault false;
       ollama.enable = lib.mkDefault false;
       samba.enable = lib.mkDefault false;
+      vscode-server.enable = true;
     };
   };
 }

@@ -53,6 +53,11 @@
     nixos = {
       desktop.enable = false;
       base.shell.console.enable = lib.mkForce false;
+
+      server = {
+        vscode-server.external = true;
+      };
+
       system = {
         powermanagement.enable = lib.mkForce false;
         bootloader.enable = lib.mkForce false;

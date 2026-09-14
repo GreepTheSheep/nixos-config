@@ -56,5 +56,9 @@
       enable = true;
       docker.enable = true;
     };
+
+    nixos.server = {
+      vscode-server.external = true;
+    };
   };
 }
