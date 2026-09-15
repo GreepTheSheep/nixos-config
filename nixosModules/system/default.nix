@@ -18,6 +18,7 @@
     ./nixos.nix
     ./nixosvm.nix
     ./nixpkgs.nix
+    ./nur.nix
     ./powermanagement.nix
     ./secureboot.nix
     ./sops.nix
@@ -54,6 +55,7 @@
       nixos.enable = true;
       nixosvm.enable = lib.mkDefault false;
       nixpkgs.enable = true;
+      nur.enable = true;
       powermanagement.enable = true;
       secureboot.enable = lib.mkDefault false;
       sops.enable = true;
