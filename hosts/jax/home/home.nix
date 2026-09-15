@@ -18,10 +18,6 @@ _:
       gaming = {
         bs-manager.enable = true;
         dolphin-emu.enable = true;
-        nxapi = {
-          enable = true;
-          enableElectronApp = true;
-        };
         wheelwizard.enable = true;
       };
 
