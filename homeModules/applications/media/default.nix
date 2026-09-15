@@ -3,6 +3,7 @@
 {
   imports = [
     ./audio.nix
+    ./feishin.nix
     ./ffmpeg.nix
     ./jellyfin.nix
     ./mediaplayer.nix
@@ -28,6 +29,7 @@
   config = lib.mkIf config.homeManager.applications.media.enable {
     homeManager.applications.media = {
       audio.enable = true;
+      feishin.enable = true;
       ffmpeg.enable = true;
       jellyfin.enable = true;
       mediaplayer.enable = true;

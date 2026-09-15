@@ -3,7 +3,6 @@
 {
   imports = [
     ./helium.nix
-    ./feishin.nix
   ];
 
   options.nixos = {
@@ -20,7 +19,6 @@
   config = lib.mkIf config.nixos.userEnvironment.non-nix-apps.enable {
     nixos.userEnvironment.non-nix-apps = {
       helium.enable = true;
-      feishin.enable = true;
     };
 
     # Force disable apps on vmVariant because apps will not be installed there
