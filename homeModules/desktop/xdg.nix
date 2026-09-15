@@ -1,4 +1,10 @@
-{ config, lib, pkgs, osConfig, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  osConfig,
+  ...
+}:
 
 {
   options.homeManager = {
@@ -55,8 +61,17 @@
           ''} %U";
           icon = "vscode";
           startupNotify = true;
-          categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-          mimeType = [ "text/plain" "inode/directory" "x-scheme-handler/vscode" ];
+          categories = [
+            "Utility"
+            "TextEditor"
+            "Development"
+            "IDE"
+          ];
+          mimeType = [
+            "text/plain"
+            "inode/directory"
+            "x-scheme-handler/vscode"
+          ];
           settings = {
             StartupWMClass = "Code";
             Keywords = "vscode";
@@ -78,8 +93,26 @@
           exec = "${pkgs.firefox}/bin/firefox %U";
           icon = "firefox";
           startupNotify = true;
-          categories = [ "Network" "WebBrowser" ];
-          mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+          categories = [
+            "Network"
+            "WebBrowser"
+          ];
+          mimeType = [
+            "application/pdf"
+            "application/rdf+xml"
+            "application/rss+xml"
+            "application/xhtml+xml"
+            "application/xhtml_xml"
+            "application/xml"
+            "image/gif"
+            "image/jpeg"
+            "image/png"
+            "image/webp"
+            "text/html"
+            "text/xml"
+            "x-scheme-handler/http"
+            "x-scheme-handler/https"
+          ];
           settings = {
             StartupWMClass = "Firefox";
             Keywords = "firefox;web browser";
@@ -96,24 +129,6 @@
           };
         };
 
-        # AFFiNE
-        affine = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.affine.enable) {
-          name = "AFFiNE";
-          comment = "AFFiNE Desktop App";
-          genericName = "AFFiNE";
-          exec = "/opt/affine/AFFiNE %U";
-          icon = "/opt/affine/icon.ico";
-          startupNotify = true;
-          terminal = false;
-          categories = [ "Utility" ];
-          mimeType = [ "x-scheme-handler/affine" ];
-          settings = {
-            Type = "Application";
-            StartupWMClass = "AFFiNE";
-            Keywords = "AFFiNE";
-          };
-        };
-
         # Helium
         helium = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.helium.enable) {
           name = "Helium";
@@ -123,8 +138,26 @@
           icon = "/opt/helium/product_logo_256.png";
           startupNotify = true;
           terminal = false;
-          categories = [ "Network" "WebBrowser" ];
-          mimeType = [ "application/pdf" "application/rdf+xml" "application/rss+xml" "application/xhtml+xml" "application/xhtml_xml" "application/xml" "image/gif" "image/jpeg" "image/png" "image/webp" "text/html" "text/xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+          categories = [
+            "Network"
+            "WebBrowser"
+          ];
+          mimeType = [
+            "application/pdf"
+            "application/rdf+xml"
+            "application/rss+xml"
+            "application/xhtml+xml"
+            "application/xhtml_xml"
+            "application/xml"
+            "image/gif"
+            "image/jpeg"
+            "image/png"
+            "image/webp"
+            "text/html"
+            "text/xml"
+            "x-scheme-handler/http"
+            "x-scheme-handler/https"
+          ];
           settings = {
             Type = "Application";
             StartupWMClass = "helium";
@@ -142,24 +175,6 @@
           };
         };
 
-        # Feishin
-        feishin = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.feishin.enable)  {
-          name = "Feishin";
-          comment = "Un lecteur de musique moderne auto-hébergé.";
-          genericName = "Lecteur de musique";
-          exec = "/opt/feishin/feishin --no-sandbox --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto %U";
-          icon = "/opt/feishin/resources/assets/icons/256x256.png";
-          terminal = false;
-          startupNotify = true;
-          categories = [ "AudioVideo" "Audio" "Music" "Player" ];
-          settings = {
-            Keywords = "jellyfin;feishin;music player";
-            TryExec = "/opt/feishin/feishin";
-            StartupWMClass = "feishin";
-            SingleMainWindow = "true";
-          };
-        };
-
         # Backrest (opens http://backrest:9898)
         backrest = lib.mkIf (osConfig.nixos.base.tools.backrest.enable) {
           name = "Backrest";
@@ -171,7 +186,10 @@
           ];
           terminal = false;
           startupNotify = false;
-          categories = [ "Utility" "FileTools" ];
+          categories = [
+            "Utility"
+            "FileTools"
+          ];
         };
 
         # Scrutiny (opens http://scrutiny:9899)
@@ -185,7 +203,10 @@
           ];
           terminal = false;
           startupNotify = false;
-          categories = [ "Utility" "Monitor" ];
+          categories = [
+            "Utility"
+            "Monitor"
+          ];
         };
 
         # Sandbox (uses the vmVariant if it was built)
@@ -196,7 +217,10 @@
           exec = "sudo /opt/nixos-sandbox/result/bin/run-${osConfig.networking.hostName}-vm";
           terminal = false;
           startupNotify = false;
-          categories = [ "System" "Emulator" ];
+          categories = [
+            "System"
+            "Emulator"
+          ];
           settings = {
             Path = "/opt/nixos-sandbox/";
           };
@@ -209,7 +233,10 @@
           exec = "sudo nixos-rebuild build-vm";
           terminal = true;
           startupNotify = false;
-          categories = [ "System" "Emulator" ];
+          categories = [
+            "System"
+            "Emulator"
+          ];
           settings = {
             Path = "/opt/nixos-sandbox/";
           };

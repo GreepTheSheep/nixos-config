@@ -1,4 +1,9 @@
-{ lib, config, osConfig, ... }:
+{
+  lib,
+  config,
+  osConfig,
+  ...
+}:
 
 {
   options.homeManager = {
@@ -83,7 +88,7 @@
                 ++ lib.optional config.homeManager.applications.browser.firefox.enable "applications:firefox.desktop"
                 ++ [ "applications:org.kde.dolphin.desktop" ]
                 ++ lib.optional config.homeManager.applications.communication.discord.enable "applications:discord.desktop"
-                ++ lib.optional osConfig.nixos.userEnvironment.non-nix-apps.feishin.enable "applications:feishin.desktop"
+                ++ lib.optional config.homeManager.applications.media.feishin.enable "applications:feishin.desktop"
                 ++ [ "applications:org.kde.konsole.desktop" ]
                 ++ [ "applications:bitwarden.desktop" ]
                 ++ lib.optional config.homeManager.applications.media.jellyfin.enable "applications:org.jellyfin.JellyfinDesktop.desktop";
@@ -167,8 +172,8 @@
         widgets = [
           {
             iconTasks = {
-              launchers = [];
-              appearance ={
+              launchers = [ ];
+              appearance = {
                 rows.maximum = 5;
                 iconSpacing = "medium";
               };
