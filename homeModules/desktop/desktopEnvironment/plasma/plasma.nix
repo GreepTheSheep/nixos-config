@@ -1,4 +1,10 @@
-{ lib, pkgs, config, osConfig, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  osConfig,
+  ...
+}:
 
 let
   isLaptop = osConfig.host.isLaptop == true;
@@ -38,22 +44,21 @@ in
     };
 
     # Example: Theme specific packages meant for KDE
-    home.packages = (
-      with pkgs;
-      [
+    home.packages =
+      (with pkgs; [
         papirus-icon-theme
         sweet-nova
         # libsForQt5.qt5.qtgraphicaleffects
-      ]
-    ) ++ (
-      with pkgs;
-      with kdePackages;
-      [
-        libksysguard
-        maliit-keyboard
-        partitionmanager
-      ]
-    );
+      ])
+      ++ (
+        with pkgs;
+        with kdePackages;
+        [
+          libksysguard
+          maliit-keyboard
+          partitionmanager
+        ]
+      );
 
     programs.plasma = {
       enable = true;
@@ -74,9 +79,9 @@ in
       kscreenlocker = {
         lockOnResume = true;
         timeout = lib.mkMerge [
-            (lib.mkIf isLaptop 5)
-            (lib.mkIf (!isLaptop) 15)
-          ];
+          (lib.mkIf isLaptop 5)
+          (lib.mkIf (!isLaptop) 15)
+        ];
         passwordRequired = true;
         passwordRequiredDelay = 30;
         lockOnStartup = false;
@@ -155,8 +160,21 @@ in
         kdeglobals.General = {
           ColorScheme = "BreezeDark";
 
-          # Set default web browser to Junction
-          BrowserApplication = "re.sonny.Junction.desktop";
+          # Set default web browser
+          BrowserApplication = lib.mkMerge [
+            (lib.mkIf (
+              config.homeManager.applications.browser.firefox.enable
+              && config.homeManager.applications.browser.helium.enable
+            ) "re.sonny.Junction.desktop")
+            (lib.mkIf (
+              !config.homeManager.applications.browser.firefox.enable
+              && config.homeManager.applications.browser.helium.enable
+            ) "helium.desktop")
+            (lib.mkIf (
+              config.homeManager.applications.browser.firefox.enable
+              && !config.homeManager.applications.browser.helium.enable
+            ) "firefox.desktop")
+          ];
         };
 
         baloofilerc."Basic Settings"."Indexing-Enabled" = false;

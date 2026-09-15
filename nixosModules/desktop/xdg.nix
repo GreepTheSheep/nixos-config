@@ -1,14 +1,45 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  browser = [ "re.sonny.Junction.desktop;" ];
+  browser = lib.mkMerge [
+    (lib.mkIf (
+      config.homeManager.applications.browser.firefox.enable
+      && config.homeManager.applications.browser.helium.enable
+    ) [ "re.sonny.Junction.desktop;" ])
+    (lib.mkIf (
+      !config.homeManager.applications.browser.firefox.enable
+      && config.homeManager.applications.browser.helium.enable
+    ) [ "helium.desktop;" ])
+    (lib.mkIf (
+      config.homeManager.applications.browser.firefox.enable
+      && !config.homeManager.applications.browser.helium.enable
+    ) [ "firefox.desktop;" ])
+  ];
   chrome = [ "helium.desktop;" ];
   firefox = [ "firefox.desktop;" ];
   filemanager = [ "org.kde.dolphin.desktop;" ];
   #mediaplayer = [ "vlc.desktop;" ];
   videoplayer = [ "vlc.desktop;" ];
   musicplayer = [ "vlc.desktop;" ];
-  pdfviewer = [ "re.sonny.Junction.desktop;" ];
+  pdfviewer = lib.mkMerge [
+    (lib.mkIf (
+      config.homeManager.applications.browser.firefox.enable
+      && config.homeManager.applications.browser.helium.enable
+    ) [ "re.sonny.Junction.desktop;" ])
+    (lib.mkIf (
+      !config.homeManager.applications.browser.firefox.enable
+      && config.homeManager.applications.browser.helium.enable
+    ) [ "helium.desktop;" ])
+    (lib.mkIf (
+      config.homeManager.applications.browser.firefox.enable
+      && !config.homeManager.applications.browser.helium.enable
+    ) [ "firefox.desktop;" ])
+  ];
   imageviewer = [ "org.kde.gwenview.desktop;" ];
   editor = [ "org.kde.kate.desktop;" ];
   discord = [ "discord.desktop;" ];
