@@ -19,7 +19,7 @@
 
   config = lib.mkIf config.homeManager.applications.browser.enable {
     homeManager.applications.browser = {
-      firefox.enable = true;
+      firefox.enable = lib.mkDefault false;
       helium.enable = true;
     };
   };
