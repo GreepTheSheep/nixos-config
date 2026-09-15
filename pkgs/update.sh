@@ -55,8 +55,9 @@ update_package() {
   local build_cmd="nix build .#$pkg_name --no-link --print-out-paths"
 
   if [ "$needs_insecure" = true ]; then
-    echo "  (dependances insecure -> NIXPKGS_ALLOW_INSECURE=1 --impure)"
-    nix_update_args="$nix_update_args --impure"
+    echo "  (dependances insecure -> NIXPKGS_ALLOW_INSECURE=1)"
+    # nix-update n'accepte pas --impure (il utilise nix-instantiate, qui lit
+    # deja NIXPKGS_ALLOW_INSECURE depuis l'environnement).
     build_cmd="NIXPKGS_ALLOW_INSECURE=1 $build_cmd --impure"
     export NIXPKGS_ALLOW_INSECURE=1
   fi
