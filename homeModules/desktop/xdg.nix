@@ -130,7 +130,7 @@
         };
 
         # Helium
-        helium = lib.mkIf (osConfig.nixos.userEnvironment.browser.helium.enable) {
+        helium = lib.mkIf (config.homeManager.applications.browser.helium.enable) {
           name = "Helium";
           comment = "Web Browser";
           genericName = "Web Browser";
