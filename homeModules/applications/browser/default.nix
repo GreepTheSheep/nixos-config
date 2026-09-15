@@ -3,6 +3,7 @@
 {
   imports = [
     ./firefox.nix
+    ./helium.nix
   ];
 
   options.homeManager = {
@@ -19,7 +20,7 @@
   config = lib.mkIf config.homeManager.applications.browser.enable {
     homeManager.applications.browser = {
       firefox.enable = true;
-      # Helium is managed on system config: Home Manager can't manage tarballs
+      helium.enable = true;
     };
   };
 }
