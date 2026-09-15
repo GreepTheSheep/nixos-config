@@ -130,50 +130,56 @@
         };
 
         # Helium
-        helium = lib.mkIf (config.homeManager.applications.browser.helium.enable) {
-          name = "Helium";
-          comment = "Web Browser";
-          genericName = "Web Browser";
-          exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium %U";
-          icon = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/product_logo_256.png";
-          startupNotify = true;
-          terminal = false;
-          categories = [
-            "Network"
-            "WebBrowser"
-          ];
-          mimeType = [
-            "application/pdf"
-            "application/rdf+xml"
-            "application/rss+xml"
-            "application/xhtml+xml"
-            "application/xhtml_xml"
-            "application/xml"
-            "image/gif"
-            "image/jpeg"
-            "image/png"
-            "image/webp"
-            "text/html"
-            "text/xml"
-            "x-scheme-handler/http"
-            "x-scheme-handler/https"
-          ];
-          settings = {
-            Type = "Application";
-            StartupWMClass = "helium";
-            Keywords = "helium;web browser";
-          };
-          actions = {
-            new-window = {
-              name = "New Window";
-              exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium %U";
+        helium =
+          lib.mkIf
+            (
+              osConfig.nixos.userEnvironment.non-nix-apps.helium.enable
+              && !config.homeManager.applications.browser.helium.enable
+            )
+            {
+              name = "Helium";
+              comment = "Web Browser";
+              genericName = "Web Browser";
+              exec = "/opt/helium/helium %U";
+              icon = "/opt/helium/product_logo_256.png";
+              startupNotify = true;
+              terminal = false;
+              categories = [
+                "Network"
+                "WebBrowser"
+              ];
+              mimeType = [
+                "application/pdf"
+                "application/rdf+xml"
+                "application/rss+xml"
+                "application/xhtml+xml"
+                "application/xhtml_xml"
+                "application/xml"
+                "image/gif"
+                "image/jpeg"
+                "image/png"
+                "image/webp"
+                "text/html"
+                "text/xml"
+                "x-scheme-handler/http"
+                "x-scheme-handler/https"
+              ];
+              settings = {
+                Type = "Application";
+                StartupWMClass = "helium";
+                Keywords = "helium;web browser";
+              };
+              actions = {
+                new-window = {
+                  name = "New Window";
+                  exec = "/opt/helium/helium %U";
+                };
+                new-private-window = {
+                  name = "New Incognito Window";
+                  exec = "/opt/helium/helium --incognito %U";
+                };
+              };
             };
-            new-private-window = {
-              name = "New Incognito Window";
-              exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium --incognito %U";
-            };
-          };
-        };
 
         # Backrest (opens http://backrest:9898)
         backrest = lib.mkIf (osConfig.nixos.base.tools.backrest.enable) {
