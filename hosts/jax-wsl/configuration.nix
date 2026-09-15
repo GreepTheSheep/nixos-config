@@ -72,10 +72,6 @@
       };
       userEnvironment = {
         enable = true;
-        non-nix-apps = {
-          affine.enable = lib.mkForce false;
-          feishin.enable = lib.mkForce false;
-        };
       };
     };
 
