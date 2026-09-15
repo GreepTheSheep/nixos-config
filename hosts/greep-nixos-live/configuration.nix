@@ -21,7 +21,10 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
@@ -46,9 +49,9 @@
 
     # Disable sops secrets for the live ISO (no SSH host keys available)
     sops = {
-      age.sshKeyPaths = lib.mkForce [];
-      secrets = lib.mkForce {};
-      templates = lib.mkForce {};
+      age.sshKeyPaths = lib.mkForce [ ];
+      secrets = lib.mkForce { };
+      templates = lib.mkForce { };
     };
 
     hardware = {
@@ -70,7 +73,6 @@
     nixos.userEnvironment = {
       enable = true;
       config.enable = lib.mkForce false;
-      non-nix-apps.enable = lib.mkForce false;
       io.bluetooth.enable = true;
       kdeconnect.enable = lib.mkForce false;
       spotify.enable = lib.mkForce false;

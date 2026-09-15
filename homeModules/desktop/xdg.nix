@@ -130,12 +130,12 @@
         };
 
         # Helium
-        helium = lib.mkIf (osConfig.nixos.userEnvironment.non-nix-apps.helium.enable) {
+        helium = lib.mkIf (osConfig.nixos.userEnvironment.browser.helium.enable) {
           name = "Helium";
           comment = "Web Browser";
           genericName = "Web Browser";
-          exec = "/opt/helium/helium %U";
-          icon = "/opt/helium/product_logo_256.png";
+          exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium %U";
+          icon = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/product_logo_256.png";
           startupNotify = true;
           terminal = false;
           categories = [
@@ -166,11 +166,11 @@
           actions = {
             new-window = {
               name = "New Window";
-              exec = "/opt/helium/helium %U";
+              exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium %U";
             };
             new-private-window = {
               name = "New Incognito Window";
-              exec = "/opt/helium/helium --incognito %U";
+              exec = "${pkgs.nur.repos.lonerOrz.helium}/opt/helium/helium --incognito %U";
             };
           };
         };

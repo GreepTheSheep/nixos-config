@@ -84,7 +84,7 @@
           {
             iconTasks = {
               launchers =
-                lib.optional osConfig.nixos.userEnvironment.non-nix-apps.helium.enable "applications:helium.desktop"
+                lib.optional config.homeManager.applications.browser.helium.enable "applications:helium.desktop"
                 ++ lib.optional config.homeManager.applications.browser.firefox.enable "applications:firefox.desktop"
                 ++ [ "applications:org.kde.dolphin.desktop" ]
                 ++ lib.optional config.homeManager.applications.communication.discord.enable "applications:discord.desktop"
