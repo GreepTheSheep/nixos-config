@@ -19,7 +19,7 @@
 
   config = lib.mkIf config.homeManager.applications.office.enable {
     homeManager.applications.office = {
-      obsidian.enable = true;
+      obsidian.enable = lib.mkDefault false;
       office.enable = true;
     };
   };
