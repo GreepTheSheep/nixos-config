@@ -1,4 +1,9 @@
-{ config, lib, inputs, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeManager = {
@@ -12,8 +17,8 @@
 
       enableDesktop = lib.mkOption {
         type = lib.types.bool;
-        default = true;
-        example = false;
+        default = false;
+        example = true;
         description = "Enable OpenCode Desktop. OpenCode Terminal must be enabled to enable the Desktop App.";
       };
     };
@@ -24,8 +29,10 @@
       enable = true;
     };
 
-    home.packages = with pkgs; lib.mkIf config.homeManager.applications.development.opencode.enableDesktop [
-      opencode-desktop
-    ];
+    home.packages =
+      with pkgs;
+      lib.mkIf config.homeManager.applications.development.opencode.enableDesktop [
+        opencode-desktop
+      ];
   };
 }
