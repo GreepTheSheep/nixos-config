@@ -5,6 +5,8 @@ _:
     applications = {
       enable = true;
 
+      communication.mumble.enableTMLink = true;
+
       sync.deskflow.enable = true;
 
       development = {
