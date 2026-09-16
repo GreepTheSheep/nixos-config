@@ -5,6 +5,7 @@
     ./bs-manager.nix
     ./dolphin-emu.nix
     ./lutris.nix
+    ./nxapi.nix
     ./parsec.nix
     ./prismlauncher.nix
     ./sober.nix
@@ -27,6 +28,7 @@
       bs-manager.enable = lib.mkDefault false;
       dolphin-emu.enable = lib.mkDefault false;
       lutris.enable = lib.mkDefault false;
+      nxapi.enable = lib.mkDefault false;
       parsec.enable = true;
       prismlauncher.enable = true;
       sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;

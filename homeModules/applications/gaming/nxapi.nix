@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.homeManager.applications.gaming.nxapi;
@@ -66,7 +71,9 @@ in
       extraEnv = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = { };
-        example = { NXAPI_USER_AGENT = "my-script/1.0.0 (+https://github.com/...)"; };
+        example = {
+          NXAPI_USER_AGENT = "my-script/1.0.0 (+https://github.com/...)";
+        };
         description = "Extra NXAPI_* environment variables to set.";
       };
 
@@ -123,7 +130,10 @@ in
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          example = [ "--no-sandbox" "--autostart" ];
+          example = [
+            "--no-sandbox"
+            "--autostart"
+          ];
           description = "Extra arguments to pass to `nxapi nso presence`.";
         };
       };
@@ -131,15 +141,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs.nxapi ]
-      ++ lib.optionals cfg.enableElectronApp [ pkgs.nxapi-electron ];
+    home.packages =
+      with pkgs;
+      [
+        nur.repos.Greep.nxapi
+      ]
+      ++ lib.optionals cfg.enableElectronApp [ nur.repos.Greep.nxapi-app ];
 
     home.sessionVariables = {
       NXAPI_DATA_PATH = cfg.dataPath;
       NXAPI_ENABLE_REMOTE_CONFIG = if cfg.enableRemoteConfig then "1" else "0";
-    } // lib.optionalAttrs (cfg.authClientId != null) {
+    }
+    // lib.optionalAttrs (cfg.authClientId != null) {
       NXAPI_AUTH_CLIENT_ID = cfg.authClientId;
-    } // cfg.extraEnv;
+    }
+    // cfg.extraEnv;
 
     systemd.user.services.nxapi-presence = lib.mkIf serviceCfg.enable {
       Unit = {
@@ -150,10 +166,23 @@ in
 
       Service = {
         ExecStart = lib.concatStringsSep " " (
-          [ "${serviceCfg.package}/bin/nxapi" "nso" "presence" ]
-          ++ lib.optionals (serviceCfg.account != null) [ "--user" serviceCfg.account ]
-          ++ lib.optionals (serviceCfg.presenceUrl != null) [ "--friend-url" serviceCfg.presenceUrl ]
-          ++ lib.optionals (serviceCfg.friendNsaId != null) [ "--friend-nsa-id" serviceCfg.friendNsaId ]
+          [
+            "${serviceCfg.package}/bin/nxapi"
+            "nso"
+            "presence"
+          ]
+          ++ lib.optionals (serviceCfg.account != null) [
+            "--user"
+            serviceCfg.account
+          ]
+          ++ lib.optionals (serviceCfg.presenceUrl != null) [
+            "--friend-url"
+            serviceCfg.presenceUrl
+          ]
+          ++ lib.optionals (serviceCfg.friendNsaId != null) [
+            "--friend-nsa-id"
+            serviceCfg.friendNsaId
+          ]
           ++ serviceCfg.extraArgs
         );
         Restart = "on-failure";
@@ -161,8 +190,8 @@ in
         Environment = [
           "NXAPI_DATA_PATH=${cfg.dataPath}"
           "NXAPI_ENABLE_REMOTE_CONFIG=${if cfg.enableRemoteConfig then "1" else "0"}"
-        ] ++ lib.optional (cfg.authClientId != null)
-          "NXAPI_AUTH_CLIENT_ID=${cfg.authClientId}"
+        ]
+        ++ lib.optional (cfg.authClientId != null) "NXAPI_AUTH_CLIENT_ID=${cfg.authClientId}"
         ++ lib.mapAttrsToList (k: v: "${k}=${v}") cfg.extraEnv;
       };
 
