@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -75,7 +80,6 @@
         libxi
         libsm
         libice
-        gnome2.GConf
         nspr
         nss
         cups
