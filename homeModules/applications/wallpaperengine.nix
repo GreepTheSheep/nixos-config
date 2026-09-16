@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.homeManager.applications.wallpaperengine;
@@ -16,8 +21,10 @@ let
           kernel assigns unstable DP-x names across reboots.
         '';
       };
-      extraOptions = lib.mkOption { type = lib.types.listOf lib.types.str; default = []; };
-      silentAudio = lib.mkOption { type = lib.types.bool; default = true; };
+      extraOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+      };
     };
   };
 
@@ -27,11 +34,18 @@ let
   # When monitor == "auto", the literal string __AUTO_MONITOR__ is emitted
   # as the --screen-root value and the wrapper script substitutes it at
   # runtime with the first connected DRM connector name.
-  wallpaperArgsString = w:
+  wallpaperArgsString =
+    w:
     lib.concatStringsSep " " (
-      [ "--screen-root" (if w.monitor == "auto" then "__AUTO_MONITOR__" else w.monitor) ]
+      [
+        "--screen-root"
+        (if w.monitor == "auto" then "__AUTO_MONITOR__" else w.monitor)
+      ]
       ++ w.extraOptions
-      ++ [ "--bg" w.wallpaperId ]
+      ++ [
+        "--bg"
+        w.wallpaperId
+      ]
     );
 
   wrapper = pkgs.writeShellScriptBin "linux-wallpaperengine-auto" ''
@@ -45,9 +59,14 @@ let
       echo "linux-wallpaperengine-auto: no connected DRM connector found" >&2
       exit 1
     fi
-    ARGS=${lib.escapeShellArg (lib.concatStringsSep " "
-      (lib.optional (cfg.assetsPath != null) "--assets-dir ${cfg.assetsPath}"
-       ++ map wallpaperArgsString cfg.wallpapers))}
+    ARGS=${
+      lib.escapeShellArg (
+        lib.concatStringsSep " " (
+          lib.optional (cfg.assetsPath != null) "--assets-dir ${cfg.assetsPath}"
+          ++ map wallpaperArgsString cfg.wallpapers
+        )
+      )
+    }
     ARGS="''${ARGS//__AUTO_MONITOR__/$MON}"
     exec ${lib.getExe pkgs.linux-wallpaperengine} $ARGS
   '';
@@ -68,6 +87,12 @@ in
         description = "Wallpaper Engine assets full path.";
       };
 
+      silentAudio = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Mute audio on wallpapers.";
+      };
+
       wallpapers = lib.mkOption {
         type = lib.types.listOf wallpapersOpts;
         example = [
@@ -85,16 +110,17 @@ in
     services.linux-wallpaperengine = {
       enable = true;
       assetsPath = cfg.assetsPath;
+      audio.silent = cfg.silentAudio;
       wallpapers = map (w: {
         inherit (w) wallpaperId monitor extraOptions;
-        audio.silent = w.silentAudio;
       }) cfg.wallpapers;
     };
 
     # When any wallpaper uses monitor = "auto", override the generated
     # ExecStart so the wrapper script resolves the connector name at
     # runtime (substituting __AUTO_MONITOR__ placeholders).
-    systemd.user.services.linux-wallpaperengine.Service.ExecStart =
-      lib.mkIf hasAuto (lib.mkForce (lib.getExe wrapper));
+    systemd.user.services.linux-wallpaperengine.Service.ExecStart = lib.mkIf hasAuto (
+      lib.mkForce (lib.getExe wrapper)
+    );
   };
 }
