@@ -19,7 +19,7 @@
 
   config = lib.mkIf config.homeManager.applications.media.feishin.enable {
     home.packages = with pkgs; [
-      feishin
+      nur.repos.Greep.feishin
     ];
   };
 }
