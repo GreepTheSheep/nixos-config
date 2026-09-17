@@ -10,7 +10,7 @@ env:
   nixos-stable-version: "26.05"
 
 jobs:
-  update-unstable:
+  update:
     strategy:
       matrix:
         ref:
