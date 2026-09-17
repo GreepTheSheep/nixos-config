@@ -37,6 +37,9 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-${{ env.nixos-stable-version }}
 
+      - name: Add Github Token
+        run: echo "access-tokens = github.com=${{ secrets.GH_TOKEN }}" >> ~/.config/nix/nix.conf
+
       - name: Update flake.lock
         run: nix flake update
 
