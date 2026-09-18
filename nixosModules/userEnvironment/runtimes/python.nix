@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -14,7 +19,7 @@
 
   config = lib.mkIf config.nixos.userEnvironment.runtimes.python.enable {
     environment.systemPackages = with pkgs; [
-      python315
+      python3
       virtualenv
     ];
   };
