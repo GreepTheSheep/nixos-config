@@ -11,6 +11,7 @@ on:
       - unstable
     paths:
       - '**.nix'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ gitea.workflow }}-${{ gitea.ref }}
