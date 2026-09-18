@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -24,13 +23,6 @@ in
         example = true;
         description = "Use Vesktop instread of Discord.";
       };
-
-      installLegcord = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        example = true;
-        description = "Install Legcord.";
-      };
     };
   };
 
@@ -39,9 +31,5 @@ in
       discord.enable = cfg.enable && !cfg.useVesktop;
       vesktop.enable = cfg.enable && cfg.useVesktop;
     };
-
-    home.packages = with pkgs lib.mkIf cfg.installLegcord; [
-      legcord # Include Legcord, an alternative lightweight Discord client.
-    ];
   };
 }
