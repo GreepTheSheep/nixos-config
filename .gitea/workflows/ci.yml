@@ -1,16 +1,16 @@
 name: CI
 
 on:
-  pull_request:
-    branches:
-      - unstable
-    paths:
-      - '**.nix'
-  push:
-    branches:
-      - unstable
-    paths:
-      - '**.nix'
+  #pull_request:
+    #branches:
+      #- unstable
+    #paths:
+      #- '**.nix'
+  #push:
+    #branches:
+      #- unstable
+    #paths:
+      #- '**.nix'
   workflow_dispatch:
 
 concurrency:
