@@ -33,6 +33,9 @@ in
       [
         mumble
       ]
-      ++ lib.optionals cfg.enableTMLink [ nur.repos.Greep.tm-mumble-link ];
+      ++ lib.optionals cfg.enableTMLink [
+        nur.repos.Greep.tm-mumble-link
+        nur.repos.Greep.tm-mumble-link-tui
+      ];
   };
 }
