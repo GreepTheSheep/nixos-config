@@ -33,6 +33,7 @@ jobs:
       - name: Commit and push
         env:
           BOT_USERNAME: ${{ vars.ACTIONS_BOT }}
+          BOT_EMAIL: ${{ vars.ACTIONS_BOT_EMAIL }}
           BOT_TOKEN: ${{ secrets.ACTIONS_BOT_TOKEN }}
         run: |
           if git diff --quiet flake.lock; then
@@ -41,7 +42,7 @@ jobs:
           fi
 
           git config user.name "$BOT_USERNAME"
-          git config user.email "$BOT_USERNAME@users.noreply.gitea.com"
+          git config user.email "$BOT_EMAIL"
           git add flake.lock
           git commit -m "Flake update ($(date +%F))"
 
