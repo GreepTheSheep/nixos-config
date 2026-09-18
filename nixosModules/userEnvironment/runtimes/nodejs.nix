@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -14,7 +19,7 @@
 
   config = lib.mkIf config.nixos.userEnvironment.runtimes.nodejs.enable {
     environment.systemPackages = with pkgs; [
-      nodejs_24
+      nodejs
     ];
   };
 }
