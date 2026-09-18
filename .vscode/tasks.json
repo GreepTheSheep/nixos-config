@@ -36,7 +36,7 @@
         {
             "label": "Lint configuration (statix & deadnix)",
             "type": "shell",
-            "command": "echo 'Running Statix...' && nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#statix -c statix check . && echo 'Running Deadnix (Scanning for unused code)...' && nix --extra-experimental-features 'nix-command flakes' shell nixpkgs#deadnix -c deadnix ."
+            "command": "echo 'Running Statix...' && nix run nixpkgs#statix -- check . && echo 'Running Deadnix (Scanning for unused code)...' && nix run nixpkgs#deadnix ."
         },
         {
             "label": "Delete old generations",
