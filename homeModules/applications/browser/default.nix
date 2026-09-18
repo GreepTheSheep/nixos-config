@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./chromium.nix
     ./firefox.nix
     ./helium.nix
   ];
@@ -19,6 +20,7 @@
 
   config = lib.mkIf config.homeManager.applications.browser.enable {
     homeManager.applications.browser = {
+      chromium.enable = true;
       firefox.enable = lib.mkDefault false;
       helium.enable = true;
     };
