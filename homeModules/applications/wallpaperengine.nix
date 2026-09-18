@@ -25,10 +25,6 @@ let
         type = lib.types.listOf lib.types.str;
         default = [ ];
       };
-      silentAudio = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-      };
     };
   };
 
@@ -91,6 +87,12 @@ in
         description = "Wallpaper Engine assets full path.";
       };
 
+      silentAudio = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Mute audio on wallpapers.";
+      };
+
       wallpapers = lib.mkOption {
         type = lib.types.listOf wallpapersOpts;
         example = [
@@ -108,9 +110,9 @@ in
     services.linux-wallpaperengine = {
       enable = true;
       assetsPath = cfg.assetsPath;
+      audio.silent = cfg.silentAudio;
       wallpapers = map (w: {
         inherit (w) wallpaperId monitor extraOptions;
-        audio.silent = w.silentAudio;
       }) cfg.wallpapers;
     };
 
