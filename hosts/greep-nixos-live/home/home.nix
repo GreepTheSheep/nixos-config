@@ -3,7 +3,7 @@
 {
   homeManager.applications = {
     enable = true;
-    development.bottles.enable = lib.mkForce false;
+    utils.bottles.enable = lib.mkForce false;
     media = {
       jellyfin.enable = lib.mkForce false;
       mixxx.enable = lib.mkForce false;

@@ -8,7 +8,6 @@
 {
   imports = [
     ./antigravity.nix
-    ./bottles.nix
     ./claudecode.nix
     ./cloc.nix
     ./diff.nix
@@ -34,7 +33,6 @@
   config = lib.mkIf config.homeManager.applications.development.enable {
     homeManager.applications.development = {
       antigravity.enable = lib.mkDefault false;
-      bottles.enable = true;
       claudecode.enable = lib.mkDefault false;
       cloc.enable = true;
       diff.enable = lib.mkDefault false;

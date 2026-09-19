@@ -1,4 +1,9 @@
-{ config, lib, osConfig, ... }:
+{
+  config,
+  lib,
+  osConfig,
+  ...
+}:
 
 {
   imports = [
@@ -12,7 +17,7 @@
     ./screenshot
     ./sync
     ./terminal
-    #./utils
+    ./utils
 
     ./common.nix
     ./flatpak.nix
@@ -42,7 +47,7 @@
       screenshot.enable = true;
       sync.enable = true;
       terminal.enable = lib.mkDefault false;
-      #utils.enable = true;
+      utils.enable = true;
 
       common.enable = true;
       flatpak.enable = osConfig.nixos.userEnvironment.flatpak.enable;

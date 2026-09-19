@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeManager = {
-    applications.development.bottles = {
+    applications.utils.bottles = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -12,9 +17,11 @@
     };
   };
 
-  config = lib.mkIf config.homeManager.applications.development.bottles.enable {
+  config = lib.mkIf config.homeManager.applications.utils.bottles.enable {
     home.packages = with pkgs; [
-      bottles
+      (bottles.override {
+        removeWarningPopup = true;
+      })
     ];
   };
 }
