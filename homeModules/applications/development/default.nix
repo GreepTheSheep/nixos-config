@@ -1,10 +1,16 @@
-{ config, lib, osConfig, ... }:
+{
+  config,
+  lib,
+  osConfig,
+  ...
+}:
 
 {
   imports = [
     ./antigravity.nix
     ./bottles.nix
     ./claudecode.nix
+    ./cloc.nix
     ./diff.nix
     ./filezilla.nix
     ./github-desktop.nix
@@ -30,6 +36,7 @@
       antigravity.enable = lib.mkDefault false;
       bottles.enable = true;
       claudecode.enable = lib.mkDefault false;
+      cloc.enable = true;
       diff.enable = lib.mkDefault false;
       filezilla.enable = true;
       github-desktop.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;
