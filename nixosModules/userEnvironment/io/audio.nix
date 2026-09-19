@@ -94,6 +94,10 @@
             "core.name" = "pipewire-0";
           };
 
+          # NB : ces rt.time.* ne concernent que le démon. Ils sont de toute
+          # façon plafonnés à 200 ms par rtkit-daemon (rttime_usec_max codé en
+          # dur), donc inopérants tant que rtkit-daemon n'est pas relancé avec
+          # --rttime-usec-max=<valeur>. Voir le bloc extraConfig.client plus bas.
           "context.modules" = [
             {
               name = "libpipewire-module-rtkit";
@@ -138,6 +142,21 @@
               };
             }
           ];
+        };
+      };
+
+      # Crash immédiat de Mumble : libpipewire-module-rt, chargé par le
+      # client.conf de PipeWire pour les clients, passe par RTKit qui impose
+      # RLIMIT_RTTIME soft == hard == 200 ms ; un thread RT qui dépasse ce budget
+      # fait tuer tout le processus par le noyau (SIGKILL, sans log ni coredump).
+      # module.rt = false évite le chargement du module, donc le watchdog.
+      # Variante conservant le temps réel : rtprio via security.pam.loginLimits
+      # (groupe @audio) ou rtkit-daemon --rttime-usec-max=2000000.
+      extraConfig.client = {
+        "10-no-rt" = {
+          "context.properties" = {
+            "module.rt" = false;
+          };
         };
       };
 
