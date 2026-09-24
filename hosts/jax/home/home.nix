@@ -15,7 +15,7 @@ _:
         opencode.enable = true;
       };
 
-      media.feishin.enableUnstable = true;
+      media.feishin.useUnstable = true;
 
       gaming = {
         bs-manager.enable = true;

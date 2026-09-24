@@ -88,7 +88,14 @@
                 ++ lib.optional config.homeManager.applications.browser.firefox.enable "applications:firefox.desktop"
                 ++ [ "applications:org.kde.dolphin.desktop" ]
                 ++ lib.optional config.homeManager.applications.communication.discord.enable "applications:discord.desktop"
-                ++ lib.optional config.homeManager.applications.media.feishin.enable "applications:feishin.desktop"
+                ++ lib.optional (
+                  config.homeManager.applications.media.feishin.enable
+                  && !config.homeManager.applications.media.feishin.useUnstable
+                ) "applications:feishin.desktop"
+                ++ lib.optional (
+                  config.homeManager.applications.media.feishin.enable
+                  && config.homeManager.applications.media.feishin.useUnstable
+                ) "applications:feishin-dev.desktop"
                 ++ [ "applications:org.kde.konsole.desktop" ]
                 ++ [ "applications:bitwarden.desktop" ]
                 ++ lib.optional config.homeManager.applications.media.jellyfin.enable "applications:org.jellyfin.JellyfinDesktop.desktop";
