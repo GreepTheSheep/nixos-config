@@ -15,6 +15,8 @@ _:
         opencode.enable = true;
       };
 
+      media.feishin.enableUnstable = true;
+
       gaming = {
         bs-manager.enable = true;
         dolphin-emu.enable = true;
