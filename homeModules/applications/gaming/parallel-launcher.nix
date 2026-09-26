@@ -19,7 +19,10 @@
 
   config = lib.mkIf config.homeManager.applications.gaming.parallelLauncher.enable {
     home.packages = with pkgs; [
-      parallel-launcher
+      (parallel-launcher.override {
+        withDiscordRpc = true;
+        extraRetroArchSettings = { };
+      })
     ];
   };
 }
