@@ -3,6 +3,7 @@
 {
   imports = [
     ./bash.nix
+    ./bat.nix
     ./console.nix
     ./sudo.nix
     ./tmux.nix
@@ -23,6 +24,7 @@
   config = lib.mkIf config.nixos.base.shell.enable {
     nixos.base.shell = {
       bash.enable = true;
+      bat.enable = true;
       console.enable = true;
       sudo.enable = true;
       tmux.enable = true;
