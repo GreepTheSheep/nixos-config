@@ -21,7 +21,10 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
@@ -47,6 +50,40 @@
     nixos.system = {
       nixos.garbageCollect = true;
       secureboot.enable = true;
+
+      serviceWatchdog = {
+        enable = true;
+        services = [
+          "create-arr-stack-network"
+          "docker-flaresolverr"
+          "docker-prowlarr"
+          "docker-radarr"
+          "docker-sonarr"
+          "docker-backrest"
+          "create-caddy-bridge-network"
+          "docker-caddy"
+          "docker-cloudflare-ddns"
+          "docker-crowdsec"
+          "docker-h5ai"
+          "create-immich-network-network"
+          "docker-immich-machine-learning"
+          "docker-immich-redis"
+          "docker-immich-postgres"
+          "docker-immich"
+          "docker-jellyfin"
+          "create-nextcloud-network-network"
+          "docker-nextcloud-mariadb"
+          "docker-nextcloud"
+          "docker-node-exporter"
+          "docker-dgcm-exporter"
+          "docker-wireguard"
+          "docker-qbittorrent"
+          "docker-cross-seed"
+          "docker-seerr"
+          "docker-tangled-discordbot"
+          "docker-watchtower"
+        ];
+      };
 
       user.defaultuser = {
         pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
