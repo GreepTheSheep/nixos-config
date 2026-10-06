@@ -197,47 +197,6 @@
         "url": "https://blocklistproject.github.io/Lists/malware.txt"
       }
     },
-    "millennium": {
-      "inputs": {
-        "millennium-src": "millennium-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-bun": "nixpkgs-bun"
-      },
-      "locked": {
-        "dir": "packages/nix",
-        "lastModified": 1791044936,
-        "narHash": "sha256-+mNY2lHscvVa4KntAxuRMMFYMYxju06avIKyHooM8EE=",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "63c3928f0306edd83122c0f5b085a9b1a3d60f55",
-        "type": "github"
-      },
-      "original": {
-        "dir": "packages/nix",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "type": "github"
-      }
-    },
-    "millennium-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1790436335,
-        "narHash": "sha256-ghYUa4gPLV/VOflM2zkl/gtdwLWHQpRxG4boQoj4yKM=",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "765aa8802f8a4d942ad8ac8323a9e0f233a50fa8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "765aa8802f8a4d942ad8ac8323a9e0f233a50fa8",
-        "type": "github"
-      }
-    },
     "nix-colors": {
       "inputs": {
         "base16-schemes": "base16-schemes",
@@ -324,22 +283,6 @@
       "original": {
         "type": "tarball",
         "url": "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz"
-      }
-    },
-    "nixpkgs-bun": {
-      "locked": {
-        "lastModified": 1790822859,
-        "narHash": "sha256-69xHQhAeMAD2wDXO7T2pcOZIF9Sga2W+JkmY2a11Ops=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "c59305bab2065cfecc4944690d9eedbb56f3a9fa",
-        "type": "github"
       }
     },
     "nixpkgs-lib": {
@@ -458,11 +401,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791310788,
-        "narHash": "sha256-xdHk7k+MgdNbOsScd9/29FtRKIEHOJsoPUQs0/cAQuI=",
+        "lastModified": 1791317984,
+        "narHash": "sha256-vABinB7rx+z15KuOtn6s0UN26aiZhwjEagTGHGJF8bo=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "0793e346f73935aed8f080b46a1b8181d03dbbaf",
+        "rev": "3586eb9c019d2470a2d258ae01fe8086e790bb26",
         "type": "github"
       },
       "original": {
@@ -474,7 +417,7 @@
     "oisd-big": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-WzqQAPUbSuHzzUPUWaaA20sf+AR1s+C70mZG7ykDKSM=",
+        "narHash": "sha256-jVOWGCd86DWSgSGgHrZsxhDhdfRggHj7n2PCKx1awFQ=",
         "type": "file",
         "url": "https://big.oisd.nl/"
       },
@@ -486,7 +429,7 @@
     "oisd-small": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-ADAW4Jr0yl8BZJi1n1zmCldYZjnOU8LYGbbeHfcoAW0=",
+        "narHash": "sha256-8DsyDwDuBw9jbCm+kWUXVsAAyNCL7rgQd6kXskLj9oo=",
         "type": "file",
         "url": "https://small.oisd.nl/"
       },
@@ -551,7 +494,6 @@
         "home-manager-unstable": "home-manager-unstable",
         "impermanence": "impermanence",
         "malware": "malware",
-        "millennium": "millennium",
         "nix-colors": "nix-colors",
         "nix-flatpak": "nix-flatpak",
         "nixos-hardware": "nixos-hardware",
