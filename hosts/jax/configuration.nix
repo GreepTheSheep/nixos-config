@@ -21,13 +21,16 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
   };
 
-config = {
+  config = {
     host.nixpkgs = "unstable";
 
     nixos.desktop = {
@@ -61,6 +64,7 @@ config = {
 
     nixos.system = {
       secureboot.enable = true;
+      boot.cachyos = true;
       nixosvm = {
         enable = true;
         memorySize = 24576;
@@ -77,7 +81,6 @@ config = {
       game = {
         enable = true;
         osu.enable = true;
-        steam.enableMillennium = false;
         vr = {
           enable = true;
           enableWiVRn = true;

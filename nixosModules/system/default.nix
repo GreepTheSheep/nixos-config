@@ -21,6 +21,7 @@
     ./nur.nix
     ./powermanagement.nix
     ./secureboot.nix
+    ./service-watchdog.nix
     ./sops.nix
     ./ssh.nix
     ./user.nix
@@ -58,6 +59,7 @@
       nur.enable = true;
       powermanagement.enable = true;
       secureboot.enable = lib.mkDefault false;
+      serviceWatchdog.enable = lib.mkDefault false;
       sops.enable = true;
       ssh.enable = true;
       user.enable = true;

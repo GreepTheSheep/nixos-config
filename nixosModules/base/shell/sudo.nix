@@ -28,7 +28,8 @@
             command = "/run/current-system/sw/bin/nixos-rebuild";
             options = [ "NOPASSWD" ];
           }
-        ] ++ lib.optionals (config.nixos.system.nixosvm.enable) [
+        ]
+        ++ lib.optionals (config.nixos.system.nixosvm.enable) [
           {
             command = "/opt/nixos-sandbox/result/bin/run-${config.networking.hostName}-vm";
             options = [ "NOPASSWD" ];
@@ -42,6 +43,8 @@
       extraRules = config.security.sudo.extraRules;
       wheelNeedsPassword = true;
     };
+
+    security.sudo.enable = lib.mkForce (!config.nixos.base.shell.sudo.useSudo-rs); # Disable legacy sudo for sudo-rs
 
     environment.variables.SUDO_PROMPT = lib.mkIf config.nixos.base.shell.sudo.useSudo-rs "%u@%h -> %U@%h";
   };

@@ -1,5 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
+let
+  cfg = config.homeManager.applications.communication.discord;
+in
 {
   options.homeManager = {
     applications.communication.discord = {
@@ -9,18 +16,20 @@
         example = true;
         description = "Enable Discord.";
       };
+
+      useVesktop = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Use Vesktop instread of Discord.";
+      };
     };
   };
 
-  config = lib.mkIf config.homeManager.applications.communication.discord.enable {
+  config = lib.mkIf cfg.enable {
     programs = {
-      discord.enable = true;
-      vesktop.enable = true;
+      discord.enable = cfg.enable && !cfg.useVesktop;
+      vesktop.enable = cfg.enable && cfg.useVesktop;
     };
-
-    home.packages = with pkgs; [
-      #openasar # Replace the original Discord's app.asar to OpenAsar
-      legcord # Include Legcord, an alternative lightweight Discord client.
-    ];
   };
 }

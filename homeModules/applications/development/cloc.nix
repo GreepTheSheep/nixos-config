@@ -1,20 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeManager = {
-    applications.development.bottles = {
+    applications.development.cloc = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         example = true;
-        description = "Enable Bottles.";
+        description = "Enable cloc.";
       };
     };
   };
 
-  config = lib.mkIf config.homeManager.applications.development.bottles.enable {
+  config = lib.mkIf config.homeManager.applications.development.cloc.enable {
     home.packages = with pkgs; [
-      bottles
+      cloc
     ];
   };
 }

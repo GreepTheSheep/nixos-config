@@ -29,7 +29,7 @@
         X11Forwarding = false;
         PrintMotd = true;
       };
-      authorizedKeysCommand = "${pkgs.writeShellScript "ssh-authorized-keys-command" ''
+      authorizedKeysCommand = lib.mkIf (!config.host.isLiveIso) "${pkgs.writeShellScript "ssh-authorized-keys-command" ''
         case "$1" in
           root)
             cat ${config.sops.secrets."openssh/root-authorized-keys".path} ;;
@@ -37,7 +37,7 @@
             cat ${config.sops.secrets."openssh/authorized-keys".path} ;;
         esac
       ''}";
-      authorizedKeysCommandUser = "root";
+      authorizedKeysCommandUser = lib.mkIf (!config.host.isLiveIso) "root";
     };
 
     services.sshguard = {

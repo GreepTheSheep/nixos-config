@@ -7,10 +7,7 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-26.05";
     nix-colors.url = "github:misterio77/nix-colors";
 
-    millennium = {
-      url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     sops-nix = {
       url = "github:Mic92/sops-nix";

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./bottles.nix
   ];
 
   options.homeManager = {
@@ -17,6 +18,7 @@
 
   config = lib.mkIf config.homeManager.applications.utils.enable {
     homeManager.applications.utils = {
+      bottles.enable = true;
     };
   };
 }

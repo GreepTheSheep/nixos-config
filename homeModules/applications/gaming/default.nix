@@ -6,6 +6,7 @@
     ./dolphin-emu.nix
     ./lutris.nix
     ./nxapi.nix
+    ./parallel-launcher.nix
     ./parsec.nix
     ./prismlauncher.nix
     ./sober.nix
@@ -29,6 +30,7 @@
       dolphin-emu.enable = lib.mkDefault false;
       lutris.enable = lib.mkDefault false;
       nxapi.enable = lib.mkDefault false;
+      parallelLauncher.enable = true;
       parsec.enable = true;
       prismlauncher.enable = true;
       sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;

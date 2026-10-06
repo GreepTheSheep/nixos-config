@@ -31,6 +31,8 @@
   };
 
   config = {
+    host.nixpkgs = "unstable";
+
     nixos.desktop = {
       enable = true;
       desktopEnvironment = {
