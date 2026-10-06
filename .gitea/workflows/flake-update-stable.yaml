@@ -1,0 +1,53 @@
+name: Flake Update (stable)
+
+on:
+  schedule:
+    # Every Monday, Wednesday, and Friday at 17:12 UTC
+    - cron: "12 17 * * 1/2"
+  workflow_dispatch:
+
+env:
+  nixpkgs-version: nixos-26.05
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: stable
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:${{ env.nixpkgs-version }}
+
+      - name: Add Github Token
+        run: |
+          mkdir -p ~/.config/nix
+          echo "access-tokens = github.com=${{ secrets.GH_TOKEN }}" > ~/.config/nix/nix.conf
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Commit and push
+        env:
+          BOT_USERNAME: ${{ vars.ACTIONS_BOT }}
+          BOT_EMAIL: ${{ vars.ACTIONS_BOT_EMAIL }}
+          BOT_TOKEN: ${{ secrets.ACTIONS_BOT_TOKEN }}
+        run: |
+          if git diff --quiet flake.lock; then
+            echo "flake.lock is already up to date"
+            exit 0
+          fi
+
+          git config user.name "$BOT_USERNAME"
+          git config user.email "$BOT_EMAIL"
+          git add flake.lock
+          git commit -m "Flake update ($(date +%F))"
+
+          git remote set-url origin "https://${BOT_USERNAME}:${BOT_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git"
+          git push origin HEAD:stable
