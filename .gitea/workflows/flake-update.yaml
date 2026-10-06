@@ -57,7 +57,7 @@ jobs:
           git config user.name "$BOT_USERNAME"
           git config user.email "$BOT_EMAIL"
           git add flake.lock
-          git commit -m "Flake update (`$BRANCH` $(date +%F))"
+          git commit -m "Flake update ($(date +%F))"
 
           git remote set-url origin "https://${BOT_USERNAME}:${BOT_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git"
           git push origin HEAD:$BRANCH
