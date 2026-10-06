@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -10,9 +16,20 @@
         description = "Set boot options.";
       };
 
+      cachyos = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = "Use a CachyOS kernel (enables the nix-cachyos-kernel overlay).";
+      };
+
       kernel = lib.mkOption {
         type = lib.types.raw;
-        default = pkgs.linuxPackages_latest;
+        default =
+          if config.nixos.system.boot.cachyos then
+            pkgs.cachyosKernels.linuxPackages-cachyos-latest
+          else
+            pkgs.linuxPackages_latest;
         example = pkgs.linuxPackages_zen;
         description = "Set the default kernel package.";
       };
@@ -25,7 +42,8 @@
       "loglevel=3"
       "udev.log-priority=3"
       "vt.global_cursor_default=1"
-    ] ++ lib.optionals config.nixos.desktop.enable [
+    ]
+    ++ lib.optionals config.nixos.desktop.enable [
       "quiet"
       "splash"
     ];
@@ -33,6 +51,15 @@
       "fuse"
     ];
     boot.initrd.kernelModules = [ "dm-snapshot" ];
+    nixpkgs.overlays = lib.mkIf config.nixos.system.boot.cachyos [
+      inputs.nix-cachyos-kernel.overlays.pinned
+    ];
+    nix.settings = lib.mkIf config.nixos.system.boot.cachyos {
+      extra-substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      extra-trusted-public-keys = [
+        "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+      ];
+    };
     boot.kernelPackages = config.nixos.system.boot.kernel;
     boot.supportedFilesystems = [
       "ntfs"

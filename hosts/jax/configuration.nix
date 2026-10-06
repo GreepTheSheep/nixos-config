@@ -64,6 +64,7 @@
 
     nixos.system = {
       secureboot.enable = true;
+      boot.cachyos = true;
       nixosvm = {
         enable = true;
         memorySize = 24576;
