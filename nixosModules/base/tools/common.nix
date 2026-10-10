@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -56,6 +61,7 @@
       nmap
       ipcalc
       wakeonlan
+      wireguard-tools
 
       # system call monitoring
       lsof # list open files
