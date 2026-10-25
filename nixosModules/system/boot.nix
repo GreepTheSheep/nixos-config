@@ -67,8 +67,6 @@
     ];
     environment.systemPackages = [ pkgs.ntfs3g ];
 
-    boot.initrd.systemd.enable = true;
-
     boot.plymouth.enable = lib.mkIf config.nixos.desktop.enable true;
 
     services.fwupd.enable = true;
