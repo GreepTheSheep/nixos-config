@@ -55,9 +55,9 @@
       inputs.nix-cachyos-kernel.overlays.pinned
     ];
     nix.settings = lib.mkIf config.nixos.system.boot.cachyos {
-      extra-substituters = [ "https://attic.xuyh0120.win/lantian" ];
+      extra-substituters = [ "https://cache.lantian.pub/lantian" ];
       extra-trusted-public-keys = [
-        "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+        "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
       ];
     };
     boot.kernelPackages = config.nixos.system.boot.kernel;
