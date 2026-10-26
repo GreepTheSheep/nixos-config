@@ -10,9 +10,9 @@
     ./mixxx.nix
     ./mpv.nix
     ./obs-studio.nix
+    ./pear-desktop.nix
     ./qbittorrent.nix
     ./yt-dlp.nix
-    ./ytmdesktop.nix
   ];
 
   options.homeManager = {
@@ -36,9 +36,9 @@
       mixxx.enable = true;
       mpv.enable = true;
       obs-studio.enable = true;
+      pear-desktop.enable = true;
       qbittorrent.enable = true;
       yt-dlp.enable = true;
-      ytmdesktop.enable = true;
     };
   };
 }
