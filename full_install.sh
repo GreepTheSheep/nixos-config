@@ -12,6 +12,7 @@ trap 'on_error "$LINENO" "$BASH_COMMAND"' ERR
 
 # Global variables
 GIT_REPO_URL="git.greep.fr/greep/nixos-config"
+GIT_BRANCH=""
 FLAKE_CONFIG=""
 DISK=""
 IS_NEW_HOST=false
@@ -127,11 +128,130 @@ get_git_credentials() {
     setup_git_auth
 }
 
+urlencode_branch() {
+    local branch="$1"
+    local encoded="" char hex i
+    local LC_ALL=C
+
+    for ((i = 0; i < ${#branch}; i++)); do
+        char="${branch:i:1}"
+        case "$char" in
+            [a-zA-Z0-9._~/-])
+                encoded+="$char"
+                ;;
+            *)
+                printf -v hex '%%%02X' "'$char"
+                encoded+="$hex"
+                ;;
+        esac
+    done
+
+    printf '%s' "$encoded"
+}
+
+select_git_branch() {
+    clear_screen
+
+    echo "Etape 1b : Sélection de la branche Git"
+    echo ""
+
+    local remote_refs
+    if ! remote_refs=$(git ls-remote --symref "https://${GIT_REPO_URL}" 2>&1); then
+        echo "/!\\ Impossible de contacter le dépôt Git :"
+        echo ""
+        echo "$remote_refs"
+        exit 1
+    fi
+
+    local default_branch
+    default_branch=$(printf '%s\n' "$remote_refs" \
+        | awk '/^ref:/ { sub("refs/heads/", "", $2); print $2; exit }')
+
+    local -a branches
+    local branch
+    while IFS= read -r branch; do
+        if [[ -n "$branch" ]]; then
+            branches+=("$branch")
+        fi
+    done < <(printf '%s\n' "$remote_refs" \
+        | awk '$1 != "ref:" && $2 ~ /^refs\/heads\// { sub("refs/heads/", "", $2); print $2 }' \
+        | sort -u)
+
+    if [[ ${#branches[@]} -eq 0 ]]; then
+        echo "/!\\ Aucune branche distante trouvée."
+        exit 1
+    fi
+
+    echo "Branches disponibles :"
+    echo ""
+    local i
+    for i in "${!branches[@]}"; do
+        if [[ "${branches[$i]}" = "$default_branch" ]]; then
+            echo "  [$((i + 1))] ${branches[$i]} (branche par défaut)"
+        else
+            echo "  [$((i + 1))] ${branches[$i]}"
+        fi
+    done
+    echo ""
+
+    local choice selected
+    while true; do
+        if [[ -n "$default_branch" ]]; then
+            read -rp "Branche à installer [Entrée = ${default_branch}] : " choice
+        else
+            read -rp "Branche à installer : " choice
+        fi
+
+        if [[ -z "$choice" ]]; then
+            if [[ -n "$default_branch" ]]; then
+                GIT_BRANCH="$default_branch"
+                break
+            fi
+            echo "/!\\ Veuillez entrer un numéro ou un nom de branche."
+            continue
+        fi
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] \
+            && [[ "$choice" -ge 1 ]] \
+            && [[ "$choice" -le "${#branches[@]}" ]]; then
+            GIT_BRANCH="${branches[$((choice - 1))]}"
+            break
+        fi
+
+        selected=""
+        for branch in "${branches[@]}"; do
+            if [[ "$branch" = "$choice" ]]; then
+                selected="$branch"
+                break
+            fi
+        done
+
+        if [[ -n "$selected" ]]; then
+            GIT_BRANCH="$selected"
+            break
+        fi
+
+        echo "/!\\ Veuillez entrer un numéro valide ou un nom de branche."
+        echo ""
+    done
+
+    echo ""
+    echo "Branche sélectionnée: $GIT_BRANCH"
+    sleep 2
+}
+
 # ------ Host selection from flake ------
 get_hosts_from_flake() {
     local tmpfile="/tmp/nix_flake.txt"
+    local flake_ref="git+https://${GIT_REPO_URL}.git"
 
-    if ! nix flake show "git+https://${GIT_REPO_URL}.git" \
+    if [[ -n "$GIT_BRANCH" ]]; then
+        local encoded_branch
+        encoded_branch=$(urlencode_branch "$GIT_BRANCH")
+        flake_ref+="?ref=${encoded_branch}"
+    fi
+
+    if ! nix flake show "$flake_ref" \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
         --accept-flake-config > "$tmpfile" 2>&1; then
@@ -1046,7 +1166,11 @@ fetch_config_tmp() {
 
     echo "Clonage du dépôt dans /tmp/nixos-config..."
     rm -rf /tmp/nixos-config
-    git clone -q "https://${GIT_REPO_URL}" /tmp/nixos-config
+    local clone_opts=()
+    if [[ -n "$GIT_BRANCH" ]]; then
+        clone_opts=(--branch "$GIT_BRANCH")
+    fi
+    git clone -q "${clone_opts[@]}" "https://${GIT_REPO_URL}" /tmp/nixos-config
     rm -rf /tmp/nixos-config/.git
 
     echo "Configuration récupérée."
@@ -1118,7 +1242,7 @@ postinstall() {
 
     # Cloner proprement la configuration depuis la repo git
     nixos-enter --silent -c \
-        "su -c 'git config --global credential.helper store && git clone -q https://${GIT_REPO_URL} /home/greep/nixos-config' greep" \
+        "su -c 'git config --global credential.helper store && git clone -q --branch \"${GIT_BRANCH}\" https://${GIT_REPO_URL} /home/greep/nixos-config' greep" \
         > /dev/null 2>&1
 
     # Nettoyer les credentials du chroot
@@ -1390,6 +1514,7 @@ main() {
     require_root
     detect_boot_mode
     get_git_credentials
+    select_git_branch
     select_host
     fetch_config_tmp
     if [ "$IS_NEW_HOST" = true ]; then
