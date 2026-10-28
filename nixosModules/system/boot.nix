@@ -54,12 +54,6 @@
     nixpkgs.overlays = lib.mkIf config.nixos.system.boot.cachyos [
       inputs.nix-cachyos-kernel.overlays.pinned
     ];
-    nix.settings = lib.mkIf config.nixos.system.boot.cachyos {
-      extra-substituters = [ "https://cache.lantian.pub/lantian" ];
-      extra-trusted-public-keys = [
-        "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
-      ];
-    };
     boot.kernelPackages = config.nixos.system.boot.kernel;
     boot.supportedFilesystems = [
       "ntfs"
