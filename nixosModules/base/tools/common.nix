@@ -76,6 +76,8 @@
       direnv
       niv
 
+      ntfsprogs # ntfs3g
+      ntfsprogs-plus # NTFS file system utilities
       exfatprogs # exFAT file system utilities
       e2fsprogs # ext file system utilities
       btrfs-progs # btrfs file system utilities
