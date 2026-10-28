@@ -7,6 +7,7 @@
     ./intelcpu.nix
     ./intelgpu.nix
     ./nvidiagpu.nix
+    ./openrazer.nix
     ./sc0710.nix
   ];
 
@@ -28,6 +29,7 @@
       intelcpu.enable = lib.mkDefault false;
       intelgpu.enable = lib.mkDefault false;
       nvidiagpu.enable = lib.mkDefault false;
+      openrazer.enable = lib.mkDefault false;
       sc0710.enable = lib.mkDefault false;
     };
   };
