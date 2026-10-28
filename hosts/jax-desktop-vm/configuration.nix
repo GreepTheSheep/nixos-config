@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   options.host = {
@@ -21,13 +21,17 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
   };
 
   config = {
+    host.nixpkgs = "unstable";
     nixos.desktop = {
       enable = true;
       desktopEnvironment = {
