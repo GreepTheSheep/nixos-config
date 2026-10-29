@@ -18,7 +18,7 @@
       ];
       keyStatistics = true;
       batteryNotifier = {
-        percentage = 30;
+        percentage = 10;
       };
     };
   };
