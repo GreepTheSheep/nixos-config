@@ -21,7 +21,10 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
@@ -31,34 +34,34 @@
 
     host.containers.enable = true;
 
-    nixos.desktop.enable = false;
+    nixos = {
+      desktop.enable = false;
+      hardware.intelcpu.enable = true;
+      userEnvironment.enable = false;
 
-    nixos.hardware.intelcpu.enable = true;
+      system = {
+        bootloader.timeout = 1;
+        nixos.garbageCollect = true;
+        secureboot.enable = true;
 
-    nixos.system = {
-      bootloader.timeout = 1;
-      nixos.garbageCollect = true;
-      secureboot.enable = true;
+        user.defaultuser = {
+          pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+        };
 
-      user.defaultuser = {
-        pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+        motd = {
+          enable = true;
+          content = builtins.readFile ./motd;
+        };
       };
 
-      motd = {
+      virtualisation = {
         enable = true;
-        content = builtins.readFile ./motd;
+        docker.enable = true;
       };
-    };
 
-    nixos.userEnvironment.enable = false;
-
-    nixos.virtualisation = {
-      enable = true;
-      docker.enable = true;
-    };
-
-    nixos.server = {
-      vscode-server.external = true;
+      server = {
+        vscode-server.external = true;
+      };
     };
   };
 }
