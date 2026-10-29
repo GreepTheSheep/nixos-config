@@ -292,11 +292,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1793054847,
-        "narHash": "sha256-mhud3nRH8RoP0h9MydfkJ8mISpj+QE/S//wOt9bNgC0=",
+        "lastModified": 1793236063,
+        "narHash": "sha256-jGFe4xdrCw6xpgH2zgKwslACyt/NGuPwGILPEMFxmcQ=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "8ba09466dc929acf5c8bb3e0cc40f472a7df3630",
+        "rev": "b6754c901c21478fd8450d62101e712b2a4f0d75",
         "type": "github"
       },
       "original": {
@@ -388,11 +388,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1793195608,
-        "narHash": "sha256-lNZLwWf5tYNKjothaoFq/VZYvzaclmLafjgMdUlpJPQ=",
+        "lastModified": 1793225069,
+        "narHash": "sha256-sx1f99WGrDfJ83KKuQrqGPmot0rnDgmpLJDzpU2oHQQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "58deea654ec5dd0644f31c840a07c29fa0592528",
+        "rev": "e62746b0b472753ef019baceab6f1e2e52014980",
         "type": "github"
       },
       "original": {
@@ -487,11 +487,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793226265,
-        "narHash": "sha256-9wL2oK17OK7fyT6Xfv3StdwKNd8GvQsraiJP/h8Bgbg=",
+        "lastModified": 1793306028,
+        "narHash": "sha256-wNuxkyOHZPxXPhd/bz+0Xxq16TgyC8xCyWmS4s9Stws=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "850f71fcd68300f972afc512395c593e660231ae",
+        "rev": "c2e8cf955b6b7cc52bef3aaf87a0bc0a61324366",
         "type": "github"
       },
       "original": {
@@ -503,7 +503,7 @@
     "oisd-big": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-+g94l+bq1cyUqtYT/isRvYbaEfj4905O6SLMZb70gOM=",
+        "narHash": "sha256-g9nxdF2YfxCCraM4RIt5wU1kGbqQSeBPB6CdrLhbh2U=",
         "type": "file",
         "url": "https://big.oisd.nl/"
       },
@@ -515,7 +515,7 @@
     "oisd-small": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-lE+n85wT1p2SyDOXq6zCsCjSIhPj4jDeiZGrE9959vU=",
+        "narHash": "sha256-obIL1XMCGHLM7i1th4YaXScYuvQC16NC6nGKj8B+bi8=",
         "type": "file",
         "url": "https://small.oisd.nl/"
       },
