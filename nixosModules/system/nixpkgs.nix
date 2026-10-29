@@ -14,14 +14,7 @@
 
   config = lib.mkIf config.nixos.system.nixpkgs.enable {
     nixpkgs = {
-      # Skips checks on openldap on i686 (does build failure recently, so we add this to skip)
       overlays = [
-        (_: prev: {
-          openldap = prev.openldap.overrideAttrs {
-            doCheck = !prev.stdenv.hostPlatform.isi686;
-          };
-        })
-
         # Node.js 26 runs test-fs-cp-async-file-modes, which chmods the setuid
         # and setgid bits. Those chmods return EPERM inside the Nix build
         # sandbox, so the test can never pass and the whole nodejs build fails.

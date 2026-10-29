@@ -40,6 +40,10 @@
         ];
         sandbox = true;
 
+        extra-substituters = [
+          "https://nix-community.cachix.org"
+          "https://greep.cachix.org"
+        ];
         trusted-substituters = [
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
