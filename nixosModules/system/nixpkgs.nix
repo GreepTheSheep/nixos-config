@@ -79,11 +79,6 @@
             };
         })
       ];
-
-      # Allow Electron 39.8.10 to build. Required for Bitwarden Desktop on NixOS 26.05
-      config.permittedInsecurePackages = [
-        "electron-39.8.10"
-      ];
     };
   };
 }

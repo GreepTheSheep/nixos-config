@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeManager = {
@@ -16,7 +21,6 @@
     home.packages = with pkgs; [
       qdirstat
       remmina
-      bitwarden-desktop
       #gearlever
     ];
   };

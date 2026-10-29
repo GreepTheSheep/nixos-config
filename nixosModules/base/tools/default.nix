@@ -4,6 +4,7 @@
   imports = [
     ./at.nix
     ./backrest.nix
+    ./bitwarden.nix
     ./common.nix
     ./git.nix
     ./htop.nix
@@ -27,6 +28,7 @@
     nixos.base.tools = {
       at.enable = true;
       backrest.enable = lib.mkDefault false;
+      bitwarden.enable = true;
       common.enable = true;
       git.enable = true;
       htop.enable = true;
