@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos.hardware.openrazer = {
@@ -21,5 +26,11 @@
         percentage = 10;
       };
     };
+
+    environment.systemPackages =
+      with pkgs;
+      lib.mkIf config.nixos.desktop.enable [
+        polychromatic
+      ];
   };
 }
