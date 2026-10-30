@@ -17,7 +17,6 @@
     ./tangled-discord-bot-rust.nix
     ./tangled-discord-bot.nix
     ./watchtower.nix
-    ./wud.nix
   ];
 
   options.host = {
@@ -32,7 +31,9 @@
 
   config = lib.mkIf (config.host.containers.enable && config.nixos.virtualisation.docker.enable) {
     systemd.tmpfiles.rules = [
-      "d ${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers 0755 ${config.nixos.system.user.defaultuser.name} users"
+      "d ${
+        config.users.users."${config.nixos.system.user.defaultuser.name}".home
+      }/docker-containers 0755 ${config.nixos.system.user.defaultuser.name} users"
     ];
 
     host.containers = {
@@ -63,7 +64,6 @@
       tangled-discord-bot-rust.enable = true;
       tangled-discord-bot.enable = true;
       watchtower.enable = true;
-      wud.enable = false;
     };
   };
 }
