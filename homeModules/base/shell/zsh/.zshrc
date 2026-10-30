@@ -12,16 +12,23 @@ SAVEHIST=1000
 bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/greep/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
 
 # Init starship if enabled
 if type "starship" > /dev/null; then
   eval "$(starship init zsh)"
+fi
+
+# Load files in ~/.zshrc.d if available
+if [[ -d "$HOME/.zshrc.d" ]]; then
+  for config in "$HOME"/.zshrc.d/*(N); do
+    [[ -f "$config" ]] && source "$config"
+  done
 fi
