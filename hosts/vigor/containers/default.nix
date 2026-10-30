@@ -17,6 +17,7 @@
     ./tangled-discord-bot-rust.nix
     ./tangled-discord-bot.nix
     ./watchtower.nix
+    ./wireguard-server.nix
   ];
 
   options.host = {
@@ -64,6 +65,7 @@
       tangled-discord-bot-rust.enable = true;
       tangled-discord-bot.enable = true;
       watchtower.enable = true;
+      wireguard-server.enable = true;
     };
   };
 }
