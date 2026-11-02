@@ -3,6 +3,7 @@
 {
   imports = [
     ./bottles.nix
+    ./rpi-imager.nix
   ];
 
   options.homeManager = {
@@ -19,6 +20,7 @@
   config = lib.mkIf config.homeManager.applications.utils.enable {
     homeManager.applications.utils = {
       bottles.enable = true;
+      rpi-imager.enable = lib.mkDefault false;
     };
   };
 }

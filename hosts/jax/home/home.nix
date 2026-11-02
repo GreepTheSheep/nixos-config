@@ -27,6 +27,8 @@ _:
         wheelwizard.enable = true;
       };
 
+      utils.rpi-imager.enable = true;
+
       wallpaperengine = {
         enable = true;
         wallpapers = [
