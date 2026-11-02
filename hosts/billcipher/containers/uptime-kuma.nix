@@ -23,7 +23,7 @@
       directory = "${home}/docker-containers/kuma";
       caddySiteDirectory = "${home}/docker-containers/caddy/sites";
     in
-    lib.mkIf config.host.containers.prometheus.enable {
+    lib.mkIf config.host.containers.kuma.enable {
       systemd.tmpfiles.rules = lib.mkMerge [
         ([
           "d ${directory} 0755 ${user} users"
