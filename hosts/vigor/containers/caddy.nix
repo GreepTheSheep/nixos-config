@@ -217,6 +217,9 @@
         };
         hostname = config.networking.hostName;
         user = "1000:1000";
+        environment = {
+          TZ = "Europe/Paris";
+        };
         ports = [
           "80:80"
           "443:443"
