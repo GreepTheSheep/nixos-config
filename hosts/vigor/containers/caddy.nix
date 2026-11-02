@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.host = {
@@ -12,204 +17,227 @@
   };
 
   config =
-  let
-    directory = "${config.users.users."${config.nixos.system.user.defaultuser.name}".home}/docker-containers/caddy";
-  in lib.mkIf config.host.containers.caddy.enable
-  {
-    sops.secrets = {
-      "docker/caddy/cloudflare-acme-dns-apikey" = {};
-      "gitea/registry-password" = {};
-    };
+    let
+      directory = "${
+        config.users.users."${config.nixos.system.user.defaultuser.name}".home
+      }/docker-containers/caddy";
+    in
+    lib.mkIf config.host.containers.caddy.enable {
+      sops.secrets = {
+        "docker/caddy/cloudflare-acme-dns-apikey" = { };
+        "gitea/registry-password" = { };
+      };
 
-    sops.templates."caddy-extraconf-cloudflare-acme".content = ''
-      acme_dns cloudflare ${config.sops.placeholder."docker/caddy/cloudflare-acme-dns-apikey"}
-    '';
+      sops.templates."caddy-extraconf-cloudflare-acme".content = ''
+        acme_dns cloudflare ${config.sops.placeholder."docker/caddy/cloudflare-acme-dns-apikey"}
+      '';
 
-    systemd.tmpfiles.rules = [
-      "d ${directory} 0755 ${config.nixos.system.user.defaultuser.name} users"
-      "d ${directory}/caddy-data 0755 ${config.nixos.system.user.defaultuser.name} users"
-      "d ${directory}/sites 0755 ${config.nixos.system.user.defaultuser.name} users"
-      "d ${directory}/extra-config 0755 ${config.nixos.system.user.defaultuser.name} users"
+      systemd.tmpfiles.rules = [
+        "d ${directory} 0755 ${config.nixos.system.user.defaultuser.name} users"
+        "d ${directory}/caddy-data 0755 ${config.nixos.system.user.defaultuser.name} users"
+        "d ${directory}/sites 0755 ${config.nixos.system.user.defaultuser.name} users"
+        "d ${directory}/extra-config 0755 ${config.nixos.system.user.defaultuser.name} users"
 
-      "C+ ${directory}/extra-config/cloudflare-acme.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${config.sops.templates."caddy-extraconf-cloudflare-acme".path}"
+        "C+ ${directory}/extra-config/cloudflare-acme.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${
+          config.sops.templates."caddy-extraconf-cloudflare-acme".path
+        }"
 
-      "C+ ${directory}/sites/vigor.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "vigor.caddy" ''
-        4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
-          import error-handler
-          ${lib.optionalString config.host.containers.arr.enable ''
-            redir /prowlarr /prowlarr/
-            handle /prowlarr/* {
-              vars {
-                websiteName "Prowlarr"
+        "C+ ${directory}/sites/vigor.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "vigor.caddy" ''
+          4.vigor.greep.fr, 6.vigor.greep.fr, vigor.greep.fr {
+            import error-handler
+            ${lib.optionalString config.host.containers.arr.enable ''
+              redir /prowlarr /prowlarr/
+              handle /prowlarr/* {
+                vars {
+                  websiteName "Prowlarr"
+                }
+
+                #error 503 # Maintenance
+
+                reverse_proxy prowlarr:9696 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
               }
 
-              #error 503 # Maintenance
+              redir /radarr /radarr/
+              handle /radarr/* {
+                vars {
+                  websiteName "Radarr"
+                }
 
-              reverse_proxy prowlarr:9696 {
-                fail_duration 30s
-                unhealthy_status 503
+                #error 503 # Maintenance
+
+                reverse_proxy radarr:7878 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
               }
+
+              redir /sonarr /sonarr/
+              handle /sonarr/* {
+                vars {
+                  websiteName "Sonarr"
+                }
+
+                #error 503 # Maintenance
+
+                reverse_proxy sonarr:8989 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
+              }
+            ''}
+
+            ${lib.optionalString config.host.containers.deemix.enable ''
+              redir /deemix /deemix/
+              handle /deemix/* {
+                vars {
+                  websiteName "Deemix"
+                }
+
+                #error 503 # Maintenance
+
+                reverse_proxy deemix:6595 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
+              }
+            ''}
+
+            ${lib.optionalString config.host.containers.qbittorrent.enable ''
+              redir /qbit /qbit/
+              handle_path /qbit/* {
+                vars {
+                  websiteName "qBittorrent"
+                }
+
+                #error 503 # Maintenance
+
+                reverse_proxy wireguard:8686 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                  header_up Host wireguard:8686
+                  header_up X-Forwarded-Host {host}:{hostport}
+                  header_up -Origin
+                  header_up -Referer
+                }
+              }
+            ''}
+
+            ${lib.optionalString config.host.containers.backrest.enable ''
+              redir /backrest /backrest/
+              handle_path /backrest/* {
+                vars {
+                  websiteName "Backrest"
+                }
+
+                import hsts
+
+                #error 503 # Maintenance
+
+                reverse_proxy backrest:9898 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
+              }
+            ''}
+
+            ${lib.optionalString config.host.containers.prometheus.enable ''
+              redir /node-metrics /node-metrics/
+              handle_path /node-metrics/* {
+                basicauth /* {
+                  vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+                }
+
+                vars {
+                  websiteName "Node Metrics"
+                }
+
+                import hsts
+
+                #error 503 # Maintenance
+
+                reverse_proxy node-exporter:9100 {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
+              }
+            ''}
+
+            ${lib.optionalString config.host.containers.prometheus.enableDgcmExporter ''
+              redir /dgcm-metrics /dgcm-metrics/
+              handle_path /dgcm-metrics/* {
+                basicauth /* {
+                  vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
+                }
+
+                vars {
+                  websiteName "DGCM Metrics"
+                }
+
+                import hsts
+
+                #error 503 # Maintenance
+
+                reverse_proxy dgcm-exporter:9400  {
+                  fail_duration 30s
+                  unhealthy_status 503
+                }
+              }
+            ''}
+
+            handle / {
+              root * {$TEMPLATES_DIR}/server-motd
+              file_server
+              rewrite * {labels.2}.html
             }
-
-            redir /radarr /radarr/
-            handle /radarr/* {
-              vars {
-                websiteName "Radarr"
-              }
-
-              #error 503 # Maintenance
-
-              reverse_proxy radarr:7878 {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-
-            redir /sonarr /sonarr/
-            handle /sonarr/* {
-              vars {
-                websiteName "Sonarr"
-              }
-
-              #error 503 # Maintenance
-
-              reverse_proxy sonarr:8989 {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-          ''}
-
-          ${lib.optionalString config.host.containers.qbittorrent.enable ''
-            redir /qbit /qbit/
-            handle_path /qbit/* {
-              vars {
-                websiteName "qBittorrent"
-              }
-
-              #error 503 # Maintenance
-
-              reverse_proxy wireguard:8686 {
-                fail_duration 30s
-                unhealthy_status 503
-                header_up Host wireguard:8686
-                header_up X-Forwarded-Host {host}:{hostport}
-                header_up -Origin
-                header_up -Referer
-              }
-            }
-          ''}
-
-          ${lib.optionalString config.host.containers.backrest.enable ''
-            redir /backrest /backrest/
-            handle_path /backrest/* {
-              vars {
-                websiteName "Backrest"
-              }
-
-              import hsts
-
-              #error 503 # Maintenance
-
-              reverse_proxy backrest:9898 {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-          ''}
-
-          ${lib.optionalString config.host.containers.prometheus.enable ''
-            redir /node-metrics /node-metrics/
-            handle_path /node-metrics/* {
-              basicauth /* {
-                vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
-              }
-
-              vars {
-                websiteName "Node Metrics"
-              }
-
-              import hsts
-
-              #error 503 # Maintenance
-
-              reverse_proxy node-exporter:9100 {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-          ''}
-
-          ${lib.optionalString config.host.containers.prometheus.enableDgcmExporter ''
-            redir /dgcm-metrics /dgcm-metrics/
-            handle_path /dgcm-metrics/* {
-              basicauth /* {
-                vigor $2a$14$kAfOmNHCCWefnuzdRX9UeeiRHmvcjDg3W8Ko0oSq6wnS6eix.zZ8O
-              }
-
-              vars {
-                websiteName "DGCM Metrics"
-              }
-
-              import hsts
-
-              #error 503 # Maintenance
-
-              reverse_proxy dgcm-exporter:9400  {
-                fail_duration 30s
-                unhealthy_status 503
-              }
-            }
-          ''}
-
-          handle / {
-            root * {$TEMPLATES_DIR}/server-motd
-            file_server
-            rewrite * {labels.2}.html
           }
-        }
-      ''}"
-    ];
+        ''}"
+      ];
 
-    systemd.services.create-caddy-bridge-network = {
-      description = "Create caddy-bridge docker network";
-      after = [ "docker.service" ];
-      before = [ "docker-caddy.service" ];
-      wantedBy = [ "docker-caddy.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.docker}/bin/docker network create caddy-bridge || true'";
+      systemd.services.create-caddy-bridge-network = {
+        description = "Create caddy-bridge docker network";
+        after = [ "docker.service" ];
+        before = [ "docker-caddy.service" ];
+        wantedBy = [ "docker-caddy.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.docker}/bin/docker network create caddy-bridge || true'";
+        };
+      };
+
+      virtualisation.oci-containers.containers.caddy = {
+        image = "git.greep.fr/greep/caddy";
+        login = {
+          registry = "git.greep.fr";
+          username = "greep";
+          passwordFile = config.sops.secrets."gitea/registry-password".path;
+        };
+        hostname = config.networking.hostName;
+        ports = [
+          "80:80"
+          "443:443"
+          "443:443/udp"
+        ];
+        volumes = [
+          "${directory}/caddy-data:/data/caddy"
+          "${directory}/sites:/etc/caddy/sites"
+          "${directory}/extra-config:/etc/caddy/config.d"
+        ];
+        networks = [ "caddy-bridge" ];
+        extraOptions = [
+          "--security-opt=no-new-privileges:true"
+        ];
+      };
+
+      nixos.system.firewall = {
+        extraAllowedTCPPorts = [
+          80
+          443
+        ];
+        extraAllowedUDPPorts = [ 443 ];
       };
     };
-
-    virtualisation.oci-containers.containers.caddy = {
-      image = "git.greep.fr/greep/caddy";
-      login = {
-        registry = "git.greep.fr";
-        username = "greep";
-        passwordFile = config.sops.secrets."gitea/registry-password".path;
-      };
-      hostname = config.networking.hostName;
-      ports = [
-        "80:80"
-        "443:443"
-        "443:443/udp"
-      ];
-      volumes = [
-        "${directory}/caddy-data:/data/caddy"
-        "${directory}/sites:/etc/caddy/sites"
-        "${directory}/extra-config:/etc/caddy/config.d"
-      ];
-      networks = [ "caddy-bridge" ];
-      extraOptions = [
-        "--security-opt=no-new-privileges:true"
-      ];
-    };
-
-    nixos.system.firewall = {
-      extraAllowedTCPPorts = [ 80 443 ];
-      extraAllowedUDPPorts = [ 443 ];
-    };
-  };
 }

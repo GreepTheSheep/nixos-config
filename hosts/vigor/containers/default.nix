@@ -7,6 +7,7 @@
     ./caddy.nix
     ./cf-ddns.nix
     ./crowdsec.nix
+    ./deemix.nix
     ./h5ai.nix
     ./immich.nix
     ./jellyfin.nix
@@ -43,6 +44,7 @@
       caddy.enable = true;
       cfddns.enable = true;
       crowdsec.enable = true;
+      deemix.enable = true;
       h5ai.enable = true;
       immich = {
         enable = true;
