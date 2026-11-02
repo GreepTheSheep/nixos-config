@@ -216,6 +216,7 @@
           passwordFile = config.sops.secrets."gitea/registry-password".path;
         };
         hostname = config.networking.hostName;
+        user = "1000:1000";
         ports = [
           "80:80"
           "443:443"
