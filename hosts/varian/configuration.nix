@@ -33,6 +33,8 @@
   config = {
     host.nixpkgs = "unstable";
 
+    config.nixos.system.bootloader.enable = lib.mkForce false; # Do not use Limine, keep using generic RPI bootloader
+
     nixos.system.nixos.garbageCollect = true;
 
     nixos.desktop.enable = false;
