@@ -21,25 +21,25 @@
     };
 
     nixpkgs = lib.mkOption {
-      type = lib.types.enum [ "stable" "unstable" ];
+      type = lib.types.enum [
+        "stable"
+        "unstable"
+      ];
       default = "stable";
       description = "Nixpkgs channel to use for this host.";
     };
   };
 
   config = {
+    host.nixpkgs = "unstable";
+
     nixos.system.nixos.garbageCollect = true;
 
     nixos.desktop.enable = false;
-    nixos.userEnvironment.enable = false;
+    nixos.userEnvironment.hermes-agent.enable = true;
 
     nixos.system.user.defaultuser = {
       pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
-    };
-
-    nixos.virtualisation = {
-      enable = true;
-      docker.enable = true;
     };
 
     nixos.system.motd = {

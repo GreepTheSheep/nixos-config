@@ -9,6 +9,7 @@
   boot.initrd.availableKernelModules = [
     "usbhid"
     "usb_storage"
+    "sdhci_brcmstb"
   ];
 
   # Paramètre requis pour le Bluetooth sur Pi 5
