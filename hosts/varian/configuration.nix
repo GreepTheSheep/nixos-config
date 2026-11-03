@@ -32,6 +32,7 @@
 
   config = {
     host.nixpkgs = "unstable";
+    host.hermes-agent.enable = true;
 
     nixos = {
       system = {
