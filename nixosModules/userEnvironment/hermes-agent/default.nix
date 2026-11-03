@@ -39,5 +39,23 @@
       environmentFiles = [ config.sops.templates."hermes.env".path ];
       addToSystemPackages = true;
     };
+
+    users.users."hermes" = lib.mkIf config.nixos.virtualisation.docker.enable {
+      extraGroups = [
+        "docker"
+      ];
+    };
+
+    security.sudo.extraRules = lib.mkIf config.nixos.virtualisation.docker.enable [
+      {
+        users = [ "hermes" ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/docker";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
   };
 }
