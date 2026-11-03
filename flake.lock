@@ -169,11 +169,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1793738068,
-        "narHash": "sha256-uOtsCgcLB8VNHPxU3mS0Ng88J49IicHoIYACq1/TqMM=",
+        "lastModified": 1793741312,
+        "narHash": "sha256-i20dkVktEMWWtkZNWYYaxrlgccQvxlkAZF6MM8sPUz4=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "3ab4fb510f870160390b82c77d87f443b49e3b47",
+        "rev": "8112254f8a934626032579cae967b25b7795836d",
         "type": "github"
       },
       "original": {
@@ -590,11 +590,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793734120,
-        "narHash": "sha256-tI/ZBIsYnNjLhYeoqmjI6D2CDO8kSanM87QrhAP1U2E=",
+        "lastModified": 1793743425,
+        "narHash": "sha256-iXs7xkb06w2uX9Uwz2+zF+7+3L1iPPVUhFgM7bRx8Dk=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "454b6b5acb5aca6a9a56b3d7825fb4dc8f149871",
+        "rev": "440c174069c4a6e9424b69c89c59929a217f2b76",
         "type": "github"
       },
       "original": {
@@ -606,7 +606,7 @@
     "oisd-big": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-4Ejt/iSwiREJVnNPJqWjc4SUZJ5hR3dBRb3zi/eGWsk=",
+        "narHash": "sha256-P0ySCH/kXfSUegB+mYKVQ6qa0jX/XARr4wz98ie0GU8=",
         "type": "file",
         "url": "https://big.oisd.nl/"
       },
@@ -618,7 +618,7 @@
     "oisd-small": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-c8L4bWp2g/NXt7FVkwj2pfUbUzXdndSchOQC+PxXkFw=",
+        "narHash": "sha256-HGR/epA0pBe0fl5U3+WwQZ0UikojY0fNYzhHoFLDqTo=",
         "type": "file",
         "url": "https://small.oisd.nl/"
       },
