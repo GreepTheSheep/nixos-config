@@ -60,6 +60,8 @@
 
     sc0710.url = "github:Nakildias/sc0710";
 
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
     # Blocklists
     ads = {
       url = "https://blocklistproject.github.io/Lists/ads.txt";
