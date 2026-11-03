@@ -4,7 +4,6 @@
   imports = [
     ./config
     ./game
-    ./hermes-agent
     ./io
     ./non-nix-apps
     ./runtimes
@@ -13,6 +12,7 @@
     ./common.nix
     ./flatpak.nix
     ./fonts.nix
+    ./hermes-agent.nix
     ./kdeconnect.nix
     ./samba-client.nix
     ./spotify.nix
@@ -33,7 +33,6 @@
     nixos.userEnvironment = {
       config.enable = true;
       game.enable = lib.mkDefault false;
-      hermes-agent.enable = lib.mkDefault false;
       io.enable = true;
       non-nix-apps.enable = lib.mkDefault false;
       runtimes.enable = true;
@@ -42,6 +41,7 @@
       common.enable = true;
       flatpak.enable = lib.mkDefault false;
       fonts.enable = true;
+      hermes-agent.enable = lib.mkDefault false;
       kdeconnect.enable = true;
       samba-client.enable = true;
       spotify.enable = true;

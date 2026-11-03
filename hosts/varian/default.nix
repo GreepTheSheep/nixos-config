@@ -7,5 +7,7 @@
     ./hardware-configuration.nix
     ./mount.nix
     ./networking.nix
+
+    ./hermes-agent
   ];
 }
