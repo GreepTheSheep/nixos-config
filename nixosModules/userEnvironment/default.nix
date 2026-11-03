@@ -4,7 +4,6 @@
   imports = [
     ./config
     ./game
-    ./hermes-agent
     ./io
     ./non-nix-apps
     ./runtimes
@@ -33,7 +32,6 @@
     nixos.userEnvironment = {
       config.enable = true;
       game.enable = lib.mkDefault false;
-      hermes-agent.enable = lib.mkDefault false;
       io.enable = true;
       non-nix-apps.enable = lib.mkDefault false;
       runtimes.enable = true;
