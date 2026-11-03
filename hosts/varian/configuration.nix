@@ -46,15 +46,15 @@
           enable = true;
           content = builtins.readFile ./motd;
         };
-
-        virtualisation = {
-          enable = true;
-          docker.enable = true;
-        };
       };
 
       desktop.enable = false;
       userEnvironment.hermes-agent.enable = true;
+
+      virtualisation = {
+        enable = true;
+        docker.enable = true;
+      };
     };
   };
 }
