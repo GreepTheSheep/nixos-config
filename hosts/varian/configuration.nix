@@ -33,20 +33,28 @@
   config = {
     host.nixpkgs = "unstable";
 
-    nixos.system.bootloader.enable = lib.mkForce false; # Do not use Limine, keep using generic RPI bootloader
+    nixos = {
+      system = {
+        bootloader.enable = lib.mkForce false; # Do not use Limine, keep using generic RPI bootloader
+        nixos.garbageCollect = true;
 
-    nixos.system.nixos.garbageCollect = true;
+        user.defaultuser = {
+          pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
+        };
 
-    nixos.desktop.enable = false;
-    nixos.userEnvironment.hermes-agent.enable = true;
+        motd = {
+          enable = true;
+          content = builtins.readFile ./motd;
+        };
+      };
 
-    nixos.system.user.defaultuser = {
-      pass = "$6$wpoCAeUVymh0/wJ8$.T2bnLYhQXc8ReqvbPVaH89g9cVeHuQVKHaBTCgTdH0xP6oAdMNWs7R5vkatJClJYbfG1u9EnXr8ELv2fPC.3/";
-    };
+      desktop.enable = false;
+      userEnvironment.hermes-agent.enable = true;
 
-    nixos.system.motd = {
-      enable = true;
-      content = builtins.readFile ./motd;
+      virtualisation = {
+        enable = true;
+        docker.enable = true;
+      };
     };
   };
 }

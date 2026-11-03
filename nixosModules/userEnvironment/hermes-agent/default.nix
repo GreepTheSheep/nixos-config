@@ -31,6 +31,7 @@
 
     services.hermes-agent = {
       enable = true;
+      container.enable = config.nixos.virtualisation.docker.enable;
       settings = {
         model.default = "deepseek-v4.1-flash:1017"; # Default Ollama model used from Ollama Cloud
         toolsets = [ "all" ];
