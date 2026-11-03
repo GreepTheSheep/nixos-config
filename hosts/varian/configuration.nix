@@ -50,11 +50,6 @@
 
       desktop.enable = false;
       userEnvironment.hermes-agent.enable = true;
-
-      virtualisation = {
-        enable = true;
-        docker.enable = true;
-      };
     };
   };
 }
