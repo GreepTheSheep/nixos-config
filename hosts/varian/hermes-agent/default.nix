@@ -13,5 +13,11 @@
 
   config = lib.mkIf config.host.hermes-agent.enable {
     nixos.userEnvironment.hermes-agent.enable = true;
+
+    services.hermes-agent.settings = {
+      webapp = {
+        enabled = true;
+      };
+    };
   };
 }

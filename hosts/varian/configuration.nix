@@ -47,6 +47,13 @@
           enable = true;
           content = builtins.readFile ./motd;
         };
+
+        serviceWatchdog = {
+          enable = true;
+          services = [
+            "hermes-agent"
+          ];
+        };
       };
 
       desktop.enable = false;
