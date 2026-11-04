@@ -17,6 +17,7 @@
     services.hermes-agent.settings = {
       webapp = {
         enabled = true;
+        host = "0.0.0.0";
       };
     };
 
