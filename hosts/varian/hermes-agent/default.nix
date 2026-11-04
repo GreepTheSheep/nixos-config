@@ -23,15 +23,16 @@
         enabled = true;
         host = "0.0.0.0";
         port = 9120;
-        public_url = "http://192.168.1.56:9120";
+        public_url = "https://hermes.greep.fr";
       };
       group_sessions_per_user = false;
       approvals.destructive_slash_confirm = false;
     };
 
-    # We need to open port 9120 for Hermes Webapp
+    # We need to open port 9120 for Webapp & port 9119 for Dashboard
     nixos.system.firewall = {
       extraAllowedTCPPorts = [
+        9119
         9120
       ];
     };
