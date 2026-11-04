@@ -1,6 +1,10 @@
 { config, lib, ... }:
 
 {
+  imports = [
+    ./messaging
+  ];
+
   options.host = {
     hermes-agent = {
       enable = lib.mkOption {
@@ -28,6 +32,10 @@
       extraAllowedTCPPorts = [
         9120
       ];
+    };
+
+    host.hermes-agent = {
+      messaging.enable = true;
     };
   };
 }
