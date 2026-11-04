@@ -6,7 +6,7 @@
     ./displayManager
     ./windowManager
     ./xdg.nix
-    ./xrdp.nix
+    ./krdp.nix
     ./xserver.nix
   ];
 
@@ -27,7 +27,7 @@
       displayManager.enable = true;
       windowManager.enable = true;
       xdg.enable = true;
-      xrdp.enable = lib.mkDefault false;
+      krdp.enable = lib.mkDefault false;
       xserver.enable = true;
     };
   };

@@ -42,7 +42,6 @@
 
     extraAllowedUDPPorts = [
       24800
-      3389
     ];
   };
 }
