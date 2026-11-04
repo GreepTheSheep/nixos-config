@@ -1,4 +1,8 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 {
   options.host = {
@@ -11,50 +15,58 @@
     };
   };
 
-  config = let
-    subDomains = [
-      "vigor"
-      "varian"
-      "jellyfin"
-      "jellyfin-requests"
-      "immich"
-      "cloud"
-      "cdn"
-      "openclaw"
-    ];
-    ipv4subDomains = [ "4.vigor" "4.varian" ];
-    ipv6subDomains = [ "6.vigor" "6.varian" ];
-
-    domain = "greep.fr";
-  in lib.mkIf config.host.containers.cfddns.enable {
-    sops.secrets = {
-      "docker/cfddns/api-token" = {};
-    };
-
-    sops.templates = {
-      "cfddns-token.env".content = ''
-        CLOUDFLARE_API_TOKEN=${config.sops.placeholder."docker/cfddns/api-token"}
-      '';
-    };
-
-    virtualisation.oci-containers.containers."cloudflare-ddns" = {
-      image = "timothyjmiller/cloudflare-ddns";
-      environmentFiles = [
-        config.sops.templates."cfddns-token.env".path
+  config =
+    let
+      subDomains = [
+        "vigor"
+        "varian"
+        "jellyfin"
+        "jellyfin-requests"
+        "immich"
+        "cloud"
+        "cdn"
+        "hermes"
       ];
-      environment = {
-        TZ = "Europe/Paris";
-        DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") subDomains;
-        IP4_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv4subDomains;
-        IP6_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv6subDomains;
-        PROXIED = "!is(vigor.greep.fr) && !is(4.vigor.greep.fr) && !is(6.vigor.greep.fr) && !is(varian.greep.fr) && !is(4.varian.greep.fr) && !is(6.varian.greep.fr)";
-        #IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
-        #IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
+      ipv4subDomains = [
+        "4.vigor"
+        "4.varian"
+      ];
+      ipv6subDomains = [
+        "6.vigor"
+        "6.varian"
+      ];
+
+      domain = "greep.fr";
+    in
+    lib.mkIf config.host.containers.cfddns.enable {
+      sops.secrets = {
+        "docker/cfddns/api-token" = { };
       };
-      extraOptions = [
-        "--security-opt=no-new-privileges:true"
-        "--network=host"
-      ];
+
+      sops.templates = {
+        "cfddns-token.env".content = ''
+          CLOUDFLARE_API_TOKEN=${config.sops.placeholder."docker/cfddns/api-token"}
+        '';
+      };
+
+      virtualisation.oci-containers.containers."cloudflare-ddns" = {
+        image = "timothyjmiller/cloudflare-ddns";
+        environmentFiles = [
+          config.sops.templates."cfddns-token.env".path
+        ];
+        environment = {
+          TZ = "Europe/Paris";
+          DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") subDomains;
+          IP4_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv4subDomains;
+          IP6_DOMAINS = lib.concatMapStringsSep "," (sub: "${sub}.${domain}") ipv6subDomains;
+          PROXIED = "!is(vigor.greep.fr) && !is(4.vigor.greep.fr) && !is(6.vigor.greep.fr) && !is(varian.greep.fr) && !is(4.varian.greep.fr) && !is(6.varian.greep.fr)";
+          #IP4_PROVIDER = "url:https://ipv4.getip.ovh/txt";
+          #IP6_PROVIDER = "url:https://ipv6.getip.ovh/txt";
+        };
+        extraOptions = [
+          "--security-opt=no-new-privileges:true"
+          "--network=host"
+        ];
+      };
     };
-  };
 }
