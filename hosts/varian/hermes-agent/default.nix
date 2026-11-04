@@ -19,5 +19,12 @@
         enabled = true;
       };
     };
+
+    # We need to open port 9120 for Hermes Webapp
+    nixos.system.firewall = {
+      extraAllowedTCPPorts = [
+        9120
+      ];
+    };
   };
 }
