@@ -194,6 +194,31 @@
             }
           }
         ''}"
+
+        "C+ ${directory}/sites/varian.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "varian.caddy" ''
+          4.varian.greep.fr, 6.varian.greep.fr, varian.greep.fr {
+            import error-handler
+            handle / {
+              root * {$TEMPLATES_DIR}/server-motd
+              file_server
+              rewrite * {labels.2}.html
+            }
+          }
+        ''}"
+
+        "C+ ${directory}/sites/hermes.caddy 0755 ${config.nixos.system.user.defaultuser.name} users - ${pkgs.writeText "hermes.caddy" ''
+          hermes.greep.fr {
+            import error-handler
+            vars {
+              websiteName "Hermes Agent"
+            }
+            import hsts
+            reverse_proxy 192.198.1.56:9120 {
+              fail_duration 30s
+              unhealthy_status 503
+            }
+          }
+        ''}"
       ];
 
       systemd.services.create-caddy-bridge-network = {
