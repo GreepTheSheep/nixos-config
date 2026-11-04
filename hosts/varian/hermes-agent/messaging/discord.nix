@@ -27,9 +27,9 @@
         config.sops.templates."hermes-discord.env".path
       ];
       environment = {
-        DISCORD_ALLOW_ALL_USERS = true; # Act like a chatbot for everyone on guilds
-        DISCORD_REACTIONS = false;
-        DISCORD_ALLOW_MENTION_ROLES = true;
+        DISCORD_ALLOW_ALL_USERS = "true"; # Act like a chatbot for everyone on guilds
+        DISCORD_REACTIONS = "false";
+        DISCORD_ALLOW_MENTION_ROLES = "true";
       };
     };
   };
