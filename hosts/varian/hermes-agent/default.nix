@@ -25,6 +25,7 @@
         port = 9120;
         public_url = "https://hermes.greep.fr";
       };
+      dashboard.trusted_proxies = [ "192.168.1.55" ];
       group_sessions_per_user = false;
       approvals.destructive_slash_confirm = false;
     };

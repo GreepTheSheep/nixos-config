@@ -29,7 +29,9 @@
       };
       templates."hermes.env".content = ''
         OLLAMA_API_KEY=${config.sops.placeholder."hermes/ollama-api-key"}
-        HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${config.sops.placeholder."hermes/dashboard-basic-auth-password"}
+        HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${
+          config.sops.placeholder."hermes/dashboard-basic-auth-password"
+        }
         HERMES_DASHBOARD_BASIC_AUTH_SECRET=${config.sops.placeholder."hermes/dashboard-basic-auth-secret"}
       '';
     };
@@ -43,6 +45,7 @@
       settings = {
         model.default = "deepseek-v4.1-flash:1017"; # Default Ollama model used from Ollama Cloud
         toolsets = [ "all" ];
+        network.force_ipv4 = true;
       };
       environment = {
         HERMES_DASHBOARD_BASIC_AUTH_USERNAME = config.nixos.system.user.defaultuser.name;
