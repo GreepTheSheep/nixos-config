@@ -70,6 +70,7 @@
             profile = "public";
           }
         ];
+        plugins.enabled = lib.mkAfter [ "discord-status" ];
       };
     };
   };
