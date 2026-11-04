@@ -45,6 +45,12 @@
       settings = {
         model.default = "deepseek-v4.1-flash:1017"; # Default Ollama model used from Ollama Cloud
         toolsets = [ "all" ];
+        plugins.enabled = [ "web-ollama-cloud" ];
+        web = {
+          backend = "ollama-cloud";
+          search_backend = "ollama-cloud";
+          extract_backend = "ollama-cloud";
+        };
         network.force_ipv4 = true;
       };
       environment = {
