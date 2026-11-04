@@ -28,8 +28,20 @@
       ];
       environment = {
         DISCORD_ALLOW_ALL_USERS = "true"; # Act like a chatbot for everyone on guilds
-        DISCORD_REACTIONS = "false";
-        DISCORD_ALLOW_MENTION_ROLES = "true";
+        DISCORD_HOME_CHANNEL = "1484999980442845294";
+        DISCORD_ALLOW_BOTS = "mentions";
+      };
+      settings.discord = {
+        auto_thread = false;
+        reactions = false;
+        voice_channel_inactivity_timeout_seconds = 0;
+        ignored_channels = [
+          "596307060010778665"
+          "563241725133455391"
+          "626846666745577504"
+          "562701687261888535"
+          "1186632496054542357"
+        ];
       };
     };
   };

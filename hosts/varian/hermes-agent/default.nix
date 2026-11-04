@@ -25,6 +25,7 @@
         port = 9120;
         public_url = "http://192.168.1.56:9120";
       };
+      group_sessions_per_user = false;
     };
 
     # We need to open port 9120 for Hermes Webapp
