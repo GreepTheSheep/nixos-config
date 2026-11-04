@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   hermes-agent,
   ...
 }:
@@ -23,9 +24,13 @@
     sops = {
       secrets = {
         "hermes/ollama-api-key" = { };
+        "hermes/dashboard-basic-auth-password" = { };
+        "hermes/dashboard-basic-auth-secret" = { };
       };
       templates."hermes.env".content = ''
         OLLAMA_API_KEY=${config.sops.placeholder."hermes/ollama-api-key"}
+        HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${config.sops.placeholder."hermes/dashboard-basic-auth-password"}
+        HERMES_DASHBOARD_BASIC_AUTH_SECRET=${config.sops.placeholder."hermes/dashboard-basic-auth-secret"}
       '';
     };
 
@@ -39,9 +44,25 @@
         model.default = "deepseek-v4.1-flash:1017"; # Default Ollama model used from Ollama Cloud
         toolsets = [ "all" ];
       };
+      environment = {
+        HERMES_DASHBOARD_BASIC_AUTH_USERNAME = config.nixos.system.user.defaultuser.name;
+      };
       environmentFiles = [ config.sops.templates."hermes.env".path ];
       addToSystemPackages = true;
     };
+
+    # Restart the gateway when its configuration changes. Without this, a
+    # `nixos-rebuild switch` rewrites config.yaml/.env but leaves the running
+    # process on the old configuration.
+    systemd.services.hermes-agent.restartTriggers = [
+      (pkgs.writeText "hermes-agent-config" (
+        builtins.toJSON {
+          settings = config.services.hermes-agent.settings;
+          environment = config.services.hermes-agent.environment;
+          envTemplate = config.sops.templates."hermes.env".content;
+        }
+      ))
+    ];
 
     users.users."hermes" = lib.mkIf config.nixos.virtualisation.docker.enable {
       extraGroups = [

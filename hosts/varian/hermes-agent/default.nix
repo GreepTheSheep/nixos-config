@@ -18,6 +18,7 @@
       webapp = {
         enabled = true;
         host = "0.0.0.0";
+        port = 9120;
         public_url = "http://192.168.1.56:9120";
       };
     };
