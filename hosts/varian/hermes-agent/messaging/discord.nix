@@ -31,17 +31,24 @@
         DISCORD_HOME_CHANNEL = "1484999980442845294";
         DISCORD_ALLOW_BOTS = "mentions";
       };
-      settings.discord = {
-        auto_thread = false;
-        reactions = false;
-        voice_channel_inactivity_timeout_seconds = 0;
-        ignored_channels = [
-          "596307060010778665"
-          "563241725133455391"
-          "626846666745577504"
-          "562701687261888535"
-          "1186632496054542357"
-        ];
+      settings = {
+        display.platforms.discord = {
+          tool_progress = "off";
+          interim_assistant_messages = false;
+          long_running_notifications = false;
+        };
+        discord = {
+          auto_thread = false;
+          reactions = false;
+          voice_channel_inactivity_timeout_seconds = 0;
+          ignored_channels = [
+            "596307060010778665"
+            "563241725133455391"
+            "626846666745577504"
+            "562701687261888535"
+            "1186632496054542357"
+          ];
+        };
       };
     };
   };
