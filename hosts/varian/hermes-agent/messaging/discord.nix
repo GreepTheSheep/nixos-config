@@ -29,7 +29,7 @@
       environment = {
         DISCORD_ALLOW_ALL_USERS = "true"; # Act like a chatbot for everyone on guilds
         DISCORD_HOME_CHANNEL = "1484999980442845294";
-        DISCORD_ALLOW_BOTS = "mentions";
+        DISCORD_ALLOW_BOTS = "none";
       };
       settings = {
         display.platforms.discord = {
@@ -40,6 +40,7 @@
         discord = {
           auto_thread = false;
           reactions = false;
+          group_sessions_per_user = true;
           voice_channel_inactivity_timeout_seconds = 0;
           ignored_channels = [
             "596307060010778665"
