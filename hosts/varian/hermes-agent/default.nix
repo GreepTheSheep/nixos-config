@@ -28,6 +28,9 @@
       dashboard.trusted_proxies = [ "192.168.1.55" ];
       group_sessions_per_user = false;
       approvals.destructive_slash_confirm = false;
+      gateway = {
+        multiplex_profiles = true;
+      };
     };
 
     # We need to open port 9120 for Webapp & port 9119 for Dashboard

@@ -50,6 +50,26 @@
             "1186632496054542357"
           ];
         };
+        gateway.profile_routes = [
+          {
+            name = "tangled";
+            platform = "discord";
+            guild_id = "562602234265731080";
+            profile = "public";
+          }
+          {
+            name = "greep";
+            platform = "discord";
+            guild_id = "570024448371982373";
+            profile = "public";
+          }
+          {
+            name = "greep-prive";
+            platform = "discord";
+            guild_id = "662011227639250972";
+            profile = "public";
+          }
+        ];
       };
     };
   };
