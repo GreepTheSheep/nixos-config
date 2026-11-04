@@ -50,7 +50,6 @@
             "1186632496054542357"
           ];
         };
-        plugins.enabled = [ "discord-status" ];
         gateway.profile_routes = [
           {
             name = "tangled";
