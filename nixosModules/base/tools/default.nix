@@ -5,6 +5,7 @@
     ./at.nix
     ./backrest.nix
     ./bitwarden.nix
+    ./cdemu.nix
     ./common.nix
     ./git.nix
     ./htop.nix
@@ -29,6 +30,7 @@
       at.enable = true;
       backrest.enable = lib.mkDefault false;
       bitwarden.enable = true;
+      cdemu.enable = lib.mkDefault false;
       common.enable = true;
       git.enable = true;
       htop.enable = true;

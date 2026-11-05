@@ -53,6 +53,7 @@
       caddy.enable = true;
       tools = {
         backrest.enable = true;
+        cdemu.enable = true;
         scrutiny.enable = true;
       };
     };
