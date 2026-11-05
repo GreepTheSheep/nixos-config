@@ -47,6 +47,8 @@
         toolsets = [ "all" ];
         plugins.enabled = [
           "web-ollama-cloud"
+          "discord-chatlog"
+          "discord-status"
         ];
         web = {
           backend = "ollama-cloud";

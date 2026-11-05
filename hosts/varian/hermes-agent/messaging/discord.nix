@@ -32,10 +32,6 @@
         DISCORD_ALLOW_BOTS = "none";
       };
       settings = {
-        plugins.enabled = lib.mkAfter [
-          "discord-chatlog"
-          "discord-status"
-        ];
         display.platforms.discord = {
           tool_progress = "off";
           interim_assistant_messages = false;
