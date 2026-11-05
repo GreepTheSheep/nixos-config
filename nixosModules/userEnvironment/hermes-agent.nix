@@ -46,7 +46,7 @@
         model.default = "deepseek-v4.1-flash:1017"; # Default Ollama model used from Ollama Cloud
         toolsets = [ "all" ];
         plugins.enabled = [
-          "web-ollama-cloud"
+          "discord-chatlog"
           "discord-status"
         ];
         web = {
