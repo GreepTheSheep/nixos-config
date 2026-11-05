@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -20,6 +25,7 @@
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [
+        mesa
         intel-media-driver
         intel-vaapi-driver
         libva-vdpau-driver
@@ -35,6 +41,7 @@
 
     environment.systemPackages = with pkgs; [
       nvtopPackages.intel
+      vulkan-tools
     ];
   };
 }

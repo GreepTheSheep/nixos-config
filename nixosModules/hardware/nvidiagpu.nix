@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -29,8 +34,11 @@
       # Make sure opengl is enabled
       enable = true;
 
-      # Include vaapi driver
-      extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+      # Include mesa & vaapi driver
+      extraPackages = with pkgs; [
+        mesa
+        nvidia-vaapi-driver
+      ];
 
       # Enable 32-bit applications such as Wine
       enable32Bit = true;
@@ -69,6 +77,7 @@
 
     environment.systemPackages = with pkgs; [
       nvtopPackages.nvidia
+      vulkan-tools
     ];
   };
 }
