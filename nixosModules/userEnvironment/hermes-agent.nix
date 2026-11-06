@@ -27,6 +27,7 @@
         "hermes/dashboard-basic-auth-password" = { };
         "hermes/dashboard-basic-auth-secret" = { };
         "hermes/n8n-mcp-token" = { };
+        "hermes/gitea-access-token" = { };
       };
       templates."hermes.env".content = ''
         OLLAMA_API_KEY=${config.sops.placeholder."hermes/ollama-api-key"}
@@ -35,6 +36,7 @@
         }
         HERMES_DASHBOARD_BASIC_AUTH_SECRET=${config.sops.placeholder."hermes/dashboard-basic-auth-secret"}
         N8N_MCP_TOKEN=${config.sops.placeholder."hermes/n8n-mcp-token"}
+        GITEA_ACCESS_TOKEN=${config.sops.placeholder."hermes/gitea-access-token"}
       '';
     };
 
