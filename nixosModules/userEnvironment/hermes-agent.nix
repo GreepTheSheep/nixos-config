@@ -59,19 +59,34 @@
         };
         network.force_ipv4 = true;
         mcp_servers = {
-          everything = {
-            command = "npx";
-            args = [
-              "-y"
-              "@modelcontextprotocol/server-everything"
-            ];
+          gitea = {
+            command = "node";
+            args = [ "/data/.hermes/mcp/gitea-mcp/node_modules/gitea-mcp/dist/stdio.js" ];
+            env = {
+              GITEA_HOST = "https://git.greep.fr";
+              GITEA_ACCESS_TOKEN = "\${GITEA_ACCESS_TOKEN}";
+            };
+            connect_timeout = 60;
           };
-          filesystem = {
-            command = "npx";
-            args = [
-              "-y"
-              "@modelcontextprotocol/server-filesystem"
-              "/data/workspace"
+          context7 = {
+            url = "https://mcp.context7.com/mcp";
+            connect_timeout = 30;
+          };
+          cloudflare = {
+            url = "https://mcp.cloudflare.com/mcp?codemode=false";
+            auth = "oauth";
+            oauth.redirect_port = 8912;
+            connect_timeout = 60;
+          };
+          globalping = {
+            url = "https://mcp.globalping.dev/mcp";
+            auth = "oauth";
+            oauth.redirect_port = 8913;
+            connect_timeout = 60;
+            tools.exclude = [
+              "help"
+              "compareLocations"
+              "limits"
             ];
           };
           n8n = {
