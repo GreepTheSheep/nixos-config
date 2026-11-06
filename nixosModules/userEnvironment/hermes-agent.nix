@@ -56,6 +56,40 @@
           extract_backend = "ollama-cloud";
         };
         network.force_ipv4 = true;
+        mcp_servers = {
+          everything = {
+            command = "npx";
+            args = [
+              "-y"
+              "@modelcontextprotocol/server-everything"
+            ];
+          };
+          filesystem = {
+            command = "npx";
+            args = [
+              "-y"
+              "@modelcontextprotocol/server-filesystem"
+              "/data/workspace"
+            ];
+          };
+          n8n = {
+            url = "https://n8n.greep.fr/mcp-server/http";
+            headers.Authorization = "Bearer \${N8N_MCP_TOKEN}";
+            timeout = 300;
+            connect_timeout = 60;
+          };
+          n8n-doc = {
+            command = "node";
+            args = [ "/data/.hermes/mcp/n8n-mcp/node_modules/n8n-mcp/dist/mcp/index.js" ];
+            env = {
+              MCP_MODE = "stdio";
+              LOG_LEVEL = "error";
+              DISABLE_CONSOLE_OUTPUT = "true";
+            };
+            lazy = true;
+            connect_timeout = 60;
+          };
+        };
       };
       environment = {
         HERMES_DASHBOARD_BASIC_AUTH_USERNAME = config.nixos.system.user.defaultuser.name;
