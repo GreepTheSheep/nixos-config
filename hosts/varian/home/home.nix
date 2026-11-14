@@ -1,5 +1,10 @@
 { lib, ... }:
 
 {
-  homeManager.applications.enable = false;
+  homeManager.applications = {
+    # Bundle complet coupé sur le Pi (pas de bureau) : on n'active qu'Helium.
+    enable = false;
+
+    browser.helium.enable = true;
+  };
 }
