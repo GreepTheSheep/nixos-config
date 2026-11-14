@@ -7,9 +7,10 @@ _:
     sync.deskflow.enable = true;
 
     development = {
-      claudecode.enable = true;
       diff.enable = true;
       opencode.enable = true;
     };
+
+    gaming.parsec.enable = true;
   };
 }
