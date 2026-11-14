@@ -30,10 +30,10 @@
       dolphin-emu.enable = lib.mkDefault false;
       lutris.enable = lib.mkDefault false;
       nxapi.enable = lib.mkDefault false;
-      parallelLauncher.enable = true;
+      parallelLauncher.enable = lib.mkDefault false;
       parsec.enable = true;
       prismlauncher.enable = true;
-      sober.enable = lib.mkIf config.homeManager.applications.flatpak.enable true;
+      sober.enable = lib.mkDefault false;
       wheelwizard.enable = lib.mkDefault false;
     };
   };
