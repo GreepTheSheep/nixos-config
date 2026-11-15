@@ -1,16 +1,20 @@
 _:
 
 {
-  homeManager.applications = {
-    enable = true;
+  homeManager = {
+    applications = {
+      enable = true;
 
-    sync.deskflow.enable = true;
+      sync.deskflow.enable = true;
 
-    development = {
-      diff.enable = true;
-      opencode.enable = true;
+      development = {
+        diff.enable = true;
+        opencode.enable = true;
+      };
+
+      gaming.parsec.enable = true;
     };
 
-    gaming.parsec.enable = true;
+    base.tools.btop.enableGPUSupport = true;
   };
 }
