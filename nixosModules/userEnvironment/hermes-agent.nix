@@ -117,6 +117,12 @@
       };
       environment = {
         HERMES_DASHBOARD_BASIC_AUTH_USERNAME = config.nixos.system.user.defaultuser.name;
+        # The container's $HOME is <stateDir>/home while the host user's $HOME is
+        # <stateDir> itself, so a `bw login` run from a host shell writes a CLI
+        # state the gateway never reads (and the session looks missing, not
+        # expired). Pin the appdata dir to the shared state dir — container path,
+        # /data is stateDir — so one login state serves both sides.
+        BITWARDENCLI_APPDATA_DIR = "/data/.config/Bitwarden CLI";
       };
       environmentFiles = [ config.sops.templates."hermes.env".path ];
       addToSystemPackages = true;
