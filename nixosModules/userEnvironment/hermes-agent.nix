@@ -141,8 +141,8 @@
       ))
     ];
 
-    users.users."hermes" = lib.mkIf config.nixos.virtualisation.docker.enable {
-      extraGroups = [
+    users.users."hermes" = {
+      extraGroups = lib.optionals config.nixos.virtualisation.docker.enable [
         "docker"
       ];
     };

@@ -1,5 +1,6 @@
 { lib, ... }:
 
 {
-  homeManager.applications.enable = true;
+  # Hôte headless : aucune application desktop n'est installée.
+  homeManager.applications.enable = false;
 }
