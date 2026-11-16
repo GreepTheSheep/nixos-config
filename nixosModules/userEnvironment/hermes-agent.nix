@@ -60,6 +60,11 @@
           extract_backend = "ollama-cloud";
         };
         network.force_ipv4 = true;
+        # The `hermes` wrapper only appends its own runtime deps to PATH (node,
+        # ripgrep, ffmpeg, git…), so `bw` never resolves inside the container and
+        # the Bitwarden credential-vault backend stays disabled. Point it at the
+        # store path: /nix/store is mounted read-only in the container.
+        vault.bitwarden.binary_path = "${pkgs.bitwarden-cli}/bin/bw";
         mcp_servers = {
           gitea = {
             command = "node";
