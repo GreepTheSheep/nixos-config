@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   options.host = {
@@ -58,6 +58,7 @@
 
     nixos.hardware = {
       amdcpu.enable = true;
+      amdgpu.enable = true;
       nvidiagpu.enable = true;
       openrazer.enable = true;
       sc0710.enable = true; # Elgato 4K60 Pro MK.2
