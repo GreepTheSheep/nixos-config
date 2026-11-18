@@ -43,7 +43,6 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      jack.enable = true;
       wireplumber.enable = true;
       raopOpenFirewall = true;
 
@@ -85,7 +84,7 @@
           "context.properties" = {
             # Augmente la taille du buffer pour éviter les coupures lors de pics CPU
             "default.clock.rate" = 48000;
-            "default.clock.quantum" = 2048;  # Buffer plus grand = moins de glitches
+            "default.clock.quantum" = 2048; # Buffer plus grand = moins de glitches
             "default.clock.min-quantum" = 128;
             "default.clock.max-quantum" = 8192;
 
@@ -102,12 +101,15 @@
             {
               name = "libpipewire-module-rtkit";
               args = {
-                "nice.level" = -11;  # Priorité élevée pour l'audio
+                "nice.level" = -11; # Priorité élevée pour l'audio
                 "rt.prio" = 88;
                 "rt.time.soft" = 2000000;
                 "rt.time.hard" = 2000000;
               };
-              flags = [ "ifexists" "nofail" ];
+              flags = [
+                "ifexists"
+                "nofail"
+              ];
             }
           ];
         };
@@ -118,7 +120,7 @@
             {
               name = "libpipewire-module-raop-discover";
               args = {
-                "raop.latency.ms" = 500;  # Augmente la latence pour AirPlay
+                "raop.latency.ms" = 500; # Augmente la latence pour AirPlay
               };
             }
           ];
@@ -136,7 +138,10 @@
                 "node.name" = "discord-share";
                 "node.description" = "Partage Discord";
                 "media.class" = "Audio/Sink";
-                "audio.position" = [ "FL" "FR" ];
+                "audio.position" = [
+                  "FL"
+                  "FR"
+                ];
                 "monitor.channel-volumes" = true;
                 "monitor.passthrough" = true;
               };
@@ -168,11 +173,21 @@
             "bluez5.enable-hw-volume" = true;
 
             # Codecs audio de meilleure qualité
-            "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" "ldac" "aptx" "aptx_hd" ];
+            "bluez5.codecs" = [
+              "sbc"
+              "sbc_xq"
+              "aac"
+              "ldac"
+              "aptx"
+              "aptx_hd"
+            ];
 
             # Ne pas forcer les profils HSP/HFP - ils seront activés automatiquement
             # uniquement quand une application VoIP (Discord, etc.) utilise le microphone
-            "bluez5.headset-roles" = [ "hfp_ag" "hsp_ag" ];
+            "bluez5.headset-roles" = [
+              "hfp_ag"
+              "hsp_ag"
+            ];
 
             # Profil par défaut : A2DP (haute qualité stéréo)
             "bluez5.auto-connect" = [ "a2dp_sink" ];
