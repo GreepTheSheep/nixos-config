@@ -14,24 +14,6 @@
         example = true;
         description = "Enable audio support";
       };
-
-      discordShare = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          example = true;
-          description = ''
-            Enable a persistent PipeWire virtual sink dedicated to Discord
-            screen-share audio. A virtual sink "discord-share" is created at
-            boot and its monitor is exposed as a capturable source.
-
-            Usage:
-            - pavucontrol (Playback tab): route applications to "Partage Discord"
-            - Discord (Voice settings): set input device to the monitor of
-              "discord-share". Restart Discord if it does not appear immediately.
-          '';
-        };
-      };
     };
   };
 
@@ -121,29 +103,6 @@
               name = "libpipewire-module-raop-discover";
               args = {
                 "raop.latency.ms" = 500; # Augmente la latence pour AirPlay
-              };
-            }
-          ];
-        };
-
-        # Virtual sink dédié au partage d'audio Discord officiel
-        # (Vesktop gère ceci nativement, mais Discord officiel ne capture pas
-        # l'audio système sans un sink virtuel exposant son monitor.)
-        "20-discord-share" = lib.mkIf config.nixos.userEnvironment.io.audio.discordShare.enable {
-          "context.objects" = [
-            {
-              factory = "adapter";
-              args = {
-                "factory.name" = "support.null-audio-sink";
-                "node.name" = "discord-share";
-                "node.description" = "Partage Discord";
-                "media.class" = "Audio/Sink";
-                "audio.position" = [
-                  "FL"
-                  "FR"
-                ];
-                "monitor.channel-volumes" = true;
-                "monitor.passthrough" = true;
               };
             }
           ];

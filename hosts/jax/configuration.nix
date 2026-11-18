@@ -91,7 +91,6 @@
         streamdeck.enable = true;
         bluetooth.enable = true;
         graphtablet.enable = true;
-        audio.discordShare.enable = true;
       };
     };
 
