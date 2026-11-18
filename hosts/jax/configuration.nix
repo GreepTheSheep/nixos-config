@@ -35,14 +35,12 @@
 
     nixos.desktop = {
       enable = true;
-      krdp.enable = true;
       desktopEnvironment = {
         plasma6.enable = true;
       };
       displayManager = {
         defaultSession = "plasma";
         sddm.enable = true;
-        autoLogin.enable = true;
       };
       windowManager = {
         hyprland.enable = false;
