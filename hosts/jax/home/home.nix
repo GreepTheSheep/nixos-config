@@ -31,8 +31,13 @@ _:
         enable = true;
         wallpapers = [
           {
-            wallpaperId = "3295216327";
+            wallpaperId = "3386113945";
             monitor = "auto";
+            properties = {
+              showclock = false;
+              showdate = false;
+              showday = false;
+            };
           }
         ];
       };

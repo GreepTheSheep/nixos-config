@@ -34,7 +34,7 @@ in
 
       wallpaperId = lib.mkOption {
         type = lib.types.str;
-        example = "3295216327";
+        example = "3386113945";
         description = "Steam Workshop ID of the wallpaper to display on the desktop.";
       };
 

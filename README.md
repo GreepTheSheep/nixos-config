@@ -32,6 +32,6 @@ To add a new host:
 
 ## Wallpaper credits:
 
-* [Stolas](wallpaper/stolas.png) by [@LANVERIL](https://linktr.ee/LANVERIL) ([X Post](https://x.com/LANVERIL/status/1561363128981471232), [Pixiv Post](https://www.pixiv.net/en/artworks/100669341))
+* [Cyn](wallpaper/cyn.png) by [Liam Vickers](https://www.liamvickers.com/) ([X Post](https://x.com/LiamVAnimation/status/1838368080789147662)), upscaled to 4K 16:9 and [Wallpaper Engine version](https://steamcommunity.com/sharedfiles/filedetails/?id=3386113945) by [@VitaPhone](https://steamcommunity.com/id/VitaPhone)
 * [N & Uzi](wallpaper/nuzi.jpg) by [@SaltyPepper](https://allmylinks.com/SaltyPepper) ([X Post](https://x.com/SaItyPepper/status/1819875736322183469))
 * [Greep's background](wallpaper/greep_background_3840x1080.png) by [Greep](https://greep.fr)

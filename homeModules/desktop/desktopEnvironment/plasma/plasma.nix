@@ -21,7 +21,7 @@ in
 
       wallpaper = lib.mkOption {
         type = lib.types.str;
-        default = "${../../../../wallpaper/stolas.png}";
+        default = "${../../../../wallpaper/cyn.png}";
         example = "${../../../../wallpaper/nuzi.jpg}";
         description = "Desktop Wallpaper file path";
       };
@@ -29,7 +29,7 @@ in
       lockScreenWallpaper = lib.mkOption {
         type = lib.types.str;
         default = "${../../../../wallpaper/nuzi.jpg}";
-        example = "${../../../../wallpaper/stolas.png}";
+        example = "${../../../../wallpaper/cyn.png}";
         description = "Lock Screen Wallpaper file path";
       };
     };

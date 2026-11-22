@@ -25,10 +25,57 @@ let
         type = lib.types.listOf lib.types.str;
         default = [ ];
       };
+      properties = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.oneOf [
+            lib.types.bool
+            lib.types.int
+            lib.types.float
+            lib.types.str
+            (lib.types.listOf (
+              lib.types.oneOf [
+                lib.types.int
+                lib.types.float
+              ]
+            ))
+          ]
+        );
+        default = { };
+        example = {
+          showclock = false;
+          schemecolor = [
+            0.15
+            0.23
+            0.4
+          ];
+        };
+        description = ''
+          Wallpaper Engine properties to override, passed as
+          `--set-property name=value`. Booleans map to true/false, lists to
+          comma-separated values (use [ R G B ] or [ R G B A ] for colors,
+          with components in the 0-1 range), everything else is stringified.
+
+          Note: linux-wallpaperengine applies these overrides globally to
+          every wallpaper in the process, not per wallpaper.
+        '';
+      };
     };
   };
 
   hasAuto = lib.any (w: w.monitor == "auto") cfg.wallpapers;
+
+  # Render a property value the way linux-wallpaperengine expects it.
+  propertyValue =
+    value:
+    if lib.isBool value then
+      (if value then "true" else "false")
+    else if lib.isList value then
+      lib.concatMapStringsSep "," toString value
+    else
+      toString value;
+
+  propertyArgs =
+    props: lib.mapAttrsToList (name: value: "--set-property ${name}=${propertyValue value}") props;
 
   # Build the per-wallpaper argument string for linux-wallpaperengine.
   # When monitor == "auto", the literal string __AUTO_MONITOR__ is emitted
@@ -42,6 +89,7 @@ let
         (if w.monitor == "auto" then "__AUTO_MONITOR__" else w.monitor)
       ]
       ++ w.extraOptions
+      ++ propertyArgs w.properties
       ++ [
         "--bg"
         w.wallpaperId
@@ -97,7 +145,7 @@ in
         type = lib.types.listOf wallpapersOpts;
         example = [
           {
-            wallpaperId = "3295216327";
+            wallpaperId = "3386113945";
             monitor = "HDMI-A-1";
           }
         ];
@@ -112,7 +160,8 @@ in
       assetsPath = cfg.assetsPath;
       audio.silent = cfg.silentAudio;
       wallpapers = map (w: {
-        inherit (w) wallpaperId monitor extraOptions;
+        inherit (w) wallpaperId monitor;
+        extraOptions = w.extraOptions ++ propertyArgs w.properties;
       }) cfg.wallpapers;
     };
 
