@@ -35,6 +35,7 @@
     host.hermes-agent.enable = true;
 
     nixos = {
+      base.tools.backrest.enable = true;
       system = {
         bootloader.enable = lib.mkForce false; # Do not use Limine, keep using generic RPI bootloader
         nixos.garbageCollect = true;
