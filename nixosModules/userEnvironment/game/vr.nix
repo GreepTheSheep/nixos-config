@@ -1,4 +1,9 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -44,7 +49,14 @@
       enable = true;
       openFirewall = true;
       autoStart = true;
-      package = lib.mkIf config.nixos.hardware.nvidiagpu.enable (pkgs.wivrn.override { cudaSupport = true; });
+      package = lib.mkIf config.nixos.hardware.nvidiagpu.enable (
+        pkgs.wivrn.override { cudaSupport = true; }
+      );
     };
+
+    # Add WayVR overlay, to use Desktop and WebXR apps on VR Headset
+    environment.systemPackages = with pkgs; [
+      wayvr
+    ];
   };
 }
