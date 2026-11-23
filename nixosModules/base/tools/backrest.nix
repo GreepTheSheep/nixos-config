@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixos = {
@@ -20,13 +25,17 @@
   };
 
   config = lib.mkIf config.nixos.base.tools.backrest.enable {
-    environment.systemPackages = with pkgs; lib.mkAfter [
-      restic
-      backrest
-    ];
+    environment.systemPackages =
+      with pkgs;
+      lib.mkAfter [
+        restic
+        backrest
+      ];
 
     # Backrest is accessed via web port 9898, we need to open it up using a firewall rule and environment variable
-    nixos.system.firewall.extraAllowedTCPPorts = lib.mkIf config.nixos.base.tools.backrest.openFirewall [ 9898 ];
+    nixos.system.firewall.extraAllowedTCPPorts =
+      lib.mkIf config.nixos.base.tools.backrest.openFirewall
+        [ 9898 ];
     environment.variables = {
       BACKREST_PORT = lib.mkIf config.nixos.base.tools.backrest.openFirewall "0.0.0.0:9898";
       BACKREST_RESTIC_COMMAND = "${pkgs.restic}/bin/restic";
@@ -36,7 +45,11 @@
     systemd.services.backrest = {
       description = "Backrest Backup Service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ backrest restic ];
+      path = with pkgs; [
+        backrest
+        restic
+        bash
+      ];
       environment = {
         BACKREST_PORT = lib.mkIf config.nixos.base.tools.backrest.openFirewall "0.0.0.0:9898";
         BACKREST_RESTIC_COMMAND = "${pkgs.restic}/bin/restic";
